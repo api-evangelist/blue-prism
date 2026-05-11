@@ -30,6 +30,12 @@ common:
     url: https://www.blueprism.com
   - type: Documentation
     url: https://bpdocs.blueprism.com
+  - type: Integrations
+    url: https://www.blueprism.com/partners/find-a-partner/
+integrations:
+  - name: All Solutions
+  - name: Become a Partner
+  - name: SS&C Partner Program
 maintainers:
   - FN: Kin Lane
     email: kin@apievangelist.com
