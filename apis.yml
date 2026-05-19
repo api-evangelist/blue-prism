@@ -26,6 +26,10 @@ apis:
       - type: Documentation
         url: https://bpdocs.blueprism.com
 common:
+  - type: GitHubOrganization
+    url: https://github.com/blue-prism
+  - type: LinkedIn
+    url: https://www.linkedin.com/company/blue-prism-limited
   - type: Website
     url: https://www.blueprism.com
   - type: Documentation
