@@ -26,6 +26,10 @@ apis:
       - type: Documentation
         url: https://bpdocs.blueprism.com
 common:
+  - type: VulnerabilityDisclosure
+    url: security/blue-prism-vulnerability-disclosure.yml
+  - type: DomainSecurity
+    url: security/blue-prism-domain-security.yml
   - type: GitHubOrganization
     url: https://github.com/blue-prism
   - type: LinkedIn
