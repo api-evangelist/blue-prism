@@ -1,0 +1,22 @@
+generated: '2026-08-29'
+method: derived
+source: openapi/blue-prism-enterprise-api-openapi.yml
+schemes:
+- name: OAuth2
+  source: openapi/blue-prism-enterprise-api-openapi.yml
+  flows:
+  - flow: clientCredentials
+    tokenUrl: https://auth-server/connect/token
+scopes:
+- scope: bp-api
+  description: API scope
+  flows:
+  - clientCredentials
+  sources:
+  - openapi/blue-prism-enterprise-api-openapi.yml
+- scope: bpserver
+  description: Blue Prism Application scope
+  flows:
+  - clientCredentials
+  sources:
+  - openapi/blue-prism-enterprise-api-openapi.yml

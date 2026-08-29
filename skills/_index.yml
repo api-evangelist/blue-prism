@@ -1,0 +1,32 @@
+generated: '2026-08-29'
+method: generated
+source: >-
+  Grounded in real operationIds from openapi/blue-prism-enterprise-api-openapi.yml (Blue Prism API
+  7.5.1) plus the Blue Prism Enterprise 7.5 documentation. Blue Prism publishes no skills/ or
+  AGENTS.md of its own — searched documentation.blueprism.com, www.blueprism.com/llms.txt and
+  github.com/blue-prism on 2026-08-29.
+provider: Blue Prism
+providerId: blue-prism
+api: Blue Prism API 7.5.1
+skills:
+  - name: blue-prism-submit-work-and-await-completion
+    file: skills/blue-prism-submit-work-and-await-completion.md
+    description: >-
+      Submit a business item into a work queue and be told when a digital worker finishes it,
+      via a webhook callback rather than polling.
+    operations: [getWorkqueues, getWorkQueue, createWorkQueueItem, CreateWebHookWorkQueueItem, getWorkQueueItemFromWorkQueue, createWorkQueueItemAttempt]
+  - name: blue-prism-run-a-process-and-read-its-logs
+    file: skills/blue-prism-run-a-process-and-read-its-logs.md
+    description: >-
+      Start an automation on a runtime resource, watch it to completion, and read the per-stage
+      execution log — with the licence-headroom check that must come first.
+    operations: [getLicenseLimits, GetProcesses, getResources, createSession, updateSessionStartupParameters, GetSessions, getSession, getSessionLogs, deleteSession]
+  - name: blue-prism-schedule-automation-against-a-calendar
+    file: skills/blue-prism-schedule-automation-against-a-calendar.md
+    description: >-
+      Build a schedule with a working calendar, chain its tasks by success and failure, trigger or
+      stop it, and run the dependency check before deleting any of it.
+    operations: [getHolidayRegions, getHolidayByRegionId, createSchedule, createScheduleTask, createScheduleSessionForTask, updateStartupParameters, startSchedule, stopSchedule, getLogsForSchedule, getWorkQueueReferences]
+maintainers:
+  - FN: Kin Lane
+    email: kin@apievangelist.com

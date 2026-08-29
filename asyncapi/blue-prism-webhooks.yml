@@ -1,0 +1,92 @@
+generated: '2026-08-29'
+method: searched
+source: >-
+  https://documentation.blueprism.com/bp-7-5/en-us/helpWebhooks.htm and the webhook subscription
+  schemas in openapi/blue-prism-enterprise-api-openapi.yml
+  (CreateWebhookWorkQueueItem, WorkQueueItemWebhookSubscriptionResponse,
+  WorkQueueItemEventSubscriptionResponse)
+provider: Blue Prism
+providerId: blue-prism
+asyncapi_spec_published: false
+asyncapi_note: >-
+  Blue Prism publishes no AsyncAPI document. It does ship a real, documented webhook surface with
+  a subscription API, an enumerated event list and a signed-payload story, so this artifact
+  captures that webhook catalog rather than fabricating a spec.
+surface: webhooks
+transport: HTTP POST callback
+introduced: Blue Prism Enterprise 7.5 (subscription reactivation semantics changed in 7.5.1)
+prerequisites:
+  - Blue Prism Enterprise must be running against a Blue Prism Server connection.
+  - >-
+    To use a digital signature to authenticate to the client application (the preferred method),
+    a default encryption scheme must be configured.
+  - To use basic authentication instead, a credential must exist in Blue Prism Credential Manager.
+subscription:
+  create_operation: CreateWebHookWorkQueueItem
+  create_path: POST /api/v7/workqueues/{workQueueId}/items/{workQueueItemId}/callbacks
+  update_operation: updatesubscription
+  update_path: PATCH /api/v7/subscriptions/{subscriptionId}
+  scope: per work queue item (not per queue and not per environment)
+  required_fields: [eventtypes, callbackurl]
+  request_shape:
+    eventtypes: array of event names
+    callbackurl: URI the callback is POSTed to
+    extensions.security.credentialName: name of a credential registered in the BPE Credential Manager
+    extensions.security.type: credential type, e.g. BasicAuthentication
+    extensions.data: free-form client metadata object echoed back to the client
+  response_shape:
+    id: subscription group UUID
+    secret: shared secret used to validate webhook payloads
+    subscriptions[]: one {subscriptionId, eventType} row per subscribed event
+  permissions:
+    read: Webhooks – Read Access
+    write: Webhooks – Edit Access / Full Access to webhooks
+events:
+  - name: completed
+    description: The work queue item reached a completed final state.
+    terminal: true
+  - name: exception
+    description: The work queue item terminated with an exception.
+    terminal: true
+  - name: prioritychanged
+    description: The item's priority was changed.
+    terminal: false
+  - name: dataupdated
+    description: The item's data was updated. Repeatable.
+    terminal: false
+  - name: status
+    description: The item's status changed.
+    terminal: false
+  - name: deferred
+    description: The item was deferred.
+    terminal: false
+  - name: locked
+    description: The item was locked. Repeatable.
+    terminal: false
+  - name: retryexception
+    description: The item was retried after an exception. Repeatable.
+    terminal: false
+lifecycle_semantics:
+  deactivation: >-
+    A subscription becomes inactive automatically once a callback signalling a final state has
+    completed successfully OR failed. From 7.5.1 onward a subscription for an event that may
+    repeat (Data Updated, Locked, Retry Exception) stays active after firing.
+  reactivation: >-
+    From 7.5.1, force-retrying a work queue item with inactive subscriptions offers the option to
+    reactivate them; this requires Webhooks – Edit Access.
+  visibility: >-
+    System Manager exposes two screens, Active Subscriptions and Inactive Subscriptions, and from
+    7.5 webhooks can be enabled/disabled from the Active Subscriptions screen.
+payload_authentication:
+  preferred: digital signature validated with the `secret` returned at subscription time
+  alternative: HTTP basic authentication using a credential from Credential Manager
+gaps:
+  - No AsyncAPI or JSON Schema document is published for the callback payload itself.
+  - >-
+    The docs describe the payload only in prose ("the final status (completed or exception) and
+    relevant item identifiers"); the concrete field list is not published, so a consumer must
+    observe a live callback to learn the shape.
+  - Subscriptions are per work-queue-item, so there is no environment-wide event stream to tail.
+maintainers:
+  - FN: Kin Lane
+    email: kin@apievangelist.com

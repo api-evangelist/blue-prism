@@ -1,0 +1,15 @@
+# security.txt file for https://www.blueprism.com/ - more info: https://securitytxt.org/
+# (required) Contact email address for security issues
+Contact: matthew@builtbymasonry.com
+
+# (required) Expiration date for the security information herein
+Expiration: 2027-08-28T19:24:13-05:00
+
+# (optional) OpenPGP key:
+Encryption: https://www.blueprism.com/pgp-key.txt
+
+# (optional) Security policy page:
+Policy: https://www.blueprism.com/security-policy
+
+# (optional) Security acknowledgements page:
+Acknowledgements: https://www.blueprism.com/hall-of-fame

@@ -1,0 +1,131 @@
+generated: '2026-08-29'
+method: derived
+source: >-
+  openapi/blue-prism-enterprise-api-openapi.yml (Blue Prism API 7.5.1, components.responses +
+  components.schemas), cross-read against
+  https://documentation.blueprism.com/bp-7-5/en-us/bp-api/api-user-permissions.htm
+provider: Blue Prism
+providerId: blue-prism
+api: Blue Prism API
+format: custom
+format_note: >-
+  NOT RFC 9457. The Blue Prism API does not use application/problem+json anywhere in the
+  contract. Errors are returned as application/json using three shapes: a bare JSON string
+  (ErrorMessage), an object with a single errorMessage field (Error), or a field-level
+  validation object (ValidationError / UrlParameterError). There is no machine-readable error
+  code, type URI or documentation link in any error body, so an agent must branch on HTTP
+  status plus free-text matching.
+envelopes:
+  - name: ErrorMessage
+    shape: string
+    description: A bare JSON string describing the problem. Used by 401, 403, 404 and 409 responses.
+  - name: Error
+    shape: object
+    fields:
+      - name: errorMessage
+        type: string
+        description: A message describing the problem encountered.
+    description: Used by the session-specific 403 response.
+  - name: ValidationError
+    shape: object
+    fields:
+      - name: invalidField
+        type: string
+        description: The field which is invalid.
+      - name: message
+        type: string
+        description: A description of the error found with the field.
+    description: One half of the 400 oneOf. Returned when a request body field fails validation.
+  - name: UrlParameterError
+    shape: object
+    fields:
+      - name: message
+        type: string
+        description: A message about the error.
+      - name: messageDetail
+        type: string
+        description: A detailed description about the error.
+    description: The other half of the 400 oneOf. Returned when a URL/query parameter is malformed.
+problem_types:
+  - status: 400
+    name: BadRequest
+    occurrences: 80
+    title: The request is malformed or contains incorrect information.
+    body: oneOf [UrlParameterError, ValidationError]
+    remediation: >-
+      Read invalidField (body validation) or message/messageDetail (URL parameter) to locate the
+      offending input. Not retryable without changing the request.
+  - status: 400
+    name: BadRequestErrorMessage
+    occurrences: 2
+    title: The request is malformed or contains incorrect information.
+    body: ErrorMessage (bare string)
+    remediation: Correct the request from the returned message text.
+  - status: 401
+    name: NotAuthorized
+    occurrences: 90
+    title: The authentication token was either missing or invalid and must be refreshed.
+    body: ErrorMessage
+    remediation: >-
+      Re-acquire a JWT from Authentication Server using the client-credentials grant against
+      the environment's token endpoint, then retry. Applies to every operation in the API.
+  - status: 403
+    name: Forbidden
+    occurrences: 87
+    title: The authentication token does not give sufficient permissions to perform this action.
+    body: ErrorMessage
+    remediation: >-
+      The Blue Prism service account backing the token lacks the System Manager / Control Room
+      permission the endpoint requires. The per-endpoint permission matrix is published at
+      https://documentation.blueprism.com/bp-7-5/en-us/bp-api/api-user-permissions.htm.
+      Not retryable.
+  - status: 403
+    name: SessionForbidden
+    occurrences: 1
+    title: >-
+      The user does not have execute permission for this action, or the number of sessions
+      permitted by the current license would be exceeded.
+    body: Error (object with errorMessage)
+    remediation: >-
+      A licence-capacity failure is indistinguishable from a permission failure at the status
+      level; parse errorMessage. Licence headroom is readable from
+      GET /api/v7/dashboards/currentLimitsAndUsage.
+  - status: 404
+    name: NotFound
+    occurrences: 65
+    title: The requested resource could not be found.
+    body: ErrorMessage
+    remediation: Verify the identifier. Not retryable.
+  - status: 404
+    name: NotFoundSession
+    occurrences: 1
+    title: The requested session could not be found.
+    body: ErrorMessage
+    remediation: Verify the sessionId returned by POST /api/v7/sessions.
+  - status: 409
+    name: Conflict
+    occurrences: 7
+    title: The request conflicts with the current state of the resource.
+    body: ErrorMessage
+    remediation: >-
+      Re-read the resource and reconcile before retrying — typically a duplicate name or a
+      state transition that is not legal from the current state.
+  - status: 503
+    name: ServiceUnavailable
+    occurrences: 1
+    title: Service unavailable.
+    body: inline
+    remediation: >-
+      Returned by the health surface only. Retry with backoff. NOTE the API declares no 429
+      anywhere in the contract — see rate-limits/blue-prism-rate-limits.yml.
+gaps:
+  - no_error_codes: >-
+      No stable machine-readable error identifier exists. Agents cannot key retry or remediation
+      logic on anything more precise than the HTTP status.
+  - no_rfc9457: content type is application/json, not application/problem+json.
+  - no_429: >-
+      No throttling response is declared on any of the 94 operations, so a client has no
+      contract-level signal for backpressure.
+maintainers:
+  - FN: Kin Lane
+    email: kin@apievangelist.com

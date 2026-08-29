@@ -1,0 +1,75 @@
+generated: '2026-08-29'
+method: searched
+source: >-
+  https://documentation.blueprism.com/bp-7-5/en-us/helpCommandLine.htm,
+  https://documentation.blueprism.com/bp-7-5/en-us/helpResourcePCCommands.htm
+provider: Blue Prism
+providerId: blue-prism
+cli_published: true
+tools:
+  - name: AutomateC.exe
+    kind: command-line utility
+    description: >-
+      Console utility that returns messages and feedback to standard output. Return code 0 means
+      success; non-zero means error. Dynamic help via the /help switch.
+    distribution: >-
+      Ships with the Blue Prism Enterprise interactive client installer. Not published to any
+      package registry — installers are downloaded from the customer portal at
+      portal.blueprism.com (Product > Blue Prism Enterprise > Blue Prism 7).
+    examples:
+      - 'AutomateC /run "My Scheduled Process" /user admin <password>'
+      - 'AutomateC /run "My Scheduled Process" /sso'
+      - 'AutomateC /run "Excel Test" /resource YourPCHostName /user admin <password> /startp "<inputs><input name=''Comment'' type=''text'' value=''Hello World'' /></inputs>"'
+  - name: Automate.exe
+    kind: GUI application accepting command-line switches
+    description: >-
+      The graphical Blue Prism application. Feedback is visual. Same return-code convention as
+      AutomateC.
+    examples:
+      - 'automate /resourcepc /user admin <password>'
+      - 'automate /resourcepc /sso'
+      - 'automate /resourcepc /public'
+      - 'automate /alerts /user admin <password>'
+selected_switches:
+  - switch: /help
+    tool: both
+    description: Print quick help. Under Automate.exe it opens the documentation in a window.
+  - switch: /run <process>
+    tool: AutomateC.exe
+    description: Run a named process.
+  - switch: /resource <host>
+    tool: AutomateC.exe
+    description: Run the process on a remote runtime resource.
+  - switch: /startp <xml>
+    tool: AutomateC.exe
+    description: Pass startup parameters as an XML <inputs> document.
+  - switch: /user <name> <password> | /sso
+    tool: both
+    description: Native credentials, or single sign-on.
+  - switch: /resourcepc
+    tool: Automate.exe
+    description: Start Blue Prism in Resource PC mode.
+  - switch: /public
+    tool: Automate.exe
+    description: With /resourcepc — make the resource PC available to all Blue Prism users.
+  - switch: /sslcert <thumbprint>
+    tool: Automate.exe
+    description: >-
+      With /resourcepc — enable TLS on connections to the resource PC using the named certificate.
+      Affects Control Room, the Scheduler, and exposed web services routed to the resource.
+  - switch: /wslocationprefix
+    tool: Automate.exe
+    description: >-
+      With /resourcepc — override the advertised location of published web services and the WSDLs
+      hosted on the device.
+  - switch: /alerts
+    tool: Automate.exe
+    description: Start background process alert monitoring without launching the main application.
+note: >-
+  This is an operator CLI for the installed product, not an API client. It talks to the Blue Prism
+  database/server directly rather than to the /api/v7 REST surface, so an agent cannot substitute
+  one for the other. Parameters are passed as XML on the command line, and quoting rules are
+  fragile (the docs warn that parameter values cannot themselves contain double quotes).
+maintainers:
+  - FN: Kin Lane
+    email: kin@apievangelist.com

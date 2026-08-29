@@ -1,0 +1,84 @@
+generated: '2026-08-29'
+method: searched
+source: >-
+  https://documentation.blueprism.com/bp-7-5/en-us/release-notes/rn-home.htm,
+  https://documentation.blueprism.com/bp-7-5/en-us/release-notes/rn-7-5-1.htm,
+  https://documentation.blueprism.com/bp-7-5/en-us/bp-api/api-spec-home.htm,
+  https://status.blueprism.com/, https://documentation.blueprism.com/sitemap.xml
+provider: Blue Prism
+providerId: blue-prism
+api: Blue Prism API
+
+versioning:
+  scheme: path segment (/api/v7) pinned to the product build
+  current_api_version: v7
+  current_contract_version: 7.5.1
+  policy_quote: >-
+    "The Blue Prism API version installed must always be the same as the Blue Prism Enterprise
+    version number to use the API."
+  policy_source: https://documentation.blueprism.com/bp-7-5/en-us/release-notes/rn-7-5-1.htm
+  note: >-
+    Because the API is customer-installed, a "version" is a build the customer chose to deploy,
+    not a rolling hosted surface. Blue Prism keeps every point-release API reference online
+    simultaneously — 7.0.0, 7.0.1, 7.1.0, 7.1.2, 7.2.0, 7.3.0, 7.4.0, 7.5.0 and 7.5.1 are all
+    published side by side under /bp-7-5/en-us/bp-api/.
+
+documentation_versions_served:
+  product_lines:
+    - Blue Prism Enterprise 6.7 – 6.10, 7.0 – 7.5
+    - Blue Prism Cloud 2021.1 – 2024.1
+    - Blue Prism Hub / Interact 4.0 – 5.1.1
+    - Decipher IDP 1.1 – 2.4
+    - Process Intelligence 1.0 – 2.1
+    - Capture 1.0 – 5.0
+    - AI Gateway 1.0
+    - Service Assist 2020.2 – 2022.1
+  note: >-
+    Documentation for superseded major versions stays online rather than being retired, which is
+    a deprecation posture of its own: nothing is removed, so nothing signals what is current.
+
+deprecation:
+  policy_published: false
+  sunset_header: false
+  deprecation_header: false
+  note: >-
+    No RFC 8594 Sunset or Deprecation header is declared in the contract, and no API deprecation
+    policy page was found on documentation.blueprism.com or blueprism.com. One deprecation is
+    visible only in the contract itself: the ScheduleLogDeprecatedItemsPage /
+    ScheduleLogDeprecatedSummary schemas back the older schedule-log shape, but the OpenAPI
+    carries no `deprecated: true` flag on any of the 94 operations.
+  deprecated_operations_in_spec: 0
+
+release_notes:
+  published: true
+  url: https://documentation.blueprism.com/bp-7-5/en-us/release-notes/rn-home.htm
+  cadence: per point release, dated by month
+  detail: changelog/blue-prism-changelog.yml
+
+status_page:
+  published: true
+  url: https://status.blueprism.com/
+  name: SS&C Blue Prism - Service Notifications
+  probed: '2026-08-29'
+  http_status: 200
+  note: >-
+    Live and returns 200, but the page body is a JavaScript application — an unauthenticated
+    HTTP client is served "Sorry, your browser does not support JavaScript!" and no incident
+    history, so it is human-readable only. No JSON status endpoint (summary.json / api/v2) was
+    found.
+
+sla:
+  published: false
+  note: >-
+    No public SLA. Blue Prism Enterprise runs on customer infrastructure, so availability of the
+    API is the customer's own; contractual terms live behind the customer portal at
+    https://portal.blueprism.com/agreements (200, login-gated).
+
+support:
+  portal: https://support.blueprism.com/support/home
+  community: https://community.blueprism.com/
+  note: support.blueprism.com issues a 302 to an authenticated support desk; community.blueprism.com is behind a Cloudflare interstitial for non-browser clients.
+
+maintainers:
+  - FN: Kin Lane
+    email: kin@apievangelist.com

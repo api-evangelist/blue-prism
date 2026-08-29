@@ -1,0 +1,25 @@
+generated: '2026-08-29'
+method: derived
+source: openapi/blue-prism-enterprise-api-openapi.yml
+summary:
+  types:
+  - http
+  - oauth2
+  oauth2_flows:
+  - clientCredentials
+schemes:
+- name: Bearer
+  type: http
+  scheme: bearer
+  bearerFormat: JWT
+  description: JWT token issued from Authentication Server.
+  sources:
+  - openapi/blue-prism-enterprise-api-openapi.yml
+- name: OAuth2
+  type: oauth2
+  flows:
+  - flow: clientCredentials
+    tokenUrl: https://auth-server/connect/token
+    scopes: 2
+  sources:
+  - openapi/blue-prism-enterprise-api-openapi.yml

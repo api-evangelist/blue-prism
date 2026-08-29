@@ -1,0 +1,40 @@
+generated: '2026-08-29'
+method: searched
+source: >-
+  npm registry search (registry.npmjs.org/-/v1/search), PyPI JSON API, NuGet search
+  (azuresearch-usnc.nuget.org), the github.com/blue-prism organization listing, and the
+  Blue Prism API documentation at
+  https://documentation.blueprism.com/bp-7-5/en-us/bp-api/api-spec-home.htm
+provider: Blue Prism
+providerId: blue-prism
+official_count: 0
+packages: []
+note: >-
+  Blue Prism publishes NO first-party client SDK on any public package registry. Searched
+  2026-08-29: npm returned no blueprism/blue-prism package (only unrelated Prism.js results);
+  pypi.org/pypi/blueprism/json and /blue-prism/json both 404; the only NuGet hit,
+  Coremoran.BluePrism.Json 1.0.0, is community-authored and not published by Blue Prism; the
+  github.com/blue-prism GitHub organization holds exactly one public repository
+  (ApplicationModellerConversion, last pushed 2022-06-27) and it is a utility, not a client
+  library. This is consistent with the product's delivery model: Blue Prism Enterprise is
+  installed software, and the API is distributed as an MSI installer downloaded from the
+  customer portal (portal.blueprism.com, Product > Blue Prism Enterprise > Blue Prism 7),
+  not as a package. The provider does publish a Postman configuration, but only as a Digital
+  Exchange asset (https://digitalexchange.blueprism.com/cardDetails?id=117456), which serves a
+  JavaScript shell to unauthenticated clients.
+registries_checked:
+  - registry: npm
+    query: blueprism / "blue prism"
+    result: no first-party package
+  - registry: pypi
+    query: blueprism, blue-prism
+    result: 404 on both
+  - registry: nuget
+    query: blueprism
+    result: 1 hit, community-authored (Coremoran.BluePrism.Json 1.0.0), not first-party
+  - registry: github
+    query: github.com/blue-prism
+    result: 1 public repo, ApplicationModellerConversion, pushed 2022-06-27, not a client library
+maintainers:
+  - FN: Kin Lane
+    email: kin@apievangelist.com

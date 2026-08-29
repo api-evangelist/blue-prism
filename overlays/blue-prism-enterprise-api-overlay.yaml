@@ -1,0 +1,72 @@
+overlay: 1.0.0
+info:
+  title: API Evangelist enrichment overlay — Blue Prism Enterprise API
+  version: 1.0.0
+x-generated: '2026-08-29'
+x-method: generated
+x-source: >-
+  Captures the API Evangelist enrichment applied on top of the verbatim contract in
+  openapi/_original/blue-prism-enterprise-api-7-5-1-openapi.json, which was extracted from the
+  provider's own ReDoc reference at
+  https://documentation.blueprism.com/bp-7-5/en-us/bp-api/bpe-7-5-1-api-spec.html
+x-extends: openapi/_original/blue-prism-enterprise-api-7-5-1-openapi.json
+x-produces: openapi/blue-prism-enterprise-api-openapi.yml
+actions:
+  - target: $
+    description: >-
+      Add the templated servers block the published contract omits. Blue Prism Enterprise is
+      customer-installed, so there is no vendor host; the documented base URL form is
+      http(s)://<address>/api/v7 per
+      https://documentation.blueprism.com/bp-7-5/en-us/bp-api/api-example-usage.htm
+    update:
+      servers:
+        - url: https://{address}
+          description: >-
+            Customer-hosted Blue Prism API instance (IIS site installed on the customer's own web
+            server). Paths already carry the /api/v7 prefix.
+          variables:
+            address:
+              default: bpapi.example.com
+              description: Host name of the web server where the Blue Prism API is installed.
+  - target: $.info
+    description: Record provenance of the contract and its distribution channel.
+    update:
+      x-apievangelist-source: https://documentation.blueprism.com/bp-7-5/en-us/bp-api/bpe-7-5-1-api-spec.html
+      x-apievangelist-extraction: >-
+        The contract is not served as a standalone .json/.yaml file. It is embedded in the
+        __redoc_state payload of the ReDoc HTML reference page and was extracted from there
+        verbatim on 2026-08-29.
+      x-apievangelist-permissions-matrix: https://documentation.blueprism.com/bp-7-5/en-us/bp-api/api-user-permissions.htm
+      x-apievangelist-example-usage: https://documentation.blueprism.com/bp-7-5/en-us/bp-api/api-example-usage.htm
+  - target: $.info
+    description: >-
+      Flag the runtime-semantics gaps an agent needs before it calls a write operation. Derived
+      from the contract, not asserted by the provider.
+    update:
+      x-apievangelist-idempotency: >-
+        NOT SUPPORTED. No Idempotency-Key header exists on any of the 43 write operations.
+      x-apievangelist-rate-limits: >-
+        UNDOCUMENTED. No 429 response and no RateLimit-*/Retry-After header anywhere in the
+        contract; throughput is bounded by the customer's own IIS deployment.
+      x-apievangelist-error-format: >-
+        Custom, not RFC 9457. Errors are bare JSON strings (ErrorMessage) or bespoke objects
+        (Error, ValidationError, UrlParameterError). See errors/blue-prism-problem-types.yml.
+      x-apievangelist-pagination: >-
+        Opaque cursor via pagingToken + itemsPerPage + sortBy on 22 collection operations. No
+        total count is returned.
+      x-apievangelist-reversibility: >-
+        Reversal paths exist (createWorkQueueItemAttempt, stopSchedule, deleteSession on pending
+        sessions) but NO window is published for any of them. Seven delete operations have no
+        restore path at all. See conventions/blue-prism-conventions.yml.
+  - target: $.components.securitySchemes.OAuth2
+    description: >-
+      Annotate the token endpoint. `https://auth-server/connect/token` in the published contract
+      is a placeholder host, not a reachable URL — the real endpoint is each customer's own
+      Blue Prism Authentication Server.
+    update:
+      x-apievangelist-token-url-is-placeholder: true
+      x-apievangelist-authentication-notes: https://documentation.blueprism.com/bp-7-5/en-us/Guides/bp-api/api-configuration.htm
+  - target: $.paths['/api/v7/workqueues/{workQueueId}/items/{workQueueItemId}/callbacks']
+    description: Cross-link the webhook event catalog to the operation that creates subscriptions.
+    update:
+      x-apievangelist-event-catalog: asyncapi/blue-prism-webhooks.yml

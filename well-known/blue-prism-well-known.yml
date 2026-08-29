@@ -1,0 +1,63 @@
+generated: '2026-08-29'
+method: probed
+source: live unauthenticated HTTPS probes of every Blue Prism host named in apis.yml, llms.txt and the API documentation
+note: >-
+  Only /.well-known/security.txt on www.blueprism.com returns a real document. Every other
+  path on every host 404s. The Blue Prism API itself is customer-hosted (an IIS site on the
+  customer's own web server), so there is no vendor-operated API host to probe for
+  openid-configuration or oauth-authorization-server — those documents, if present, are served
+  by each customer's own Authentication Server instance and are not publicly discoverable.
+hosts:
+  - host: www.blueprism.com
+    documents:
+      - path: /.well-known/security.txt
+        status: 200
+        file: well-known/blue-prism-security.txt
+      - path: /.well-known/openid-configuration
+        status: 404
+      - path: /.well-known/oauth-authorization-server
+        status: 404
+      - path: /.well-known/api-catalog
+        status: 404
+      - path: /.well-known/ai-plugin.json
+        status: 404
+      - path: /.well-known/agent-card.json
+        status: 404
+      - path: /.well-known/agent.json
+        status: 404
+  - host: documentation.blueprism.com
+    documents:
+      - path: /.well-known/security.txt
+        status: 404
+      - path: /.well-known/openid-configuration
+        status: 404
+      - path: /.well-known/oauth-authorization-server
+        status: 404
+      - path: /.well-known/api-catalog
+        status: 404
+      - path: /.well-known/ai-plugin.json
+        status: 404
+      - path: /.well-known/agent-card.json
+        status: 404
+      - path: /.well-known/agent.json
+        status: 404
+  - host: portal.blueprism.com
+    documents:
+      - path: /.well-known/security.txt
+        status: 404
+      - path: /.well-known/openid-configuration
+        status: 404
+      - path: /.well-known/oauth-authorization-server
+        status: 404
+      - path: /.well-known/api-catalog
+        status: 404
+      - path: /.well-known/ai-plugin.json
+        status: 404
+      - path: /.well-known/agent-card.json
+        status: 404
+      - path: /.well-known/agent.json
+        status: 404
+  - host: bpdocs.blueprism.com
+    documents:
+      - path: /.well-known/agent-card.json
+        status: 404

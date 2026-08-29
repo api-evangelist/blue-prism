@@ -1,68 +1,207 @@
 aid: blue-prism
 name: Blue Prism
 description: >-
-  Blue Prism is an intelligent automation platform providing RPA with AI
-  and machine learning capabilities.
+  SS&C Blue Prism is an enterprise intelligent-automation vendor whose platform combines robotic
+  process automation, business process management and agentic AI. Its products — Blue Prism
+  Enterprise, Blue Prism Cloud, WorkHQ, Chorus, AI Gateway, Decipher IDP and Process Intelligence
+  — coordinate people, AI agents, digital workers and APIs across regulated, mission-critical
+  workflows. Blue Prism Enterprise publishes a REST contract, the Blue Prism API, covering work
+  queues, sessions, schedules, calendars, processes, runtime resources, licensing and webhook
+  subscriptions. The company was acquired by SS&C Technologies in 2022.
 type: Index
 deliveryModel:
-  model: unknown
+  model: installed-software
   open_source: false
-  commercial: false
+  commercial: true
   callable_host: false
-  label: Delivery model not determined — needs a product licence on record
-  confidence: low
+  label: Customer-installed software with a customer-hosted API
+  confidence: high
   source:
-  - none
-  generated: '2026-08-28'
-  method: derived
+    - https://documentation.blueprism.com/bp-7-5/en-us/Guides/bp-api/api-introduction.htm
+    - https://documentation.blueprism.com/bp-7-5/en-us/bp-api/api-example-usage.htm
+  generated: '2026-08-29'
+  method: searched
+  note: >-
+    The Blue Prism API is an MSI-installed IIS site on the customer's own web server, documented
+    base URL form http(s)://<address>/api/v7. There is no vendor-operated multi-tenant API host,
+    which is why the published OpenAPI carries no servers[] block.
 accessModel:
-  pricing: freemium
-  onboarding: unknown
+  pricing: enterprise
+  onboarding: sales
   trial: false
   try_now: false
   public: false
-  label: Freemium
-  confidence: medium
+  label: Contact sales
+  confidence: high
   source:
-  - plans
-  generated: '2026-07-22'
-  method: derived
+    - plans/blue-prism-plans-pricing.yml
+  generated: '2026-08-29'
+  method: searched
 image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/icons/blue-prism.png
 tags:
   - AI Automation
   - RPA
+  - Intelligent Automation
+  - Business Process Management
+  - Process Orchestration
+  - Agentic AI
+  - Workflow Automation
+  - Enterprise Software
 url: >-
   https://raw.githubusercontent.com/api-evangelist/blue-prism/refs/heads/main/apis.yml
 created: '2026-03-27'
-modified: '2026-03-27'
+modified: '2026-08-29'
 specificationVersion: '0.23'
 apis:
   - aid: blue-prism:blue-prism
-    name: Blue Prism
+    name: Blue Prism API
     description: >-
-      Blue Prism is an intelligent automation platform providing RPA with AI
-      and machine learning capabilities.
-    humanURL: https://www.blueprism.com
+      The Blue Prism API is the REST contract for Blue Prism Enterprise. It exposes work queues
+      and work queue items, sessions and session logs, schedules, scheduled tasks and schedule
+      logs, calendars and holiday regions, processes, runtime resources and pools, environment
+      variables, encryption schemes, licences, Control Room dashboards and webhook subscriptions.
+      94 operations across 67 paths, OpenAPI 3.0.3, version 7.5.1. Authentication is a JWT bearer
+      token issued by Blue Prism Authentication Server via the OAuth 2.0 client-credentials grant.
+    humanURL: https://documentation.blueprism.com/bp-7-5/en-us/bp-api/api-spec-home.htm
+    baseURL: https://{address}/api/v7
     tags:
       - AI Automation
+      - RPA
+      - Intelligent Automation
+      - Workflow Automation
+    properties:
+      - type: OpenAPI
+        url: openapi/blue-prism-enterprise-api-openapi.yml
+      - type: Documentation
+        url: https://documentation.blueprism.com/bp-7-5/en-us/bp-api/api-spec-home.htm
+      - type: APIReference
+        url: https://documentation.blueprism.com/bp-7-5/en-us/bp-api/bpe-7-5-1-api-spec.html
+      - type: GettingStarted
+        url: https://documentation.blueprism.com/bp-7-5/en-us/Guides/bp-api/api-introduction.htm
+      - type: Authentication
+        url: authentication/blue-prism-authentication.yml
+      - type: OAuthScopes
+        url: scopes/blue-prism-scopes.yml
+      - type: Conventions
+        url: conventions/blue-prism-conventions.yml
+      - type: ErrorCatalog
+        url: errors/blue-prism-problem-types.yml
+      - type: DataModel
+        url: data-model/blue-prism-data-model.yml
+      - type: Overlay
+        url: overlays/blue-prism-enterprise-api-overlay.yaml
+      - type: Webhooks
+        url: asyncapi/blue-prism-webhooks.yml
+      - type: AgentSkill
+        url: skills/_index.yml
+      - type: Lifecycle
+        url: lifecycle/blue-prism-lifecycle.yml
+      - type: Conformance
+        url: conformance/blue-prism-conformance.yml
+      - type: RateLimits
+        url: rate-limits/blue-prism-rate-limits.yml
+  - aid: blue-prism:process-intelligence
+    name: Process Intelligence API
+    description: >-
+      Also called the Timeline API. Lets third-party clients upload data to Process Intelligence
+      projects, drive program modules without the UI, and retrieve processed results such as
+      timeline statistics and calculated metrics. Blue Prism documents it in prose and ships a
+      Swagger UI reference per installation rather than publishing a downloadable spec — the
+      reference lives at <instance>/open-api/1.0/apidoc.html, so no machine-readable contract is
+      retrievable without an instance.
+    humanURL: https://documentation.blueprism.com/process-intelligence/2-1/en-us/api/api-intro.htm
+    baseURL: https://{your.instance}/open-api/1.0
+    tags:
+      - Process Mining
+      - Intelligent Automation
     properties:
       - type: Documentation
-        url: https://bpdocs.blueprism.com
+        url: https://documentation.blueprism.com/process-intelligence/2-1/en-us/api/api-intro.htm
+      - type: APIReference
+        url: https://documentation.blueprism.com/process-intelligence/2-1/en-us/api/resources.htm
+      - type: GettingStarted
+        url: https://documentation.blueprism.com/process-intelligence/2-1/en-us/api/getting-started.htm
+      - type: Authentication
+        url: https://documentation.blueprism.com/process-intelligence/2-1/en-us/api/authentication.htm
 common:
-  - type: VulnerabilityDisclosure
-    url: security/blue-prism-vulnerability-disclosure.yml
-  - type: DomainSecurity
-    url: security/blue-prism-domain-security.yml
+  - type: Website
+    url: https://www.blueprism.com
+  - type: Documentation
+    url: https://documentation.blueprism.com/en-us/home.htm
+  - type: APIReference
+    url: https://documentation.blueprism.com/bp-7-5/en-us/bp-api/api-spec-home.htm
+  - type: GettingStarted
+    url: https://documentation.blueprism.com/bp-7-5/en-us/Guides/bp-api/api-introduction.htm
+  - type: Support
+    url: https://www.blueprism.com/contact/
+  - type: Community
+    url: https://community.blueprism.com/
+  - type: Blog
+    url: https://www.blueprism.com/resources/blog/
   - type: GitHubOrganization
     url: https://github.com/blue-prism
   - type: LinkedIn
     url: https://www.linkedin.com/company/blue-prism-limited
-  - type: Website
-    url: https://www.blueprism.com
-  - type: Documentation
-    url: https://bpdocs.blueprism.com
+  - type: Login
+    url: https://portal.blueprism.com/
+  - type: TermsOfService
+    url: https://www.blueprism.com/terms-of-service/
+  - type: PrivacyPolicy
+    url: https://www.blueprism.com/privacy-policy/
   - type: Integrations
     url: https://www.blueprism.com/partners/find-a-partner/
+  - type: StatusPage
+    url: https://status.blueprism.com/
+  - type: ChangeLog
+    url: https://documentation.blueprism.com/bp-7-5/en-us/release-notes/rn-home.htm
+  - type: ChangeLog
+    url: changelog/blue-prism-changelog.yml
+  - type: LLMsTxt
+    url: llms/blue-prism-llms.txt
+  - type: WellKnown
+    url: well-known/blue-prism-well-known.yml
+  - type: SecurityTxt
+    url: well-known/blue-prism-security.txt
+  - type: Security
+    url: security/blue-prism-vulnerability-disclosure.yml
+  - type: VulnerabilityDisclosure
+    url: security/blue-prism-vulnerability-disclosure.yml
+  - type: TrustCenter
+    url: security/blue-prism-trust-center.yml
+  - type: Compliance
+    url: security/blue-prism-trust-center.yml
+  - type: DomainSecurity
+    url: security/blue-prism-domain-security.yml
+  - type: Authentication
+    url: authentication/blue-prism-authentication.yml
+  - type: OAuthScopes
+    url: scopes/blue-prism-scopes.yml
+  - type: Conventions
+    url: conventions/blue-prism-conventions.yml
+  - type: ErrorCatalog
+    url: errors/blue-prism-problem-types.yml
+  - type: DataModel
+    url: data-model/blue-prism-data-model.yml
+  - type: Lifecycle
+    url: lifecycle/blue-prism-lifecycle.yml
+  - type: Conformance
+    url: conformance/blue-prism-conformance.yml
+  - type: Webhooks
+    url: asyncapi/blue-prism-webhooks.yml
+  - type: AgentSkill
+    url: skills/_index.yml
+  - type: Overlay
+    url: overlays/blue-prism-enterprise-api-overlay.yaml
+  - type: Packages
+    url: packages/blue-prism-packages.yml
+  - type: CLI
+    url: cli/blue-prism-cli.yml
+  - type: Plans
+    url: plans/blue-prism-plans-pricing.yml
+  - type: RateLimits
+    url: rate-limits/blue-prism-rate-limits.yml
+  - type: FinOps
+    url: finops/blue-prism-finops.yml
 integrations:
   - name: All Solutions
   - name: Become a Partner
@@ -70,3 +209,8 @@ integrations:
 maintainers:
   - FN: Kin Lane
     email: kin@apievangelist.com
+x-enrichment:
+  date: '2026-08-29'
+  status: enriched
+  artifacts_added: 23
+  pass: local-v1

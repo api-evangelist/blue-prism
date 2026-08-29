@@ -1,0 +1,119 @@
+generated: '2026-08-29'
+method: derived
+source: >-
+  Searched for a first-party MCP server across documentation.blueprism.com (all 51 product
+  sitemaps), www.blueprism.com/llms.txt, the github.com/blue-prism organization, npm and PyPI.
+  Nothing was found. The candidate tool list below is DERIVED from
+  openapi/blue-prism-enterprise-api-openapi.yml (Blue Prism API 7.5.1).
+provider: Blue Prism
+providerId: blue-prism
+status: candidate
+deployment:
+  mode: none
+  endpoint: null
+  install: null
+  package: null
+  auth: unknown
+  verified: searched
+deployment_note: >-
+  Blue Prism ships NO MCP server — not hosted, not stdio. Its 2026 marketing positions the
+  company as "agentic automation" and its llms.txt describes AI agents and an AI Gateway, but
+  neither the product documentation nor any registry carries an MCP endpoint or package. There is
+  also a structural reason it would be hard to ship a hosted one: Blue Prism Enterprise is
+  installed on customer infrastructure, so any MCP server would have to be deployed per customer
+  alongside the API. No endpoint has been invented here.
+search_evidence:
+  - target: documentation.blueprism.com sitemaps (51 product/version sitemaps)
+    query: mcp | model-context
+    result: no matches
+  - target: https://www.blueprism.com/llms.txt
+    query: mcp
+    result: no matches (200, 18,661 bytes)
+  - target: github.com/blue-prism
+    result: 1 public repo, not an MCP server
+  - target: npm / PyPI
+    query: blueprism, blue-prism
+    result: no first-party package
+pointer_policy: >-
+  NO `type: MCPServer` pointer is wired into apis.yml for this artifact, deliberately. The pointer
+  asserts that the PROVIDER serves an MCP surface; Blue Prism does not, and deployment.mode is
+  `none`. This file records the honest absence plus a derived candidate tool list, and wiring it
+  as an MCPServer would score as a presence — the same error the pipeline forbids for WellKnown
+  manifests whose every probe 404s and for agent cards.
+candidate_tools_note: >-
+  The list below is a DERIVED proposal grounded in real operationIds from the published contract.
+  It is not a server, and nothing here is callable today.
+candidate_tools:
+  - name: list_work_queues
+    rest: [getWorkqueues, getWorkqueuesLight]
+    description: List work queues with item counts and status.
+  - name: get_work_queue
+    rest: [getWorkQueue, getWorkQueueConfiguration]
+    description: Read one work queue's configuration and live statistics.
+  - name: list_work_queue_items
+    rest: [getWorkQueueItems]
+    description: Page through the items in a queue, filtered by status/state.
+  - name: add_work_queue_item
+    rest: [createWorkQueueItem, createWorkQueueItems]
+    description: Submit business work into a queue for a digital worker to process.
+    write: true
+  - name: retry_work_queue_item
+    rest: [createWorkQueueItemAttempt]
+    description: Force a failed or exceptioned item to retry.
+    write: true
+  - name: subscribe_work_queue_item_webhook
+    rest: [CreateWebHookWorkQueueItem]
+    description: Register a callback for completion/exception events on one item.
+    write: true
+  - name: list_sessions
+    rest: [GetSessions]
+    description: List process executions with status, resource and exception detail.
+  - name: start_session
+    rest: [createSession]
+    description: Start a process on a runtime resource.
+    write: true
+  - name: stop_session
+    rest: [deleteSession]
+    description: Delete a pending session. Only works before the session starts.
+    write: true
+  - name: get_session_logs
+    rest: [getSessionLogs, getSessionLogsLight, getSessionLogParameters]
+    description: Read the per-stage execution log for a session.
+  - name: list_schedules
+    rest: [getSchedules, getSchedule]
+    description: List and read schedule definitions.
+  - name: run_schedule
+    rest: [startSchedule, createSessionRun]
+    description: Trigger a schedule immediately.
+    write: true
+  - name: stop_schedule
+    rest: [stopSchedule]
+    description: Request a running schedule to stop.
+    write: true
+  - name: get_schedule_logs
+    rest: [getScheduleLogs, getScheduleLogsById, getLogsForSchedule]
+    description: Read schedule execution history.
+  - name: list_processes
+    rest: [GetProcesses, getAllProcessGroupItems]
+    description: List automation definitions available in the environment.
+  - name: list_resources
+    rest: [getResources, getResourcePools]
+    description: List runtime resources (digital workers) and pools with live session counts.
+  - name: get_utilization
+    rest: [getResourceUtilization, getResourceSummaryUtilizationByDate, getWorkQueueData]
+    description: Read the Control Room dashboard metrics.
+  - name: get_license_headroom
+    rest: [getLicenseLimits, getLicenses]
+    description: Read current licence limits and usage before starting more sessions.
+  - name: list_environment_variables
+    rest: [getEnvironmentVariables, getEnvironmentVariableReferences]
+    description: Read configuration values and what depends on them.
+  - name: health_check
+    rest: []
+    rest_paths: [GET /api/v7/health]
+    description: >-
+      Dependency health of the API instance. NOTE the health operation carries no operationId in
+      the published contract, so it is addressed by path.
+maintainers:
+  - FN: Kin Lane
+    email: kin@apievangelist.com

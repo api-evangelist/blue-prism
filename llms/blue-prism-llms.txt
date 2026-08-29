@@ -1,0 +1,135 @@
+﻿# SS&C Blue Prism
+
+> SS&C Blue Prism helps complex enterprises make agentic AI operational through trusted, governed automation. Its platform connects people, AI agents, digital workers, APIs and business processes to help organizations design, orchestrate, manage and scale work across mission-critical and highly regulated environments.
+
+SS&C Blue Prism provides enterprise agentic automation, robotic process automation, business process management, process orchestration and intelligent automation solutions. This file is the English-language content index for the global SS&C Blue Prism website and also provides access to the localized content indexes.
+
+## Platform and Core Products
+
+- [SS&C Blue Prism](https://www.blueprism.com/): Global website for SS&C Blue Prism and its enterprise agentic automation portfolio.
+- [WorkHQ](https://www.blueprism.com/platform/): Enterprise agentic automation platform for coordinating people, AI agents, digital workers, APIs and end-to-end workflows in one governed environment.
+- [Agentic Automation](https://www.blueprism.com/products/agentic-automation/): Agentic automation capabilities combining adaptive AI agents, orchestration, governance and production-ready automation.
+- [AI Gateway](https://www.blueprism.com/products/ai-gateway/): Enterprise AI governance gateway for securely managing AI models, access, controls, monitoring and compliance.
+- [Blue Prism Enterprise](https://www.blueprism.com/products/enterprise/): Secure and scalable enterprise automation platform for digital workers and intelligent automation.
+- [Blue Prism Cloud](https://www.blueprism.com/products/blue-prism-cloud/): Fully managed, SaaS-delivered intelligent automation platform.
+- [Chorus](https://www.blueprism.com/products/chorus/): Business process management and orchestration platform for managing mission-critical work end to end.
+- [Decipher IDP](https://www.blueprism.com/products/decipheridp/): Intelligent document processing for extracting, classifying and validating information from documents.
+- [Process Intelligence](https://www.blueprism.com/products/blue-prism-process-intelligence/): Process and task mining tools for discovering, analyzing and optimizing business processes.
+- [All Products](https://www.blueprism.com/products/): Overview of the SS&C Blue Prism product portfolio.
+
+## Agentic AI, Governance and Orchestration
+
+- [Agentic AI Services](https://www.blueprism.com/services/agentic-ai/): Services and methodologies for implementing secure and governed agentic AI in enterprise workflows.
+- [Agentic Process Automation](https://www.blueprism.com/guides/ai/agentic-process-automation/): Agentic process automation (APA) is enterprise automation where AI agents perceive data, reason through options and act across multi-step processes on their own.
+- [AI Agent Governance Framework](https://www.blueprism.com/resources/blog/ai-agent-agentic-governance-framework/): Framework for governing AI agents through accountability, oversight, monitoring, compliance and transparency.
+- [AI Governance](https://www.blueprism.com/guides/ai/ai-governance/): Guidance for aligning enterprise AI adoption with governance, security and business objectives.
+- [AI Agent ROI](https://www.blueprism.com/resources/blog/ai-agent-roi/): Guidance for measuring the business value and return on investment of AI agents.
+- [AI Agent Use Cases](https://www.blueprism.com/resources/blog/ai-agent-use-cases/): Examples of how AI agents can support enterprise processes and operational work.
+- [AI Agents](https://www.blueprism.com/guides/ai/ai-agents/):AI agents are cognitive AI systems that can semi-autonomously perform tasks for a user. Think of these agents as your AI assistants, augmenting human work so people can focus on higher-value tasks.
+- [Agentic AI] (https://www.blueprism.com/guides/ai/agentic-ai/): Agentic AI refers to autonomous AI systems that complete complex goals with minimal human input.
+- [Agentic AI vs RPA vs AI Agents](https://www.blueprism.com/resources/blog/agentic-ai-vs-rpa-vs-ai-agents-comparing/): Comparison of agentic AI, intelligent automation, RPA and AI-agent capabilities.
+- [Agentic Workflows](https://www.blueprism.com/guides/ai/agentic-workflows/):An agentic workflow is an AI-driven process where autonomous AI agents reason, plan and use connected tools to make decisions and complete multi-step tasks with minimal human intervention.
+- [Agentic Orchestration](https://www.blueprism.com/guides/ai/agentic-orchestration/):Agentic orchestration coordinates your autonomous agents as they break down goals into self-directed tasks, handling decision-making and making adjustments based on context instead of rigid rules.
+- [Specialized AI](https://www.blueprism.com/guides/ai/specialized-ai/):Specialized AI focuses on solving specific, real-world problems. It fits within the larger AI scope and it’s the practical side of AI usage
+- [Automation Fabric](https://www.blueprism.com/guides/automation-fabric/): An automation fabric is an enterprise-wide, integrated framework that seamlessly connects various process automation solutions, data, workflows, application programming interfaces (APIs), intelligent agents and processes, bringing these resources together in one platform.
+- [AI Workflows](https://www.blueprism.com/guides/ai/ai-workflows/):AI workflows are automated sequences of tasks enhanced with intelligence. They combine AI decision-making with workflow orchestration to route work.
+- [AI Workflow Orchestration](https://www.blueprism.com/resources/blog/power-ai-workflow-orchestration-benefits/): Benefits of connecting AI agents, people and systems through governed workflow orchestration.
+- [AI Orchestration](https://www.blueprism.com/guides/ai/ai-orchestration/):AI orchestration manages AI models, tools, integrations and data sources into connected, automated workflows.
+- [Introducing WorkHQ](https://www.blueprism.com/resources/blog/introducing-workhq-automation-coordination/): Introduction to WorkHQ as a unified environment for coordinating automation, people, systems and AI.
+- [Responsible AI](https://www.blueprism.com/resources/blog/responsible-ai/): Principles for implementing AI with fairness, privacy, transparency and security.
+- [AI Agents Security](https://www.blueprism.com/guides/ai/ai-agent-security/):AI agent security is the practice of protecting autonomous AI systems, their users, data, and connected tools from threats.
+- [AI Observability](https://www.blueprism.com/resources/blog/ai-observability-ai-agent/): AI observability is the practice of tracking, evaluating, and securing production artificial intelligence systems by monitoring specialized telemetry like token counts, retrieval relevance, multi-step agent actions, and model drift.
+- [AI Roadmap](https://www.blueprism.com/resources/blog/build-your-ai-roadmap/): Framework for planning and scaling AI adoption across an organization.
+- [AI Business Strategy](https://www.blueprism.com/resources/blog/ai-business-strategy/): Guidance for aligning AI initiatives with business strategy and measurable outcomes.
+
+## Operating Models and Services
+
+- [Enterprise Operating Model](https://www.blueprism.com/services/enterprise-operating-model-eom/): Governance and delivery model for scaling agentic automation and AI safely across the enterprise.
+- [Robotic Operating Model](https://www.blueprism.com/services/robotic-operating-model-rom/): Framework for establishing and scaling an enterprise automation programme.
+- [Services](https://www.blueprism.com/services/): Overview of implementation, automation, managed and professional services.
+- [Enterprise Operating Model Guide](https://www.blueprism.com/resources/white-papers/enterprise-operating-model-agentic-automation/): Guide to governance, roles and operating practices for scaling agentic automation.
+- [Agentic Automation Onboarding Guide](https://www.blueprism.com/resources/white-papers/onboarding-guide-implementing-agentic-automation/): Practical guidance for moving agentic automation from pilot projects into governed production environments.
+
+## Industry Solutions
+
+- [All Industry Solutions](https://www.blueprism.com/solutions/industry/): Overview of industry-specific automation solutions.
+- [Financial Services Automation](https://www.blueprism.com/solutions/industry/financial-services-ai-automation/): Agentic AI and automation for banking, capital markets, asset management and financial services operations.
+- [Healthcare and Life Sciences Automation](https://www.blueprism.com/solutions/industry/healthcare-automation/): Automation for patient care, clinical operations, administration and healthcare finance.
+- [Insurance Automation](https://www.blueprism.com/solutions/industry/insurance-automation/): Automation for claims, underwriting, customer service, compliance and back-office operations.
+- [Manufacturing Automation](https://www.blueprism.com/solutions/industry/manufacturing-automation/): Automation for manufacturing operations, supply chains, finance and Industry 4.0 initiatives.
+- [Public Sector Automation](https://www.blueprism.com/solutions/industry/public-sector-automation/): Automation for government services, citizen experiences and public-sector operations.
+- [Telecommunications Automation](https://www.blueprism.com/solutions/industry/telecoms-automation/): Automation for telecom operations, customer service, network processes and digital transformation.
+- [Energy and Utilities Automation](https://www.blueprism.com/solutions/industry/energy-utilities-automation/): Automation for utility operations, field services, finance and customer experience.
+
+## Functional Solutions
+
+- [Finance and Accounting Automation](https://www.blueprism.com/solutions/function/finance-accounting-automation/): Automation for accounts payable, reconciliation, reporting, controls and financial operations.
+- [Human Resources Automation](https://www.blueprism.com/solutions/function/human-resources-automation/): Automation for onboarding, employee services, workforce administration and HR operations.
+- [Supply Chain Automation](https://www.blueprism.com/solutions/function/rpa-supply-chain/): Automation for procurement, inventory, logistics and supply-chain operations.
+- [All Solutions](https://www.blueprism.com/solutions/): Overview of SS&C Blue Prism solutions by industry and business function.
+
+## Selected Customer Stories
+
+- [Customer Stories](https://www.blueprism.com/customers/): Overview of organizations using SS&C Blue Prism automation solutions.
+- [Case Study Library](https://www.blueprism.com/resources/case-studies/): Full library of customer case studies.
+- [SS&C GIDS: Agentic AI in Customer Service](https://www.blueprism.com/resources/case-studies/ssnc-gids-agentic-agents-ai-customer-service/): AI agents used to transform customer-service and complaints operations.
+- [SS&C GIDS: AI Customer Communications](https://www.blueprism.com/resources/case-studies/ssc-gids-ai-customer-communications/): BPM, intelligent automation and generative AI used to improve customer communications.
+- [SS&C: AI Lending and Unstructured Data](https://www.blueprism.com/resources/case-studies/ssc-ai-lending-loan-unstructured-data/): Generative AI and automation used to accelerate credit-agreement processing.
+- [ABANCA: Generative AI and Customer Experience](https://www.blueprism.com/resources/case-studies/abanca-customer-experience-cx-generative-ai/): Intelligent automation and generative AI used to improve customer experience and response times.
+- [Banorte: AI Document Processing](https://www.blueprism.com/resources/case-studies/banorte-automation-ai-document-processing/): Automation and AI used to improve critical document-processing workflows.
+- [Banco Supervielle: Legal Process Automation](https://www.blueprism.com/resources/case-studies/banco-supervielle-legal-process-ai-automation/): AI automation applied to legal processes and operational workflows.
+- [Tropex Exports: Invoice Processing AI Agent](https://www.blueprism.com/resources/case-studies/tropex-exports-invoice-processing-ai-agent-automation/): AI-agent automation used for end-to-end invoice processing.
+- [The Warehouse Group: Retail AI Automation](https://www.blueprism.com/resources/case-studies/warehouse-group-retail-ai-automation/): Retail and supply-chain automation delivering substantial operational savings.
+- [Sandwell and West Birmingham NHS: Radiology AI Agent](https://www.blueprism.com/resources/case-studies/sandwell-and-west-birmingham-nhs-to-return-3000-clinical-hours-to-radiology/): AI-agent deployment returning clinical capacity to radiology teams.
+- [AHS: Healthcare RPA and Generative AI](https://www.blueprism.com/resources/case-studies/ahs-rpa-healthcare-gen-ai-patient-care/): Healthcare automation supporting patient care through RPA and generative AI.
+- [Kimberly-Clark: Consumer Goods Automation](https://www.blueprism.com/resources/case-studies/kimberly-clark-corporation-consumer-goods-automation/): Enterprise automation programme delivering significant business value.
+- [Coca-Cola Europacific Partners](https://www.blueprism.com/resources/case-studies/coca-cola-partners-intelligent-automation-transformation/): Intelligent automation supporting enterprise transformation.
+- [AB InBev: Food and Beverage Automation](https://www.blueprism.com/resources/case-studies/abinbev-food-beverage-automation/): Automation and AI used to improve customer service and order operations.
+- [Danica Pension: AI, AML and Due Diligence](https://www.blueprism.com/resources/case-studies/danica-pensions-ai-aml-due-diligence/): AI-supported automation for due diligence and anti-money-laundering processes.
+- [DNB: AML and Credit Automation](https://www.blueprism.com/resources/case-studies/dnb-bank-aml-credit-automation/): Automation delivering major time and cost savings across banking operations.
+- [State Street: KYC Automation](https://www.blueprism.com/resources/case-studies/state-street-bank-rpa-kyc/): RPA and intelligent automation used to accelerate know-your-customer processing.
+- [NBS: BPM and Growth](https://www.blueprism.com/resources/case-studies/nbs-growth-bpm-chorus/): Chorus BPM enabling business growth without proportional headcount expansion.
+- [Port of Rotterdam](https://www.blueprism.com/resources/case-studies/port-of-rotterdam-professional-services-automation/): Professional services supporting the modernization and migration of enterprise automation.
+
+## Research, Reports and Practical Tools
+
+- [Resources](https://www.blueprism.com/resources/): Research, guides, reports, case studies, webinars and thought leadership.
+- [Analyst Reports](https://www.blueprism.com/resources/analyst-reports/): Independent analyst research covering RPA, orchestration and intelligent process automation.
+- [Gartner Magic Quadrant for RPA 2025](https://www.blueprism.com/resources/analyst-reports/gartner-magic-quadrant-for-rpa-2025/): Gartner assessment of the robotic process automation market.
+- [Everest Group RPA PEAK Matrix](https://www.blueprism.com/resources/analyst-reports/everest-rpa-peak-matrix/): Everest Group assessment of RPA products and market leadership.
+- [Everest Group Process Orchestration](https://www.blueprism.com/resources/analyst-reports/everest-process-orchestration/): Everest Group assessment of process-orchestration products.
+- [Everest Group Intelligent Process Automation Platform](https://www.blueprism.com/resources/analyst-reports/ss-c-blue-prism-is-recognized-as-a-leader-in-everest-groups-peak-matrix-for-ipap/): Assessment of intelligent process automation platforms.
+- [Gartner Predicts 2026: Agentic Automation](https://www.blueprism.com/resources/analyst-reports/gartner-predicts-2026-the-new-era-of-agentic-automation-begins/): Research on the emerging era of enterprise agentic automation.
+- [Agentic Automation and AI Agent Trends 2026](https://www.blueprism.com/resources/white-papers/agentic-automation-ai-agent-trends/): Report on AI-human collaboration, orchestration, governance and scaling AI agents.
+
+## Company, Partners and Support
+- [About SS&C Blue Prism](https://www.blueprism.com/about-us/): Company information, mission and enterprise automation expertise.
+- [Why SS&C Blue Prism](https://www.blueprism.com/why-blue-prism/): Reasons enterprises choose SS&C Blue Prism for governed automation and AI.
+- [SS&C Blue Prism Leadership]( https://www.blueprism.com/about/leadership/):Meet Our Leadership Team, building the future of AI and agentic automation, together.
+- [ROI SS&C Blue Prism] (https://www.blueprism.com/about/roi/): See the thousands of customers across the globe have achieved outstanding ROI with SS&C Blue Prism’s enterprise agentic automation.
+- [Partner Overview](https://www.blueprism.com/partners-and-services/): Overview of the SS&C Blue Prism partner ecosystem.
+- [Find a Partner](https://www.blueprism.com/partners-and-services/find-a-partner/): Directory for locating implementation and technology partners.
+- [Partner Certification](https://www.blueprism.com/partners-and-services/certification/): Information about partner certifications and accreditations.
+- [Documentation](https://documentation.blueprism.com/): Product documentation and technical guidance.
+- [Blue Prism University](https://university.blueprism.com/): Training and certification resources.
+- [Community](https://community.blueprism.com/): Customer and practitioner community.
+- [Digital Exchange](https://digitalexchange.blueprism.com/): Marketplace for connectors, assets and automation components.
+- [Contact](https://www.blueprism.com/contact/): Contact information for sales and enquiries.
+
+## Language-Specific Content
+
+- [日本語](https://www.blueprism.com/japan/llms.txt): 日本語のコンテンツ。
+- [Deutsch](https://www.blueprism.com/de/llms.txt): Deutschsprachige Inhalte.
+- [Français](https://www.blueprism.com/fr/llms.txt): Contenu en français.
+- [Español](https://www.blueprism.com/es/llms.txt): Contenido en español.
+- [Português](https://www.blueprism.com/pt/llms.txt): Conteúdo em português.
+- [한국어](https://www.blueprism.com/ko/llms.txt): 한국어 콘텐츠.
+
+## Official Localized Websites
+
+- [日本語ウェブサイト](https://www.blueprism.com/japan/)
+- [Deutsche Website](https://www.blueprism.com/de/)
+- [Site français](https://www.blueprism.com/fr/)
+- [Sitio web en español](https://www.blueprism.com/es/)
+- [Site em português](https://www.blueprism.com/pt/)
+- [한국어 웹사이트](https://www.blueprism.com/ko/)

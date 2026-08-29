@@ -1,0 +1,200 @@
+generated: '2026-08-29'
+method: derived
+source: >-
+  openapi/blue-prism-enterprise-api-openapi.yml (Blue Prism API 7.5.1) plus the Blue Prism
+  Enterprise 7.5 documentation:
+  https://documentation.blueprism.com/bp-7-5/en-us/bp-api/api-example-usage.htm,
+  https://documentation.blueprism.com/bp-7-5/en-us/Guides/bp-api/api-configuration.htm,
+  https://documentation.blueprism.com/bp-7-5/en-us/bp-api/api-user-permissions.htm,
+  https://documentation.blueprism.com/bp-7-5/en-us/helpWebhooks.htm
+provider: Blue Prism
+providerId: blue-prism
+api: Blue Prism API 7.5.1
+
+base_url:
+  form: http(s)://<address>/api/v7
+  templated: true
+  note: >-
+    Blue Prism Enterprise is customer-hosted. The Blue Prism API is an MSI-installed IIS site on
+    the customer's own web server, so <address> is environment-specific — the docs give
+    https://bpapi.mydomain.com/api/v7 as the worked example. There is no vendor-operated
+    multi-tenant host, which is why the published contract carries no servers[] block.
+  docs: https://documentation.blueprism.com/bp-7-5/en-us/bp-api/api-example-usage.htm
+
+auth:
+  style: oauth2-client-credentials + bearer JWT
+  schemes:
+    - Bearer (http bearer, JWT issued by Blue Prism Authentication Server)
+    - OAuth2 clientCredentials, token endpoint <auth-server>/connect/token
+  scopes: [bp-api, bpserver]
+  identity_model: >-
+    A service account created in Blue Prism Hub holds the client ID and secret. Permissions are
+    granted per Blue Prism user role, not per OAuth scope — the two scopes are audience markers,
+    and real authorization is the System Manager / Control Room permission matrix published at
+    api-user-permissions.htm. Hub-synchronized API service accounts must hold the System
+    Administrator role.
+  detail: authentication/blue-prism-authentication.yml
+
+idempotency:
+  supported: false
+  header: null
+  note: >-
+    No Idempotency-Key (or equivalent) header exists anywhere in the 94-operation contract, and
+    the docs do not describe one. Retrying POST /api/v7/workqueues/{workQueueId}/items or
+    POST /api/v7/sessions after a timeout will create duplicate work. Clients must dedupe on
+    their own keys — e.g. by reading the queue back with GET .../items before re-posting.
+
+pagination:
+  style: opaque-cursor
+  request_params:
+    - name: pagingToken
+      in: query
+      description: Opaque token returned by the previous page; omit for the first page.
+    - name: itemsPerPage
+      in: query
+      description: Page size.
+    - name: sortBy
+      in: query
+      description: Sort key for the collection.
+  response_field: pagingToken
+  applies_to_operations: 22
+  note: >-
+    Cursor pagination is consistent across all 22 collection endpoints (schedules, sessions,
+    work queues, work queue items, logs, processes, resources, environment variables). The token
+    is a base64 opaque string; no total-count field is returned, so a client cannot size a
+    result set before walking it.
+
+filtering:
+  style: typed filter objects
+  note: >-
+    Collection endpoints accept typed filter query parameters backed by named schemas —
+    ContainsStringFilter, StartsWithStringFilter, EqualsFilter, GreaterThanOrEqualToFilter,
+    LessThanOrEqualToFilter, RangeFilter — rather than free-form query syntax.
+
+partial_update:
+  style: RFC 6902-shaped patch documents
+  schemas: [PatchRequest, PatchDocument]
+  note: >-
+    PATCH operations take a patch document naming the path to update. The example-usage page
+    enumerates the supported paths for environment variables (/value, /name, /description,
+    /datatype) and warns that changing /datatype requires updating /value in the same change.
+  docs: https://documentation.blueprism.com/bp-7-5/en-us/bp-api/api-example-usage.htm
+
+request_id_tracing:
+  supported: false
+  note: No correlation/request-id header is declared in the contract or documented.
+
+versioning:
+  style: path
+  current: v7 (/api/v7/...)
+  contract_version: 7.5.1
+  policy: >-
+    The API version is pinned to the product version: "The Blue Prism API version installed must
+    always be the same as the Blue Prism Enterprise version number to use the API." A separate
+    API reference document is published per point release (7.0.0 through 7.5.1 are all still
+    served), so the effective versioning unit is the installed product build, not a rolling
+    hosted API.
+  detail: lifecycle/blue-prism-lifecycle.yml
+
+error_envelope:
+  format: custom (not RFC 9457)
+  shapes: [ErrorMessage (bare string), Error, ValidationError, UrlParameterError]
+  detail: errors/blue-prism-problem-types.yml
+
+rate_limit_signaling:
+  documented: false
+  headers: []
+  status_on_exhaustion: null
+  note: >-
+    No 429 response is declared on any of the 94 operations and no RateLimit-* / X-RateLimit-* /
+    Retry-After header appears in the contract or the documentation. Because the API runs on the
+    customer's own IIS server, throughput is bounded by that deployment rather than by a vendor
+    quota. See rate-limits/blue-prism-rate-limits.yml.
+
+dry_run_mode:
+  supported: false
+  note: No preview/validate-only/simulate mode exists on any write operation.
+
+reversibility:
+  grade: documented
+  grade_basis: >-
+    Reversal paths exist and are named in the contract, but NO published document states a
+    window inside which any of them works. Per the pipeline grading rule that is `documented`
+    (0.4), not `verified` (1.0). No window has been invented here.
+  write_surface: true
+  write_operations: 43
+  surfaces:
+    - surface: Work queue item processing
+      forward: createWorkQueueItem / createWorkQueueItems (POST /api/v7/workqueues/{workQueueId}/items[/batch])
+      reversal: createWorkQueueItemAttempt
+      reversal_operation: POST /api/v7/workqueues/{workQueueId}/items/{workQueueItemId}/attempts
+      reversal_description: >-
+        "Creates a new work queue item attempt by forcing an item to retry." This is the
+        documented undo for a failed/exceptioned item — it re-queues the work rather than
+        discarding it.
+      window: null
+      window_note: >-
+        No retry window is published. The webhooks documentation states only that from Blue Prism
+        Enterprise 7.5.1 a user force-retrying an item with inactive webhook subscriptions may
+        also reactivate those subscriptions; it states no time limit.
+      docs: https://documentation.blueprism.com/bp-7-5/en-us/helpWebhooks.htm
+    - surface: Work queue item attempt
+      forward: createWorkQueueItemAttempt
+      reversal: deleteWorkQueueItemAttempt
+      reversal_operation: DELETE /api/v7/workqueues/{workQueueId}/items/{workQueueItemId}/attempts/{attemptId}
+      reversal_description: Deletes a worked queue item.
+      window: null
+    - surface: Schedule execution
+      forward: startSchedule (POST /api/v7/schedules/{scheduleId}/sessions)
+      reversal: stopSchedule
+      reversal_operation: DELETE /api/v7/schedules/{scheduleId}/sessions
+      reversal_description: >-
+        "Request the schedule to stop." A cancel, not a rollback — work already performed by the
+        digital worker inside the target application is not undone.
+      window: null
+    - surface: Session creation
+      forward: createSession (POST /api/v7/sessions)
+      reversal: deleteSession
+      reversal_operation: DELETE /api/v7/sessions/{sessionId}
+      reversal_description: >-
+        "Deletes a specified PENDING session." The reversal is state-bounded rather than
+        time-bounded: a session that has already started cannot be deleted this way.
+      window: null
+      window_note: Bounded by session state (pending), not by elapsed time. The docs state no duration.
+    - surface: Scheduled task session
+      forward: createScheduleSessionForTask
+      reversal: deleteScheduledTaskSession
+      reversal_operation: DELETE /api/v7/schedules/{scheduleId}/tasks/{taskId}/sessions/{sessionId}
+      window: null
+    - surface: Webhook subscription
+      forward: CreateWebHookWorkQueueItem (POST /api/v7/workqueues/{workQueueId}/items/{workQueueItemId}/callbacks)
+      reversal: updatesubscription (PATCH /api/v7/subscriptions/{subscriptionId})
+      reversal_description: >-
+        Subscriptions are deactivated rather than deleted, and System Manager exposes Active and
+        Inactive subscription screens. From 7.5.1 a subscription for a repeatable event
+        (Data Updated, Locked, Retry Exception) stays active after a callback.
+      window: null
+  non_reversible:
+    - deleteWorkQueue (DELETE /api/v7/workqueues/{workQueueId}) — no restore/undelete operation exists
+    - deleteWorkQueueGroup — no restore operation
+    - DELETE /api/v7/calendars/{calendarId} (no operationId in the contract) — no restore operation
+    - deleteSchedule (DELETE /api/v7/schedules/{scheduleId}) — no restore operation
+    - deleteEnvironmentVariable — no restore operation
+    - deleteLicense (DELETE /api/v7/licenses/{licenseId}) — no restore operation
+    - deleteScheduleTask — no restore operation
+  agent_guidance: >-
+    Before calling any DELETE in the non_reversible list, an agent should call the matching
+    .../references endpoint (getWorkQueueReferences, getEnvironmentVariableReferences,
+    GET /api/v7/calendars/{calendarId}/references) to see what depends on the object. Those
+    reference endpoints are the closest thing this API has to a dry run.
+
+cross_links:
+  errors: errors/blue-prism-problem-types.yml
+  lifecycle: lifecycle/blue-prism-lifecycle.yml
+  authentication: authentication/blue-prism-authentication.yml
+  scopes: scopes/blue-prism-scopes.yml
+  rate_limits: rate-limits/blue-prism-rate-limits.yml
+  events: asyncapi/blue-prism-webhooks.yml
+maintainers:
+  - FN: Kin Lane
+    email: kin@apievangelist.com

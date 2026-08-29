@@ -1,0 +1,62 @@
+generated: '2026-08-29'
+method: searched
+source: https://documentation.blueprism.com/bp-7-5/en-us/release-notes/rn-home.htm
+provider: Blue Prism
+providerId: blue-prism
+subject: Blue Prism Enterprise (the Blue Prism API version tracks the product version exactly)
+scheme: semver-ish product build (major.minor[.patch][ hotfix n])
+current_version: 7.5.1
+current_api_contract: Blue Prism API 7.5.1
+dated: true
+url: https://documentation.blueprism.com/bp-7-5/en-us/release-notes/rn-home.htm
+window: recent releases only — the provider serves release notes back to 7.0
+entries:
+  - version: 7.5.1
+    date: '2026-03'
+    date_text: March 2026
+    url: https://documentation.blueprism.com/bp-7-5/en-us/release-notes/rn-7-5-1.htm
+    api_version: 7.5.1
+    breaking: true
+    breaking_note: >-
+      Requires Blue Prism database version 661 — "This is the first Blue Prism Enterprise release
+      to use this database version" — and Authentication Server 5.1.x.
+    highlights:
+      - Blue Prism API 7.5.1 released in lockstep with the product.
+      - >-
+        Webhook subscriptions for repeatable events (Data Updated, Locked, Retry Exception) no
+        longer deactivate after a callback.
+      - Force-retrying a work queue item can now reactivate its inactive webhook subscriptions.
+      - Browser extensions (Chrome and Edge) 7.5.1.
+  - version: '7.5'
+    date: '2025-12'
+    date_text: December 2025
+    url: https://documentation.blueprism.com/bp-7-5/en-us/release-notes/rn-7-5.htm
+    api_version: '7.5'
+    breaking: true
+    breaking_note: Requires Blue Prism database version 650 and Authentication Server 5.1.
+    highlights:
+      - Webhooks introduced for work queue items, with subscription management in System Manager.
+      - Blue Prism API 7.5 released.
+  - version: 7.4.2
+    date: '2026-01'
+    date_text: January 2026
+    url: https://documentation.blueprism.com/bp-7-5/en-us/release-notes/rn-7-4-2.htm
+    api_version: 7.4.2
+    breaking: true
+    breaking_note: Requires Blue Prism database version 607; Authentication Server 4.7/5.1.
+    highlights:
+      - Maintenance release on the 7.4 line, shipped after 7.5.
+earlier_versions_published:
+  - 7.4.1 hotfix 1, 7.4.1, 7.4
+  - 7.3.2 hotfix 1, 7.3.2, 7.3.1 hotfix 1, 7.3.1, 7.3.0 hotfix 1, 7.3
+  - 7.2.2, 7.2.1, 7.2
+  - 7.1.2, 7.1.1, 7.1
+  - 7.0.2, 7.0.1, 7.0
+note: >-
+  Release notes are per-release HTML pages under /release-notes/, dated to the month rather than
+  the day. There is no feed, no JSON changelog and no per-endpoint API changelog — API changes are
+  described in the product release note and by diffing the per-version API reference pages
+  published at /bp-7-5/en-us/bp-api/.
+maintainers:
+  - FN: Kin Lane
+    email: kin@apievangelist.com

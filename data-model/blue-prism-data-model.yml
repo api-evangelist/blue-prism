@@ -1,0 +1,218 @@
+generated: '2026-08-29'
+method: derived
+source: >-
+  openapi/blue-prism-enterprise-api-openapi.yml — components.schemas (136 schemas) $ref graph plus
+  id-reference fields; cross-read against
+  https://documentation.blueprism.com/bp-7-5/en-us/bp-api/api-user-permissions.htm
+provider: Blue Prism
+providerId: blue-prism
+api: Blue Prism API 7.5.1
+identifier_style: >-
+  UUIDs for most entities (format: uuid), with integer identifiers for work queue item ident and
+  for holiday regions. There are no typed/prefixed identifiers, so an id alone does not tell an
+  agent what kind of object it names — the entity type has to come from the operation that
+  produced it.
+entities:
+  - name: WorkQueue
+    schema: WorkQueueSummary
+    id: id
+    description: A queue of business items to be worked by digital workers.
+    fields_of_note: [name, keyField, status, isEncrypted, maxAttempts, pendingItemCount, completedItemCount, lockedItemCount, exceptionedItemCount, groupId, isActiveQueue]
+    operations: [getWorkqueues, getWorkqueuesLight, getWorkQueue, createWorkQueue, updateWorkQueue, deleteWorkQueue, getWorkQueueReferences, getWorkQueueConfiguration]
+  - name: WorkQueueGroup
+    schema: WorkQueueGroup
+    id: id
+    description: Hierarchical grouping of work queues.
+    operations: [getWorkQueueGroup, createWorkQueueGroup, updateWorkQueueGroup, deleteWorkQueueGroup, getWorkQueuesInGroup, getChildGroupsInWorkQueueGroup]
+  - name: WorkQueueItem
+    schema: WorkQueueItem
+    id: id
+    description: One unit of business work in a queue, with its own attempt history and SLA.
+    fields_of_note: [priority, ident, state, keyValue, status, tags, attemptNumber, loadedDate, deferredDate, lockedDate, completedDate, exceptionedDate, exceptionReason, sla, data]
+    operations: [getWorkQueueItems, getWorkQueueItem, getWorkQueueItemFromWorkQueue, createWorkQueueItem, createWorkQueueItems, getWorkQueueItemAttempts, createWorkQueueItemAttempt, updateWorkQueueItemAttempt, deleteWorkQueueItemAttempt, CreateWebHookWorkQueueItem]
+  - name: Session
+    schema: SessionSummary
+    id: sessionId
+    description: An execution of a process on a runtime resource.
+    fields_of_note: [sessionNumber, status, startTime, endTime, latestStage, exceptionMessage, terminationReason, exceptionType, sessionSource]
+    operations: [GetSessions, getSession, createSession, updateSession, deleteSession, getSessionStartUpParameters, updateSessionStartupParameters, getSessionLogs, getSessionLogsLight]
+  - name: SessionLog
+    schema: SessionLogSummary
+    id: logId
+    description: Per-stage execution log for a session.
+    operations: [getSessionLogs, getSessionLogsLight, getSessionLogParameters]
+  - name: Schedule
+    schema: ScheduleSummary
+    id: id
+    description: A recurrence definition that runs tasks against processes.
+    fields_of_note: [initialTaskId, isRetired, tasksCount, intervalType, timePeriod, startDate, endDate, calendarId]
+    operations: [getSchedules, getSchedule, createSchedule, updateSchedule, deleteSchedule, CloneSchedule, startSchedule, stopSchedule, createSessionRun]
+  - name: ScheduledTask
+    schema: ScheduledTask
+    id: id
+    description: A step in a schedule, chained to the next step by outcome.
+    fields_of_note: [failFastOnError, delayAfterEnd, onSuccessTaskId, onFailureTaskId, sessionsCount]
+    operations: [getScheduleTasks, getScheduleTask, createScheduleTask, updateScheduleTask, deleteScheduleTask]
+  - name: ScheduledSession
+    schema: ScheduledSession
+    description: A session bound to a scheduled task, with its own startup parameters.
+    operations: [getScheduledSessionForTask, createScheduleSessionForTask, deleteScheduledTaskSession, getStartupParameters, updateStartupParameters]
+  - name: ScheduleLog
+    schema: ScheduleLogSummary
+    id: scheduleLogId
+    description: Execution record for a schedule run.
+    operations: [getScheduleLogs, getScheduleLogsById, getLogsForSchedule, getAllScheduleLogs]
+  - name: Process
+    schema: Process
+    id: processId
+    description: An automation definition (process or business object).
+    operations: [GetProcesses, getAllProcessGroupItems]
+  - name: Resource
+    schema: Resource
+    id: id
+    description: A runtime resource (digital worker machine) that executes sessions.
+    fields_of_note: [poolId, groupId, activeSessionCount, warningSessionCount, pendingSessionCount, databaseStatus, displayStatus, resourceType]
+    operations: [getResources, updateResource]
+  - name: ResourcePool
+    schema: ResourcePool
+    id: id
+    description: A pool of runtime resources sharing work.
+    operations: [getResourcePools]
+  - name: Calendar
+    schema: Calendar
+    id: id
+    description: Working-week and holiday definition used to constrain schedules.
+    operations: [getCalendars, updateCalendar, getHolidayRegions, getHolidayByRegionId]
+    unnamed_operations:
+      - POST /api/v7/calendars
+      - GET /api/v7/calendars/{calendarId}
+      - DELETE /api/v7/calendars/{calendarId}
+      - POST /api/v7/calendars/{calendarId}/clones
+      - GET /api/v7/calendars/{calendarId}/otherHolidays
+      - POST /api/v7/calendars/{calendarId}/otherHolidays/batch
+      - DELETE /api/v7/calendars/{calendarId}/otherHolidays/batch
+      - GET /api/v7/calendars/{calendarId}/references
+    unnamed_note: >-
+      NONE of these calendar operations carries an operationId in the published contract. Eleven
+      of the 94 operations are unnamed, which means an agent (or a generator) has no stable
+      handle for them.
+  - name: HolidayRegion
+    schema: HolidayRegion
+    id: regionId
+    description: Named public-holiday region a calendar draws from.
+    operations: [getHolidayRegions, getHolidayByRegionId]
+  - name: EnvironmentVariable
+    schema: EnvironmentVariable
+    id: id
+    description: Named, typed configuration value referenced by processes.
+    operations: [getEnvironmentVariables, createEnvironmentVariable, updateEnvironmentVariable, deleteEnvironmentVariable, getEnvironmentVariableReferences]
+  - name: EncryptionScheme
+    schema: EncryptionScheme
+    id: name
+    description: Key configuration used to encrypt queue data and sign webhook callbacks.
+    operations: [getEncryptionSchemes]
+  - name: License
+    schema: License
+    id: id
+    description: Product entitlement bounding processes, sessions, resources and alerts.
+    operations: [getLicenses, createLicense, deleteLicense, getLicenseLimits]
+  - name: WebhookSubscription
+    schema: WorkQueueItemWebhookSubscriptionResponse
+    id: subscriptionId
+    description: Callback registration against one work queue item and one event type.
+    operations: [CreateWebHookWorkQueueItem, updatesubscription]
+relationships:
+  - from: WorkQueue
+    to: WorkQueueGroup
+    kind: belongs_to
+    via: groupId
+  - from: WorkQueueGroup
+    to: WorkQueueGroup
+    kind: belongs_to
+    via: parentGroupId
+    note: self-referential hierarchy
+  - from: WorkQueue
+    to: WorkQueueItem
+    kind: has_many
+    via: path /api/v7/workqueues/{workQueueId}/items
+  - from: WorkQueueItem
+    to: Session
+    kind: belongs_to
+    via: sessionId
+  - from: WorkQueueItem
+    to: Resource
+    kind: belongs_to
+    via: resource
+  - from: WorkQueueItem
+    to: Process
+    kind: belongs_to
+    via: processName
+    note: name reference, not an id — the item does not carry processId
+  - from: WorkQueueItem
+    to: WebhookSubscription
+    kind: has_many
+    via: path /api/v7/workqueues/{workQueueId}/items/{workQueueItemId}/callbacks
+  - from: Session
+    to: Process
+    kind: belongs_to
+    via: processId
+  - from: Session
+    to: Resource
+    kind: belongs_to
+    via: resourceId
+  - from: Session
+    to: SessionLog
+    kind: has_many
+    via: path /api/v7/sessions/{sessionId}/logs
+  - from: Schedule
+    to: Calendar
+    kind: belongs_to
+    via: calendarId
+  - from: Schedule
+    to: ScheduledTask
+    kind: has_many
+    via: path /api/v7/schedules/{scheduleId}/tasks
+  - from: Schedule
+    to: ScheduledTask
+    kind: has_one
+    via: initialTaskId
+    note: entry point of the task chain
+  - from: ScheduledTask
+    to: ScheduledTask
+    kind: has_one
+    via: onSuccessTaskId
+    note: success branch of the chain
+  - from: ScheduledTask
+    to: ScheduledTask
+    kind: has_one
+    via: onFailureTaskId
+    note: failure branch of the chain
+  - from: ScheduledTask
+    to: ScheduledSession
+    kind: has_many
+    via: path /api/v7/schedules/{scheduleId}/tasks/{taskId}/sessions
+  - from: Schedule
+    to: ScheduleLog
+    kind: has_many
+    via: scheduleId
+  - from: Resource
+    to: ResourcePool
+    kind: belongs_to
+    via: poolId
+  - from: Process
+    to: ProcessGroupItem
+    kind: belongs_to
+    via: groupId
+  - from: Calendar
+    to: HolidayRegion
+    kind: belongs_to
+    via: region.regionId
+note: >-
+  The graph has two spines that meet at Session: a WORK spine (WorkQueueGroup > WorkQueue >
+  WorkQueueItem > attempt) and a SCHEDULING spine (Calendar > Schedule > ScheduledTask >
+  ScheduledSession). Process and Resource are the shared dimensions both spines point at. Three
+  entities expose a .../references endpoint (work queue, environment variable, calendar) that
+  answers "what depends on this" — the safest pre-delete check available in this API.
+maintainers:
+  - FN: Kin Lane
+    email: kin@apievangelist.com
