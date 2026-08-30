@@ -45,6 +45,15 @@ tags:
   - Business Process Management
   - Process Orchestration
   - Agentic AI
+  - Workflow-Automation
+  - Enterprise Software
+tags_raw:
+  - AI Automation
+  - RPA
+  - Intelligent Automation
+  - Business Process Management
+  - Process Orchestration
+  - Agentic AI
   - Workflow Automation
   - Enterprise Software
 url: >-
@@ -65,6 +74,11 @@ apis:
     humanURL: https://documentation.blueprism.com/bp-7-5/en-us/bp-api/api-spec-home.htm
     baseURL: https://{address}/api/v7
     tags:
+      - AI Automation
+      - RPA
+      - Intelligent Automation
+      - Workflow-Automation
+    tags_raw:
       - AI Automation
       - RPA
       - Intelligent Automation

@@ -1,0 +1,14 @@
+{
+  "repo": "blue-prism",
+  "feeds": [
+    {
+      "source": "https://community.blueprism.com/",
+      "feed_url": "https://community.blueprism.com/hfgie69872/rss/Community?interaction.style=forum",
+      "title": "",
+      "saved": 8,
+      "method": "discovered"
+    }
+  ],
+  "post_count": 8,
+  "fetched": "2026-08-30T22:33:40Z"
+}
