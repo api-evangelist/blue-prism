@@ -1,19 +1,24 @@
 {
-  "repo": "blue-prism",
-  "feeds": [
-    {
-      "source": "https://community.blueprism.com/",
-      "feed_url": "https://community.blueprism.com/hfgie69872/rss/Community?interaction.style=forum",
-      "title": "",
-      "saved": 8,
-      "method": "discovered",
-      "nature": "support-community",
-      "nature_basis": "khoros_thread"
-    }
-  ],
-  "post_count": 8,
-  "fetched": "2026-08-30T22:33:40Z",
-  "feed_nature": "support-community",
-  "feed_nature_basis": "khoros_thread",
-  "feed_nature_note": "Whether these posts are the vendor publishing or its support community, decided on the URL path grammar of the saved posts -- not the hostname, which carries both on Khoros, and not author diversity, which flags large vendor blogs as forums. 'undetermined' means undetermined."
+ "repo": "blue-prism",
+ "feeds": [
+  {
+   "source": "https://community.blueprism.com/",
+   "feed_url": "https://community.blueprism.com/hfgie69872/rss/Community?interaction.style=forum",
+   "title": "",
+   "saved": 8,
+   "method": "discovered",
+   "nature": "support-community",
+   "nature_basis": "khoros_thread"
+  }
+ ],
+ "post_count": 8,
+ "fetched": "2026-08-30T22:33:40Z",
+ "feed_nature": "support-community",
+ "feed_nature_basis": "khoros_thread",
+ "feed_nature_note": "Whether these posts are the vendor publishing or its support community, decided on the URL path grammar of the saved posts -- not the hostname, which carries both on Khoros, and not author diversity, which flags large vendor blogs as forums. 'undetermined' means undetermined.",
+ "community_posts_removed": {
+  "count": 8,
+  "on": "2026-09-03",
+  "reason": "roadmap#239, Kin's call: forum/support-community posts are other people's questions saved as provider blog content \u2014 deleted; the harvester no longer collects them"
+ }
 }
