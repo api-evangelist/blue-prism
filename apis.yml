@@ -62,81 +62,609 @@ created: '2026-03-27'
 modified: '2026-08-29'
 specificationVersion: '0.23'
 apis:
-  - aid: blue-prism:blue-prism
-    name: Blue Prism API
-    description: >-
-      The Blue Prism API is the REST contract for Blue Prism Enterprise. It exposes work queues
-      and work queue items, sessions and session logs, schedules, scheduled tasks and schedule
-      logs, calendars and holiday regions, processes, runtime resources and pools, environment
-      variables, encryption schemes, licences, Control Room dashboards and webhook subscriptions.
-      94 operations across 67 paths, OpenAPI 3.0.3, version 7.5.1. Authentication is a JWT bearer
-      token issued by Blue Prism Authentication Server via the OAuth 2.0 client-credentials grant.
-    humanURL: https://documentation.blueprism.com/bp-7-5/en-us/bp-api/api-spec-home.htm
-    baseURL: https://{address}/api/v7
-    tags:
-      - AI Automation
-      - RPA
-      - Intelligent Automation
-      - Workflow-Automation
-    tags_raw:
-      - AI Automation
-      - RPA
-      - Intelligent Automation
-      - Workflow Automation
-    properties:
-      - type: OpenAPI
-        url: openapi/blue-prism-enterprise-api-openapi.yml
-      - type: Documentation
-        url: https://documentation.blueprism.com/bp-7-5/en-us/bp-api/api-spec-home.htm
-      - type: APIReference
-        url: https://documentation.blueprism.com/bp-7-5/en-us/bp-api/bpe-7-5-1-api-spec.html
-      - type: GettingStarted
-        url: https://documentation.blueprism.com/bp-7-5/en-us/Guides/bp-api/api-introduction.htm
-      - type: Authentication
-        url: authentication/blue-prism-authentication.yml
-      - type: OAuthScopes
-        url: scopes/blue-prism-scopes.yml
-      - type: Conventions
-        url: conventions/blue-prism-conventions.yml
-      - type: ErrorCatalog
-        url: errors/blue-prism-problem-types.yml
-      - type: DataModel
-        url: data-model/blue-prism-data-model.yml
-      - type: Overlay
-        url: overlays/blue-prism-enterprise-api-overlay.yaml
-      - type: Webhooks
-        url: asyncapi/blue-prism-webhooks.yml
-      - type: AgentSkill
-        url: skills/_index.yml
-      - type: Lifecycle
-        url: lifecycle/blue-prism-lifecycle.yml
-      - type: Conformance
-        url: conformance/blue-prism-conformance.yml
-      - type: RateLimits
-        url: rate-limits/blue-prism-rate-limits.yml
-  - aid: blue-prism:process-intelligence
-    name: Process Intelligence API
-    description: >-
-      Also called the Timeline API. Lets third-party clients upload data to Process Intelligence
-      projects, drive program modules without the UI, and retrieve processed results such as
-      timeline statistics and calculated metrics. Blue Prism documents it in prose and ships a
-      Swagger UI reference per installation rather than publishing a downloadable spec — the
-      reference lives at <instance>/open-api/1.0/apidoc.html, so no machine-readable contract is
-      retrievable without an instance.
-    humanURL: https://documentation.blueprism.com/process-intelligence/2-1/en-us/api/api-intro.htm
-    baseURL: https://{your.instance}/open-api/1.0
-    tags:
-      - Process Mining
-      - Intelligent Automation
-    properties:
-      - type: Documentation
-        url: https://documentation.blueprism.com/process-intelligence/2-1/en-us/api/api-intro.htm
-      - type: APIReference
-        url: https://documentation.blueprism.com/process-intelligence/2-1/en-us/api/resources.htm
-      - type: GettingStarted
-        url: https://documentation.blueprism.com/process-intelligence/2-1/en-us/api/getting-started.htm
-      - type: Authentication
-        url: https://documentation.blueprism.com/process-intelligence/2-1/en-us/api/authentication.htm
+- aid: blue-prism:process-intelligence
+  name: Process Intelligence API
+  description: >-
+    Also called the Timeline API. Lets third-party clients upload data to Process Intelligence projects,
+    drive program modules without the UI, and retrieve processed results such as timeline statistics and
+    calculated metrics. Blue Prism documents it in prose and ships a Swagger UI reference per installation
+    rather than publishing a downloadable spec — the reference lives at <instance>/open-api/1.0/apidoc.html,
+    so no machine-readable contract is retrievable without an instance.
+  humanURL: https://documentation.blueprism.com/process-intelligence/2-1/en-us/api/api-intro.htm
+  baseURL: https://{your.instance}/open-api/1.0
+  tags:
+  - Process Mining
+  - Intelligent Automation
+  properties:
+  - type: Documentation
+    url: https://documentation.blueprism.com/process-intelligence/2-1/en-us/api/api-intro.htm
+  - type: APIReference
+    url: https://documentation.blueprism.com/process-intelligence/2-1/en-us/api/resources.htm
+  - type: GettingStarted
+    url: >-
+      https://documentation.blueprism.com/process-intelligence/2-1/en-us/api/getting-started.htm
+  - type: Authentication
+    url: >-
+      https://documentation.blueprism.com/process-intelligence/2-1/en-us/api/authentication.htm
+- aid: blue-prism:blue-prism-calendars-api
+  name: Blue Prism Calendars API
+  description: The Calendars API from Blue Prism — 8 operation(s) for calendars.
+  humanURL: https://documentation.blueprism.com/bp-7-5/en-us/bp-api/api-spec-home.htm
+  baseURL: https://{address}/api/v7
+  tags:
+  - Calendars
+  properties:
+  - type: OpenAPI
+    url: openapi/blue-prism-calendars-api-openapi.yml
+  - type: Documentation
+    url: https://documentation.blueprism.com/bp-7-5/en-us/bp-api/api-spec-home.htm
+  - type: APIReference
+    url: https://documentation.blueprism.com/bp-7-5/en-us/bp-api/bpe-7-5-1-api-spec.html
+  - type: GettingStarted
+    url: https://documentation.blueprism.com/bp-7-5/en-us/Guides/bp-api/api-introduction.htm
+  - type: Authentication
+    url: authentication/blue-prism-authentication.yml
+  - type: OAuthScopes
+    url: scopes/blue-prism-scopes.yml
+  - type: Conventions
+    url: conventions/blue-prism-conventions.yml
+  - type: ErrorCatalog
+    url: errors/blue-prism-problem-types.yml
+  - type: DataModel
+    url: data-model/blue-prism-data-model.yml
+  - type: Webhooks
+    url: asyncapi/blue-prism-webhooks.yml
+  - type: Lifecycle
+    url: lifecycle/blue-prism-lifecycle.yml
+  - type: Conformance
+    url: conformance/blue-prism-conformance.yml
+  - type: RateLimits
+    url: rate-limits/blue-prism-rate-limits.yml
+- aid: blue-prism:blue-prism-dashboards-api
+  name: Blue Prism Dashboards API
+  description: The Dashboards API from Blue Prism — 5 operation(s) for dashboards.
+  humanURL: https://documentation.blueprism.com/bp-7-5/en-us/bp-api/api-spec-home.htm
+  baseURL: https://{address}/api/v7
+  tags:
+  - Dashboards
+  properties:
+  - type: OpenAPI
+    url: openapi/blue-prism-dashboards-api-openapi.yml
+  - type: Documentation
+    url: https://documentation.blueprism.com/bp-7-5/en-us/bp-api/api-spec-home.htm
+  - type: APIReference
+    url: https://documentation.blueprism.com/bp-7-5/en-us/bp-api/bpe-7-5-1-api-spec.html
+  - type: GettingStarted
+    url: https://documentation.blueprism.com/bp-7-5/en-us/Guides/bp-api/api-introduction.htm
+  - type: Authentication
+    url: authentication/blue-prism-authentication.yml
+  - type: OAuthScopes
+    url: scopes/blue-prism-scopes.yml
+  - type: Conventions
+    url: conventions/blue-prism-conventions.yml
+  - type: ErrorCatalog
+    url: errors/blue-prism-problem-types.yml
+  - type: DataModel
+    url: data-model/blue-prism-data-model.yml
+  - type: Webhooks
+    url: asyncapi/blue-prism-webhooks.yml
+  - type: Lifecycle
+    url: lifecycle/blue-prism-lifecycle.yml
+  - type: Conformance
+    url: conformance/blue-prism-conformance.yml
+  - type: RateLimits
+    url: rate-limits/blue-prism-rate-limits.yml
+- aid: blue-prism:blue-prism-encryption-schemes-api
+  name: Blue Prism Encryption Schemes API
+  description: The Encryption Schemes API from Blue Prism — 1 operation(s) for encryption schemes.
+  humanURL: https://documentation.blueprism.com/bp-7-5/en-us/bp-api/api-spec-home.htm
+  baseURL: https://{address}/api/v7
+  tags:
+  - Encryption Schemes
+  properties:
+  - type: OpenAPI
+    url: openapi/blue-prism-encryption-schemes-api-openapi.yml
+  - type: Documentation
+    url: https://documentation.blueprism.com/bp-7-5/en-us/bp-api/api-spec-home.htm
+  - type: APIReference
+    url: https://documentation.blueprism.com/bp-7-5/en-us/bp-api/bpe-7-5-1-api-spec.html
+  - type: GettingStarted
+    url: https://documentation.blueprism.com/bp-7-5/en-us/Guides/bp-api/api-introduction.htm
+  - type: Authentication
+    url: authentication/blue-prism-authentication.yml
+  - type: OAuthScopes
+    url: scopes/blue-prism-scopes.yml
+  - type: Conventions
+    url: conventions/blue-prism-conventions.yml
+  - type: ErrorCatalog
+    url: errors/blue-prism-problem-types.yml
+  - type: DataModel
+    url: data-model/blue-prism-data-model.yml
+  - type: Webhooks
+    url: asyncapi/blue-prism-webhooks.yml
+  - type: Lifecycle
+    url: lifecycle/blue-prism-lifecycle.yml
+  - type: Conformance
+    url: conformance/blue-prism-conformance.yml
+  - type: RateLimits
+    url: rate-limits/blue-prism-rate-limits.yml
+- aid: blue-prism:blue-prism-environment-variables-api
+  name: Blue Prism Environment Variables API
+  description: >-
+    The Environment Variables API from Blue Prism — 3 operation(s) for environment variables.
+  humanURL: https://documentation.blueprism.com/bp-7-5/en-us/bp-api/api-spec-home.htm
+  baseURL: https://{address}/api/v7
+  tags:
+  - Environment Variables
+  properties:
+  - type: OpenAPI
+    url: openapi/blue-prism-environment-variables-api-openapi.yml
+  - type: Documentation
+    url: https://documentation.blueprism.com/bp-7-5/en-us/bp-api/api-spec-home.htm
+  - type: APIReference
+    url: https://documentation.blueprism.com/bp-7-5/en-us/bp-api/bpe-7-5-1-api-spec.html
+  - type: GettingStarted
+    url: https://documentation.blueprism.com/bp-7-5/en-us/Guides/bp-api/api-introduction.htm
+  - type: Authentication
+    url: authentication/blue-prism-authentication.yml
+  - type: OAuthScopes
+    url: scopes/blue-prism-scopes.yml
+  - type: Conventions
+    url: conventions/blue-prism-conventions.yml
+  - type: ErrorCatalog
+    url: errors/blue-prism-problem-types.yml
+  - type: DataModel
+    url: data-model/blue-prism-data-model.yml
+  - type: Webhooks
+    url: asyncapi/blue-prism-webhooks.yml
+  - type: Lifecycle
+    url: lifecycle/blue-prism-lifecycle.yml
+  - type: Conformance
+    url: conformance/blue-prism-conformance.yml
+  - type: RateLimits
+    url: rate-limits/blue-prism-rate-limits.yml
+- aid: blue-prism:blue-prism-health-api
+  name: Blue Prism Health API
+  description: The Health API from Blue Prism — 1 operation(s) for health.
+  humanURL: https://documentation.blueprism.com/bp-7-5/en-us/bp-api/api-spec-home.htm
+  baseURL: https://{address}/api/v7
+  tags:
+  - Health
+  properties:
+  - type: OpenAPI
+    url: openapi/blue-prism-health-api-openapi.yml
+  - type: Documentation
+    url: https://documentation.blueprism.com/bp-7-5/en-us/bp-api/api-spec-home.htm
+  - type: APIReference
+    url: https://documentation.blueprism.com/bp-7-5/en-us/bp-api/bpe-7-5-1-api-spec.html
+  - type: GettingStarted
+    url: https://documentation.blueprism.com/bp-7-5/en-us/Guides/bp-api/api-introduction.htm
+  - type: Authentication
+    url: authentication/blue-prism-authentication.yml
+  - type: OAuthScopes
+    url: scopes/blue-prism-scopes.yml
+  - type: Conventions
+    url: conventions/blue-prism-conventions.yml
+  - type: ErrorCatalog
+    url: errors/blue-prism-problem-types.yml
+  - type: DataModel
+    url: data-model/blue-prism-data-model.yml
+  - type: Webhooks
+    url: asyncapi/blue-prism-webhooks.yml
+  - type: Lifecycle
+    url: lifecycle/blue-prism-lifecycle.yml
+  - type: Conformance
+    url: conformance/blue-prism-conformance.yml
+  - type: RateLimits
+    url: rate-limits/blue-prism-rate-limits.yml
+- aid: blue-prism:blue-prism-licenses-api
+  name: Blue Prism Licenses API
+  description: The Licenses API from Blue Prism — 2 operation(s) for licenses.
+  humanURL: https://documentation.blueprism.com/bp-7-5/en-us/bp-api/api-spec-home.htm
+  baseURL: https://{address}/api/v7
+  tags:
+  - Licenses
+  properties:
+  - type: OpenAPI
+    url: openapi/blue-prism-licenses-api-openapi.yml
+  - type: Documentation
+    url: https://documentation.blueprism.com/bp-7-5/en-us/bp-api/api-spec-home.htm
+  - type: APIReference
+    url: https://documentation.blueprism.com/bp-7-5/en-us/bp-api/bpe-7-5-1-api-spec.html
+  - type: GettingStarted
+    url: https://documentation.blueprism.com/bp-7-5/en-us/Guides/bp-api/api-introduction.htm
+  - type: Authentication
+    url: authentication/blue-prism-authentication.yml
+  - type: OAuthScopes
+    url: scopes/blue-prism-scopes.yml
+  - type: Conventions
+    url: conventions/blue-prism-conventions.yml
+  - type: ErrorCatalog
+    url: errors/blue-prism-problem-types.yml
+  - type: DataModel
+    url: data-model/blue-prism-data-model.yml
+  - type: Webhooks
+    url: asyncapi/blue-prism-webhooks.yml
+  - type: Lifecycle
+    url: lifecycle/blue-prism-lifecycle.yml
+  - type: Conformance
+    url: conformance/blue-prism-conformance.yml
+  - type: RateLimits
+    url: rate-limits/blue-prism-rate-limits.yml
+- aid: blue-prism:blue-prism-pools-api
+  name: Blue Prism Pools API
+  description: The Pools API from Blue Prism — 1 operation(s) for pools.
+  humanURL: https://documentation.blueprism.com/bp-7-5/en-us/bp-api/api-spec-home.htm
+  baseURL: https://{address}/api/v7
+  tags:
+  - Pools
+  properties:
+  - type: OpenAPI
+    url: openapi/blue-prism-pools-api-openapi.yml
+  - type: Documentation
+    url: https://documentation.blueprism.com/bp-7-5/en-us/bp-api/api-spec-home.htm
+  - type: APIReference
+    url: https://documentation.blueprism.com/bp-7-5/en-us/bp-api/bpe-7-5-1-api-spec.html
+  - type: GettingStarted
+    url: https://documentation.blueprism.com/bp-7-5/en-us/Guides/bp-api/api-introduction.htm
+  - type: Authentication
+    url: authentication/blue-prism-authentication.yml
+  - type: OAuthScopes
+    url: scopes/blue-prism-scopes.yml
+  - type: Conventions
+    url: conventions/blue-prism-conventions.yml
+  - type: ErrorCatalog
+    url: errors/blue-prism-problem-types.yml
+  - type: DataModel
+    url: data-model/blue-prism-data-model.yml
+  - type: Webhooks
+    url: asyncapi/blue-prism-webhooks.yml
+  - type: Lifecycle
+    url: lifecycle/blue-prism-lifecycle.yml
+  - type: Conformance
+    url: conformance/blue-prism-conformance.yml
+  - type: RateLimits
+    url: rate-limits/blue-prism-rate-limits.yml
+- aid: blue-prism:blue-prism-processes-api
+  name: Blue Prism Processes API
+  description: The Processes API from Blue Prism — 2 operation(s) for processes.
+  humanURL: https://documentation.blueprism.com/bp-7-5/en-us/bp-api/api-spec-home.htm
+  baseURL: https://{address}/api/v7
+  tags:
+  - Processes
+  properties:
+  - type: OpenAPI
+    url: openapi/blue-prism-processes-api-openapi.yml
+  - type: Documentation
+    url: https://documentation.blueprism.com/bp-7-5/en-us/bp-api/api-spec-home.htm
+  - type: APIReference
+    url: https://documentation.blueprism.com/bp-7-5/en-us/bp-api/bpe-7-5-1-api-spec.html
+  - type: GettingStarted
+    url: https://documentation.blueprism.com/bp-7-5/en-us/Guides/bp-api/api-introduction.htm
+  - type: Authentication
+    url: authentication/blue-prism-authentication.yml
+  - type: OAuthScopes
+    url: scopes/blue-prism-scopes.yml
+  - type: Conventions
+    url: conventions/blue-prism-conventions.yml
+  - type: ErrorCatalog
+    url: errors/blue-prism-problem-types.yml
+  - type: DataModel
+    url: data-model/blue-prism-data-model.yml
+  - type: Webhooks
+    url: asyncapi/blue-prism-webhooks.yml
+  - type: Lifecycle
+    url: lifecycle/blue-prism-lifecycle.yml
+  - type: Conformance
+    url: conformance/blue-prism-conformance.yml
+  - type: RateLimits
+    url: rate-limits/blue-prism-rate-limits.yml
+- aid: blue-prism:blue-prism-resources-api
+  name: Blue Prism Resources API
+  description: The Resources API from Blue Prism — 2 operation(s) for resources.
+  humanURL: https://documentation.blueprism.com/bp-7-5/en-us/bp-api/api-spec-home.htm
+  baseURL: https://{address}/api/v7
+  tags:
+  - Resources
+  properties:
+  - type: OpenAPI
+    url: openapi/blue-prism-resources-api-openapi.yml
+  - type: Documentation
+    url: https://documentation.blueprism.com/bp-7-5/en-us/bp-api/api-spec-home.htm
+  - type: APIReference
+    url: https://documentation.blueprism.com/bp-7-5/en-us/bp-api/bpe-7-5-1-api-spec.html
+  - type: GettingStarted
+    url: https://documentation.blueprism.com/bp-7-5/en-us/Guides/bp-api/api-introduction.htm
+  - type: Authentication
+    url: authentication/blue-prism-authentication.yml
+  - type: OAuthScopes
+    url: scopes/blue-prism-scopes.yml
+  - type: Conventions
+    url: conventions/blue-prism-conventions.yml
+  - type: ErrorCatalog
+    url: errors/blue-prism-problem-types.yml
+  - type: DataModel
+    url: data-model/blue-prism-data-model.yml
+  - type: Webhooks
+    url: asyncapi/blue-prism-webhooks.yml
+  - type: Lifecycle
+    url: lifecycle/blue-prism-lifecycle.yml
+  - type: Conformance
+    url: conformance/blue-prism-conformance.yml
+  - type: RateLimits
+    url: rate-limits/blue-prism-rate-limits.yml
+- aid: blue-prism:blue-prism-schedulelogs-api
+  name: Blue Prism Schedule Logs API
+  description: The ScheduleLogs API from Blue Prism — 2 operation(s) for schedulelogs.
+  humanURL: https://documentation.blueprism.com/bp-7-5/en-us/bp-api/api-spec-home.htm
+  baseURL: https://{address}/api/v7
+  tags:
+  - ScheduleLogs
+  properties:
+  - type: OpenAPI
+    url: openapi/blue-prism-schedulelogs-api-openapi.yml
+  - type: Documentation
+    url: https://documentation.blueprism.com/bp-7-5/en-us/bp-api/api-spec-home.htm
+  - type: APIReference
+    url: https://documentation.blueprism.com/bp-7-5/en-us/bp-api/bpe-7-5-1-api-spec.html
+  - type: GettingStarted
+    url: https://documentation.blueprism.com/bp-7-5/en-us/Guides/bp-api/api-introduction.htm
+  - type: Authentication
+    url: authentication/blue-prism-authentication.yml
+  - type: OAuthScopes
+    url: scopes/blue-prism-scopes.yml
+  - type: Conventions
+    url: conventions/blue-prism-conventions.yml
+  - type: ErrorCatalog
+    url: errors/blue-prism-problem-types.yml
+  - type: DataModel
+    url: data-model/blue-prism-data-model.yml
+  - type: Webhooks
+    url: asyncapi/blue-prism-webhooks.yml
+  - type: Lifecycle
+    url: lifecycle/blue-prism-lifecycle.yml
+  - type: Conformance
+    url: conformance/blue-prism-conformance.yml
+  - type: RateLimits
+    url: rate-limits/blue-prism-rate-limits.yml
+- aid: blue-prism:blue-prism-schedules-api
+  name: Blue Prism Schedules API
+  description: The Schedules API from Blue Prism — 14 operation(s) for schedules.
+  humanURL: https://documentation.blueprism.com/bp-7-5/en-us/bp-api/api-spec-home.htm
+  baseURL: https://{address}/api/v7
+  tags:
+  - Schedules
+  properties:
+  - type: OpenAPI
+    url: openapi/blue-prism-schedules-api-openapi.yml
+  - type: Documentation
+    url: https://documentation.blueprism.com/bp-7-5/en-us/bp-api/api-spec-home.htm
+  - type: APIReference
+    url: https://documentation.blueprism.com/bp-7-5/en-us/bp-api/bpe-7-5-1-api-spec.html
+  - type: GettingStarted
+    url: https://documentation.blueprism.com/bp-7-5/en-us/Guides/bp-api/api-introduction.htm
+  - type: Authentication
+    url: authentication/blue-prism-authentication.yml
+  - type: OAuthScopes
+    url: scopes/blue-prism-scopes.yml
+  - type: Conventions
+    url: conventions/blue-prism-conventions.yml
+  - type: ErrorCatalog
+    url: errors/blue-prism-problem-types.yml
+  - type: DataModel
+    url: data-model/blue-prism-data-model.yml
+  - type: Webhooks
+    url: asyncapi/blue-prism-webhooks.yml
+  - type: Lifecycle
+    url: lifecycle/blue-prism-lifecycle.yml
+  - type: Conformance
+    url: conformance/blue-prism-conformance.yml
+  - type: RateLimits
+    url: rate-limits/blue-prism-rate-limits.yml
+- aid: blue-prism:blue-prism-sessions-api
+  name: Blue Prism Sessions API
+  description: The Sessions API from Blue Prism — 6 operation(s) for sessions.
+  humanURL: https://documentation.blueprism.com/bp-7-5/en-us/bp-api/api-spec-home.htm
+  baseURL: https://{address}/api/v7
+  tags:
+  - Sessions
+  properties:
+  - type: OpenAPI
+    url: openapi/blue-prism-sessions-api-openapi.yml
+  - type: Documentation
+    url: https://documentation.blueprism.com/bp-7-5/en-us/bp-api/api-spec-home.htm
+  - type: APIReference
+    url: https://documentation.blueprism.com/bp-7-5/en-us/bp-api/bpe-7-5-1-api-spec.html
+  - type: GettingStarted
+    url: https://documentation.blueprism.com/bp-7-5/en-us/Guides/bp-api/api-introduction.htm
+  - type: Authentication
+    url: authentication/blue-prism-authentication.yml
+  - type: OAuthScopes
+    url: scopes/blue-prism-scopes.yml
+  - type: Conventions
+    url: conventions/blue-prism-conventions.yml
+  - type: ErrorCatalog
+    url: errors/blue-prism-problem-types.yml
+  - type: DataModel
+    url: data-model/blue-prism-data-model.yml
+  - type: Webhooks
+    url: asyncapi/blue-prism-webhooks.yml
+  - type: Lifecycle
+    url: lifecycle/blue-prism-lifecycle.yml
+  - type: Conformance
+    url: conformance/blue-prism-conformance.yml
+  - type: RateLimits
+    url: rate-limits/blue-prism-rate-limits.yml
+- aid: blue-prism:blue-prism-subscriptions-api
+  name: Blue Prism Subscriptions API
+  description: The Subscriptions API from Blue Prism — 1 operation(s) for subscriptions.
+  humanURL: https://documentation.blueprism.com/bp-7-5/en-us/bp-api/api-spec-home.htm
+  baseURL: https://{address}/api/v7
+  tags:
+  - Subscriptions
+  properties:
+  - type: OpenAPI
+    url: openapi/blue-prism-subscriptions-api-openapi.yml
+  - type: Documentation
+    url: https://documentation.blueprism.com/bp-7-5/en-us/bp-api/api-spec-home.htm
+  - type: APIReference
+    url: https://documentation.blueprism.com/bp-7-5/en-us/bp-api/bpe-7-5-1-api-spec.html
+  - type: GettingStarted
+    url: https://documentation.blueprism.com/bp-7-5/en-us/Guides/bp-api/api-introduction.htm
+  - type: Authentication
+    url: authentication/blue-prism-authentication.yml
+  - type: OAuthScopes
+    url: scopes/blue-prism-scopes.yml
+  - type: Conventions
+    url: conventions/blue-prism-conventions.yml
+  - type: ErrorCatalog
+    url: errors/blue-prism-problem-types.yml
+  - type: DataModel
+    url: data-model/blue-prism-data-model.yml
+  - type: Webhooks
+    url: asyncapi/blue-prism-webhooks.yml
+  - type: Lifecycle
+    url: lifecycle/blue-prism-lifecycle.yml
+  - type: Conformance
+    url: conformance/blue-prism-conformance.yml
+  - type: RateLimits
+    url: rate-limits/blue-prism-rate-limits.yml
+- aid: blue-prism:blue-prism-time-zones-api
+  name: Blue Prism Time Zones API
+  description: The Time Zones API from Blue Prism — 1 operation(s) for time zones.
+  humanURL: https://documentation.blueprism.com/bp-7-5/en-us/bp-api/api-spec-home.htm
+  baseURL: https://{address}/api/v7
+  tags:
+  - Time Zones
+  properties:
+  - type: OpenAPI
+    url: openapi/blue-prism-time-zones-api-openapi.yml
+  - type: Documentation
+    url: https://documentation.blueprism.com/bp-7-5/en-us/bp-api/api-spec-home.htm
+  - type: APIReference
+    url: https://documentation.blueprism.com/bp-7-5/en-us/bp-api/bpe-7-5-1-api-spec.html
+  - type: GettingStarted
+    url: https://documentation.blueprism.com/bp-7-5/en-us/Guides/bp-api/api-introduction.htm
+  - type: Authentication
+    url: authentication/blue-prism-authentication.yml
+  - type: OAuthScopes
+    url: scopes/blue-prism-scopes.yml
+  - type: Conventions
+    url: conventions/blue-prism-conventions.yml
+  - type: ErrorCatalog
+    url: errors/blue-prism-problem-types.yml
+  - type: DataModel
+    url: data-model/blue-prism-data-model.yml
+  - type: Webhooks
+    url: asyncapi/blue-prism-webhooks.yml
+  - type: Lifecycle
+    url: lifecycle/blue-prism-lifecycle.yml
+  - type: Conformance
+    url: conformance/blue-prism-conformance.yml
+  - type: RateLimits
+    url: rate-limits/blue-prism-rate-limits.yml
+- aid: blue-prism:blue-prism-user-api
+  name: Blue Prism User API
+  description: The User API from Blue Prism — 1 operation(s) for user.
+  humanURL: https://documentation.blueprism.com/bp-7-5/en-us/bp-api/api-spec-home.htm
+  baseURL: https://{address}/api/v7
+  tags:
+  - User
+  properties:
+  - type: OpenAPI
+    url: openapi/blue-prism-user-api-openapi.yml
+  - type: Documentation
+    url: https://documentation.blueprism.com/bp-7-5/en-us/bp-api/api-spec-home.htm
+  - type: APIReference
+    url: https://documentation.blueprism.com/bp-7-5/en-us/bp-api/bpe-7-5-1-api-spec.html
+  - type: GettingStarted
+    url: https://documentation.blueprism.com/bp-7-5/en-us/Guides/bp-api/api-introduction.htm
+  - type: Authentication
+    url: authentication/blue-prism-authentication.yml
+  - type: OAuthScopes
+    url: scopes/blue-prism-scopes.yml
+  - type: Conventions
+    url: conventions/blue-prism-conventions.yml
+  - type: ErrorCatalog
+    url: errors/blue-prism-problem-types.yml
+  - type: DataModel
+    url: data-model/blue-prism-data-model.yml
+  - type: Webhooks
+    url: asyncapi/blue-prism-webhooks.yml
+  - type: Lifecycle
+    url: lifecycle/blue-prism-lifecycle.yml
+  - type: Conformance
+    url: conformance/blue-prism-conformance.yml
+  - type: RateLimits
+    url: rate-limits/blue-prism-rate-limits.yml
+- aid: blue-prism:blue-prism-work-queue-groups-api
+  name: Blue Prism Work Queue Groups API
+  description: The Work Queue Groups API from Blue Prism — 5 operation(s) for work queue groups.
+  humanURL: https://documentation.blueprism.com/bp-7-5/en-us/bp-api/api-spec-home.htm
+  baseURL: https://{address}/api/v7
+  tags:
+  - Work Queue Groups
+  properties:
+  - type: OpenAPI
+    url: openapi/blue-prism-work-queue-groups-api-openapi.yml
+  - type: Documentation
+    url: https://documentation.blueprism.com/bp-7-5/en-us/bp-api/api-spec-home.htm
+  - type: APIReference
+    url: https://documentation.blueprism.com/bp-7-5/en-us/bp-api/bpe-7-5-1-api-spec.html
+  - type: GettingStarted
+    url: https://documentation.blueprism.com/bp-7-5/en-us/Guides/bp-api/api-introduction.htm
+  - type: Authentication
+    url: authentication/blue-prism-authentication.yml
+  - type: OAuthScopes
+    url: scopes/blue-prism-scopes.yml
+  - type: Conventions
+    url: conventions/blue-prism-conventions.yml
+  - type: ErrorCatalog
+    url: errors/blue-prism-problem-types.yml
+  - type: DataModel
+    url: data-model/blue-prism-data-model.yml
+  - type: Webhooks
+    url: asyncapi/blue-prism-webhooks.yml
+  - type: Lifecycle
+    url: lifecycle/blue-prism-lifecycle.yml
+  - type: Conformance
+    url: conformance/blue-prism-conformance.yml
+  - type: RateLimits
+    url: rate-limits/blue-prism-rate-limits.yml
+- aid: blue-prism:blue-prism-work-queues-api
+  name: Blue Prism Work Queues API
+  description: The Work Queues API from Blue Prism — 12 operation(s) for work queues.
+  humanURL: https://documentation.blueprism.com/bp-7-5/en-us/bp-api/api-spec-home.htm
+  baseURL: https://{address}/api/v7
+  tags:
+  - Work Queues
+  properties:
+  - type: OpenAPI
+    url: openapi/blue-prism-work-queues-api-openapi.yml
+  - type: Documentation
+    url: https://documentation.blueprism.com/bp-7-5/en-us/bp-api/api-spec-home.htm
+  - type: APIReference
+    url: https://documentation.blueprism.com/bp-7-5/en-us/bp-api/bpe-7-5-1-api-spec.html
+  - type: GettingStarted
+    url: https://documentation.blueprism.com/bp-7-5/en-us/Guides/bp-api/api-introduction.htm
+  - type: Authentication
+    url: authentication/blue-prism-authentication.yml
+  - type: OAuthScopes
+    url: scopes/blue-prism-scopes.yml
+  - type: Conventions
+    url: conventions/blue-prism-conventions.yml
+  - type: ErrorCatalog
+    url: errors/blue-prism-problem-types.yml
+  - type: DataModel
+    url: data-model/blue-prism-data-model.yml
+  - type: Webhooks
+    url: asyncapi/blue-prism-webhooks.yml
+  - type: Lifecycle
+    url: lifecycle/blue-prism-lifecycle.yml
+  - type: Conformance
+    url: conformance/blue-prism-conformance.yml
+  - type: RateLimits
+    url: rate-limits/blue-prism-rate-limits.yml
 common:
   - type: Website
     url: https://www.blueprism.com
