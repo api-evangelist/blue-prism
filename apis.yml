@@ -529,40 +529,6 @@ apis:
     url: conformance/blue-prism-conformance.yml
   - type: RateLimits
     url: rate-limits/blue-prism-rate-limits.yml
-- aid: blue-prism:blue-prism-time-zones-api
-  name: Blue Prism Time Zones API
-  description: The Time Zones API from Blue Prism — 1 operation(s) for time zones.
-  humanURL: https://documentation.blueprism.com/bp-7-5/en-us/bp-api/api-spec-home.htm
-  baseURL: https://{address}/api/v7
-  tags:
-  - Time Zones
-  properties:
-  - type: OpenAPI
-    url: openapi/blue-prism-time-zones-api-openapi.yml
-  - type: Documentation
-    url: https://documentation.blueprism.com/bp-7-5/en-us/bp-api/api-spec-home.htm
-  - type: APIReference
-    url: https://documentation.blueprism.com/bp-7-5/en-us/bp-api/bpe-7-5-1-api-spec.html
-  - type: GettingStarted
-    url: https://documentation.blueprism.com/bp-7-5/en-us/Guides/bp-api/api-introduction.htm
-  - type: Authentication
-    url: authentication/blue-prism-authentication.yml
-  - type: OAuthScopes
-    url: scopes/blue-prism-scopes.yml
-  - type: Conventions
-    url: conventions/blue-prism-conventions.yml
-  - type: ErrorCatalog
-    url: errors/blue-prism-problem-types.yml
-  - type: DataModel
-    url: data-model/blue-prism-data-model.yml
-  - type: Webhooks
-    url: asyncapi/blue-prism-webhooks.yml
-  - type: Lifecycle
-    url: lifecycle/blue-prism-lifecycle.yml
-  - type: Conformance
-    url: conformance/blue-prism-conformance.yml
-  - type: RateLimits
-    url: rate-limits/blue-prism-rate-limits.yml
 - aid: blue-prism:blue-prism-user-api
   name: Blue Prism User API
   description: The User API from Blue Prism — 1 operation(s) for user.
@@ -641,6 +607,40 @@ apis:
   properties:
   - type: OpenAPI
     url: openapi/blue-prism-work-queues-api-openapi.yml
+  - type: Documentation
+    url: https://documentation.blueprism.com/bp-7-5/en-us/bp-api/api-spec-home.htm
+  - type: APIReference
+    url: https://documentation.blueprism.com/bp-7-5/en-us/bp-api/bpe-7-5-1-api-spec.html
+  - type: GettingStarted
+    url: https://documentation.blueprism.com/bp-7-5/en-us/Guides/bp-api/api-introduction.htm
+  - type: Authentication
+    url: authentication/blue-prism-authentication.yml
+  - type: OAuthScopes
+    url: scopes/blue-prism-scopes.yml
+  - type: Conventions
+    url: conventions/blue-prism-conventions.yml
+  - type: ErrorCatalog
+    url: errors/blue-prism-problem-types.yml
+  - type: DataModel
+    url: data-model/blue-prism-data-model.yml
+  - type: Webhooks
+    url: asyncapi/blue-prism-webhooks.yml
+  - type: Lifecycle
+    url: lifecycle/blue-prism-lifecycle.yml
+  - type: Conformance
+    url: conformance/blue-prism-conformance.yml
+  - type: RateLimits
+    url: rate-limits/blue-prism-rate-limits.yml
+- aid: blue-prism:blue-prism-timezones-api
+  name: Blue Prism Timezones API
+  description: The Timezones API from Blue Prism — 1 operation(s) for timezones.
+  humanURL: https://documentation.blueprism.com/process-intelligence/2-1/en-us/api/api-intro.htm
+  baseURL: https://{your.instance}/open-api/1.0
+  tags:
+  - Timezones
+  properties:
+  - type: OpenAPI
+    url: openapi/blue-prism-timezones-api-openapi.yml
   - type: Documentation
     url: https://documentation.blueprism.com/bp-7-5/en-us/bp-api/api-spec-home.htm
   - type: APIReference
