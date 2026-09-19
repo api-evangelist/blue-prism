@@ -92,6 +92,8 @@ apis:
   humanURL: https://documentation.blueprism.com/bp-7-5/en-us/bp-api/api-spec-home.htm
   baseURL: https://{address}/api/v7
   tags:
+  - Calendar
+  tags_raw:
   - Calendars
   properties:
   - type: OpenAPI
@@ -433,6 +435,8 @@ apis:
   humanURL: https://documentation.blueprism.com/bp-7-5/en-us/bp-api/api-spec-home.htm
   baseURL: https://{address}/api/v7
   tags:
+  - Schedule
+  tags_raw:
   - Schedules
   properties:
   - type: OpenAPI
@@ -501,6 +505,8 @@ apis:
   humanURL: https://documentation.blueprism.com/bp-7-5/en-us/bp-api/api-spec-home.htm
   baseURL: https://{address}/api/v7
   tags:
+  - Subscription
+  tags_raw:
   - Subscriptions
   properties:
   - type: OpenAPI
@@ -637,6 +643,8 @@ apis:
   humanURL: https://documentation.blueprism.com/process-intelligence/2-1/en-us/api/api-intro.htm
   baseURL: https://{your.instance}/open-api/1.0
   tags:
+  - Timezone
+  tags_raw:
   - Timezones
   properties:
   - type: OpenAPI
