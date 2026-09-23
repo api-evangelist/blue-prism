@@ -1,0 +1,398 @@
+openapi: 3.2.0
+info:
+  title: Blue Prism Dashboards API
+  description: An API to expose core functionality of the Blue Prism product.
+  version: 7.5.1
+security:
+- Bearer:
+  - bp-api
+  - bpserver
+- OAuth2:
+  - bp-api
+  - bpserver
+tags:
+- name: Dashboards
+paths:
+  /api/v7/dashboards/workQueueCompositions:
+    get:
+      summary: Return aggregate work queue data for each of the requested queues
+      operationId: getWorkQueueData
+      tags:
+      - Dashboards
+      parameters:
+      - name: workQueueIds
+        in: query
+        description: Array of work queue IDs to retrieve data for.
+        required: true
+        schema:
+          type: array
+          items:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: A list of work queue composition details was successfully retrieved.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/WorkQueueComposition'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/NotAuthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+  /api/v7/dashboards/resourceUtilization:
+    get:
+      summary: Return runtime resource utilization
+      operationId: getResourceUtilization
+      tags:
+      - Dashboards
+      parameters:
+      - name: startDate
+        in: query
+        required: true
+        description: The start date.
+        schema:
+          type: string
+          format: date-time
+      - name: resourceIds
+        in: query
+        description: Array of resource IDs to filter on.
+        schema:
+          type: array
+          items:
+            type: string
+            format: uuid
+      - name: pageNumber
+        in: query
+        description: Page number parameter used for data paging of utilization heat map.
+        schema:
+          type: integer
+      - name: pageSize
+        in: query
+        description: Page size parameter used for data paging of utilization heat map.
+        schema:
+          type: integer
+      responses:
+        '200':
+          description: A list of resource utilization details was successfully retrieved.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ResourceUtilization'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/NotAuthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+  /api/v7/dashboards/resourcesSummaryUtilization:
+    get:
+      summary: Return runtime resources summary utilization by date range
+      operationId: getResourceSummaryUtilizationByDate
+      tags:
+      - Dashboards
+      parameters:
+      - name: startDate
+        in: query
+        required: true
+        description: The start date.
+        schema:
+          type: string
+          format: date-time
+      - name: endDate
+        in: query
+        required: true
+        description: The end date.
+        schema:
+          type: string
+          format: date-time
+      - name: resourceIds
+        in: query
+        description: Resource IDs to filter on.
+        schema:
+          type: array
+          items:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: A list of resource utilization by date range was successfully retrieved.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ResourcesSummaryUtilization'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/NotAuthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+  /api/v7/dashboards/licensesEntitlement:
+    get:
+      summary: Return aggregated licenses entitlement data
+      description: '> ### Permissions required: `System - License permission`'
+      tags:
+      - Dashboards
+      responses:
+        '200':
+          description: An aggregated licenses entitlement data was successfully retrieved.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LicensesEntitlement'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/NotAuthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+      operationId: getApiV7DashboardsLicensesEntitlement
+      x-operation-id-source: derived
+  /api/v7/dashboards/currentLimitsAndUsage:
+    get:
+      summary: Return current active licenses limits and usages
+      operationId: getLicenseLimits
+      description: '> ### Permissions required
+
+        At least one of: `View Resource Screen Capture` | `View Resource`
+
+        | `Control Resource` | `Configure Resource`
+
+
+        And at least one of: `Audit Alerts` | `Subscribe To Process Alerts`
+
+        | `Configure Process Alerts`'
+      tags:
+      - Dashboards
+      responses:
+        '200':
+          description: Details of current active licenses limits and usages was successfully retrieved.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LicenseUsageDetailsModel'
+        '401':
+          $ref: '#/components/responses/NotAuthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+components:
+  schemas:
+    LicensesEntitlement:
+      description: A summary of an aggregated licenses entitlement data.
+      type: object
+      properties:
+        activeLicenseTypes:
+          description: An array of types of an active licenses.
+          type: array
+          items:
+            type: string
+            enum:
+            - Enterprise
+            - NHS
+            - Evaluation
+            - Education
+            - Desktop
+        enterpriseEntitlement:
+          type: object
+          $ref: '#/components/schemas/BaseEntitlement'
+          description: A summary of an aggregated enterprise licenses entitlement data.
+        desktopEntitlement:
+          type: object
+          $ref: '#/components/schemas/BaseEntitlement'
+          description: A summary of an aggregated desktop licenses entitlement data.
+    ResourceUtilization:
+      description: A model of resource utilization per hour.
+      type: object
+      properties:
+        resourceId:
+          type: string
+          description: The ID of the resource.
+          format: uuid
+        digitalWorkerName:
+          type: string
+          description: The name of the resource.
+        utilizationDate:
+          type: string
+          description: The date of the resource utilization.
+          format: date-time
+          example: '2020-10-02T12:34:56+02:00'
+        usages:
+          type: array
+          description: An array of 24 items representing each hour of a day. Each item contains the number of minutes of that hour that the resource was working.
+          items:
+            type: integer
+            description: The number of minutes that the resource was working in this hour.
+    BaseEntitlement:
+      description: An aggregated licenses entitlement data.
+      type: object
+      properties:
+        publishedprocesseslimit:
+          type: integer
+          description: Number of processes that can be published.
+        concurrentsessionslimit:
+          type: integer
+          description: Number of concurrent sessions which can be ran.
+        runtimeresourceslimit:
+          type: integer
+          description: Number of resources which can be registered at any one time.
+        processalertmachineslimit:
+          type: integer
+          description: Number of machines which Process Alerts can be used.
+    WorkQueueComposition:
+      description: A summary of work queue items.
+      type: object
+      properties:
+        id:
+          type: string
+          description: The ID of the work queue.
+          format: uuid
+        name:
+          type: string
+          description: The name of work queue.
+        completed:
+          type: integer
+          description: A count of completed items in work queue.
+        pending:
+          type: integer
+          description: A count of pending items in work queue.
+        deferred:
+          type: integer
+          description: A count of deferred items in work queue.
+        locked:
+          type: integer
+          description: A count of locked items in work queue.
+        exceptioned:
+          type: integer
+          description: A count of exceptioned items in work queue.
+    UrlParameterError:
+      description: An error occurred due to incorrect data supplied to url parameter.
+      type: object
+      properties:
+        message:
+          type: string
+          description: A message about the error.
+        messageDetail:
+          type: string
+          description: A detailed description about the error.
+    ValidationError:
+      description: An error occurred during validation. See the response body for details on the invalid field.
+      type: object
+      properties:
+        invalidField:
+          type: string
+          description: The field which is invalid.
+        message:
+          type: string
+          description: A description of the error found with the field.
+    ErrorMessage:
+      description: A message describing the problem encountered.
+      type: string
+    LicenseUsageDetailsModel:
+      description: A summary of active licenses limits and usages
+      type: object
+      properties:
+        publishedProcessesLimit:
+          type:
+          - integer
+          - 'null'
+          description: The number of processes that active licenses permit to be published or null if unlimited.
+          example: null
+        publishedProcessesUsed:
+          type: integer
+          description: The number of published processes (excluding retired processes) currently in use.
+          example: 5
+        concurrentSessionsLimit:
+          type:
+          - integer
+          - 'null'
+          description: The number of concurrent sessions that active licenses permit or null if unlimited.
+          example: 50
+        concurrentSessionsUsed:
+          type: integer
+          description: The number of current pending, running or stopping sessions.
+          example: 7
+        runtimeResourcesLimit:
+          type:
+          - integer
+          - 'null'
+          description: The number of machines that active licenses permit or null if unlimited.
+          example: 150
+        runtimeResourcesUsed:
+          type: integer
+          description: The number of machines currently in use.
+          example: 72
+        processAlertMachinesLimit:
+          type:
+          - integer
+          - 'null'
+          description: The number of machines on which this set of licenses permits process alerts or null if unlimited.
+          example: 50
+        processAlertMachinesUsed:
+          type: integer
+          description: The number of machines with alerts currently in use.
+          example: 17
+    ResourcesSummaryUtilization:
+      description: A model of average resource utilization per day.
+      type: object
+      properties:
+        usagehour:
+          type: string
+          description: The date of the resource utilization.
+          format: date-time
+          example: '2020-10-02T12:34:56+02:00'
+        usage:
+          type: integer
+          description: The average resource utilization per hour in minutes.
+  responses:
+    BadRequest:
+      description: The request is malformed or contains incorrect information. See the response for more details.
+      content:
+        application/json:
+          schema:
+            oneOf:
+            - $ref: '#/components/schemas/UrlParameterError'
+            - $ref: '#/components/schemas/ValidationError'
+    NotFound:
+      description: The requested resource could not be found.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorMessage'
+    Forbidden:
+      description: The authentication token does not give sufficient permissions to perform this action.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorMessage'
+    NotAuthorized:
+      description: The authentication token was either missing or invalid and must be refreshed.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorMessage'
+  securitySchemes:
+    Bearer:
+      type: http
+      scheme: bearer
+      description: JWT token issued from Authentication Server.
+      bearerFormat: JWT
+    OAuth2:
+      type: oauth2
+      flows:
+        clientCredentials:
+          tokenUrl: https://auth-server/connect/token
+          scopes:
+            bp-api: API scope
+            bpserver: Blue Prism Application scope

@@ -1,0 +1,98 @@
+openapi: 3.2.0
+info:
+  title: Blue Prism Pools API
+  description: An API to expose core functionality of the Blue Prism product.
+  version: 7.5.1
+security:
+- Bearer:
+  - bp-api
+  - bpserver
+- OAuth2:
+  - bp-api
+  - bpserver
+tags:
+- name: Pools
+paths:
+  /api/v7/resources/pools:
+    get:
+      summary: Return a list of resource pools
+      operationId: getResourcePools
+      description: '> ### Permissions required
+
+        At least one of: `View Resource` | `View Resource Screen Captures` | `Configure Resource`
+
+        | `Control Resource` | `Manage Resource Access Rights` | `View Resource Details`'
+      tags:
+      - Pools
+      responses:
+        '200':
+          description: A list pools was successfully retrieved.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ResourcePool'
+        '401':
+          $ref: '#/components/responses/NotAuthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+components:
+  responses:
+    Forbidden:
+      description: The authentication token does not give sufficient permissions to perform this action.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorMessage'
+    NotAuthorized:
+      description: The authentication token was either missing or invalid and must be refreshed.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorMessage'
+  schemas:
+    ErrorMessage:
+      description: A message describing the problem encountered.
+      type: string
+    ResourcePool:
+      description: A model of resource pool.
+      type: object
+      properties:
+        id:
+          type: string
+          description: The ID of the resource pool.
+          format: uuid
+        name:
+          type: string
+          description: The name of the pool.
+        members:
+          type: integer
+          description: The number of resources in the pool.
+        databaseStatus:
+          type: string
+          enum:
+          - Unknown
+          - Ready
+          - Offline
+          - Pending
+          description: The reported status of the resource pool.
+      example:
+        id: 1
+        name: Test Pool
+        members: 3
+        databaseStatus: Ready
+  securitySchemes:
+    Bearer:
+      type: http
+      scheme: bearer
+      description: JWT token issued from Authentication Server.
+      bearerFormat: JWT
+    OAuth2:
+      type: oauth2
+      flows:
+        clientCredentials:
+          tokenUrl: https://auth-server/connect/token
+          scopes:
+            bp-api: API scope
+            bpserver: Blue Prism Application scope

@@ -1,0 +1,617 @@
+openapi: 3.2.0
+info:
+  title: Blue Prism Licenses API
+  description: An API to expose core functionality of the Blue Prism product.
+  version: 7.5.1
+security:
+- Bearer:
+  - bp-api
+  - bpserver
+- OAuth2:
+  - bp-api
+  - bpserver
+tags:
+- name: Licenses
+paths:
+  /api/v7/licenses:
+    get:
+      summary: Return a list of licenses
+      operationId: getLicenses
+      description: '> ### Permissions required: `System - License permission`'
+      tags:
+      - Licenses
+      parameters:
+      - name: pagingToken
+        description: The token to point to the last item previously returned.
+        in: query
+        schema:
+          type: string
+      - name: itemsPerPage
+        description: The maximum number of items to retrieve per page.
+        in: query
+        schema:
+          type: integer
+          minimum: 1
+      - name: sortBy
+        description: The field that results should be sorted by and the direction they should be sorted in.
+        in: query
+        schema:
+          type: string
+          enum:
+          - LicenseIdAsc
+          - LicenseIdDesc
+          - StatusAsc
+          - StatusDesc
+          - ActivationStatusAsc
+          - ActivationStatusDesc
+          - OwnerAsc
+          - OwnerDesc
+          - TypeAsc
+          - TypeDesc
+          - StartsAsc
+          - StartsDesc
+          - ExpiresAsc
+          - ExpiresDesc
+          - ProcessesAsc
+          - ProcessesDesc
+          - SessionsAsc
+          - SessionsDesc
+          - ResourcesAsc
+          - ResourcesDesc
+          - AlertsAsc
+          - AlertsDesc
+          - StandaloneAsc
+          - StandaloneDesc
+          - DecipherIDPAsc
+          - DecipherIDPDesc
+      - name: status
+        in: query
+        style: form
+        explode: false
+        description: The status of the license to search for.
+        schema:
+          type: array
+          items:
+            type: string
+            enum:
+            - Future
+            - Expired
+            - ExpiresSoon
+            - GracePeriodEndsSoon
+            - RequiresActivation
+            - Active
+      - name: activationStatus
+        in: query
+        style: form
+        explode: false
+        description: The activation status of the license to search for.
+        schema:
+          type: array
+          items:
+            type: string
+            enum:
+            - NotApplicable
+            - NotActivated
+            - Activated
+      - name: type
+        in: query
+        style: form
+        explode: false
+        description: The type of the license to search for.
+        schema:
+          type: array
+          items:
+            type: string
+            enum:
+            - None
+            - Enterprise
+            - NHS
+            - Evaluation
+            - Education
+            - Desktop
+      - name: owner
+        description: A filter to search for the owner of the license.
+        in: query
+        style: deepObject
+        schema:
+          $ref: '#/components/schemas/FullStringFilter'
+        examples:
+          equals:
+            $ref: '#/components/examples/StringEqualsExample'
+          startsWith:
+            $ref: '#/components/examples/StringStartsWithExample'
+          contains:
+            $ref: '#/components/examples/StringContainsExample'
+          range:
+            $ref: '#/components/examples/StringRangeExample'
+          greater:
+            $ref: '#/components/examples/StringGreaterThanExample'
+      - name: starts
+        in: query
+        style: deepObject
+        description: A filter to search for the date that the license starts.
+        schema:
+          $ref: '#/components/schemas/RangeOrEqualFilter'
+        examples:
+          equals:
+            $ref: '#/components/examples/DateTimeEqualsExample'
+          range:
+            $ref: '#/components/examples/DateTimeRangeExample'
+          greater:
+            $ref: '#/components/examples/DateTimeGreaterThanExample'
+      - name: expires
+        in: query
+        style: deepObject
+        description: A filter to search for the date that the license expires.
+        schema:
+          $ref: '#/components/schemas/RangeOrEqualFilter'
+        examples:
+          equals:
+            $ref: '#/components/examples/DateTimeEqualsExample'
+          range:
+            $ref: '#/components/examples/DateTimeRangeExample'
+          greater:
+            $ref: '#/components/examples/DateTimeGreaterThanExample'
+      - name: processes
+        description: A filter to search for the number of processes that may be published.
+        in: query
+        style: deepObject
+        schema:
+          $ref: '#/components/schemas/RangeOrEqualFilter'
+        examples:
+          equals:
+            $ref: '#/components/examples/IntegerEqualsExample'
+          range:
+            $ref: '#/components/examples/IntegerRangeExample'
+          less:
+            $ref: '#/components/examples/IntegerLessThanExample'
+      - name: sessions
+        description: A filter to search for the number of sessions which may be run.
+        in: query
+        style: deepObject
+        schema:
+          $ref: '#/components/schemas/RangeOrEqualFilter'
+        examples:
+          equals:
+            $ref: '#/components/examples/IntegerEqualsExample'
+          range:
+            $ref: '#/components/examples/IntegerRangeExample'
+          less:
+            $ref: '#/components/examples/IntegerLessThanExample'
+      - name: resources
+        description: A filter to search for the number of runtime resources which may be registered at any one time.
+        in: query
+        style: deepObject
+        schema:
+          $ref: '#/components/schemas/RangeOrEqualFilter'
+        examples:
+          equals:
+            $ref: '#/components/examples/IntegerEqualsExample'
+          range:
+            $ref: '#/components/examples/IntegerRangeExample'
+          less:
+            $ref: '#/components/examples/IntegerLessThanExample'
+      - name: alerts
+        description: A filter to search for the number of machines on which Process Alerts may be used.
+        in: query
+        style: deepObject
+        schema:
+          $ref: '#/components/schemas/RangeOrEqualFilter'
+        examples:
+          equals:
+            $ref: '#/components/examples/IntegerEqualsExample'
+          range:
+            $ref: '#/components/examples/IntegerRangeExample'
+          less:
+            $ref: '#/components/examples/IntegerLessThanExample'
+      - name: standalone.eq
+        description: A filter to check availability of license standalone.
+        in: query
+        schema:
+          type: boolean
+      - name: decipherIDP.eq
+        description: A filter to check availability of license decipherIDP.
+        in: query
+        schema:
+          type: boolean
+      responses:
+        '200':
+          description: A list of licenses was successfully retrieved.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LicensesItemsPage'
+        '401':
+          $ref: '#/components/responses/NotAuthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+    post:
+      summary: Add a license
+      operationId: createLicense
+      description: '> ### Permissions required: `System - License permission`'
+      tags:
+      - Licenses
+      requestBody:
+        description: Encoded license key.
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AddLicense'
+      responses:
+        '201':
+          description: The license was successfully added.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AddLicenseResponseModel'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/NotAuthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+  /api/v7/licenses/{licenseId}:
+    delete:
+      summary: Delete a specified license
+      operationId: deleteLicense
+      description: '> ### Permissions required: `System - License permission `'
+      tags:
+      - Licenses
+      parameters:
+      - name: licenseId
+        in: path
+        description: The ID of the license to delete.
+        required: true
+        schema:
+          type: integer
+      responses:
+        '204':
+          description: The license was successfully deleted.
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/NotAuthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+components:
+  examples:
+    StringGreaterThanExample:
+      value:
+        gte: Example
+      summary: Search for a value alphanumerically after or equal to "Example".
+    StringContainsExample:
+      value:
+        ctn: amp
+      summary: Search a value containing "amp"
+    IntegerLessThanExample:
+      value:
+        lte: 123
+      summary: Search for a value less than or equal to 123.
+    DateTimeEqualsExample:
+      value:
+        eq: '2020-10-02T12:34:56+01:00'
+      summary: Search for a value equal to 2020-10-02 at 12:34:56 (GMT+1).
+    IntegerRangeExample:
+      value:
+        gte: 123
+        lte: 321
+      summary: Search for a value between 123 and 321 inclusive.
+    StringStartsWithExample:
+      value:
+        strtw: Exa
+      summary: Search a value starting with "Exa".
+    IntegerEqualsExample:
+      value:
+        eq: 123
+      summary: Search for a value equal to 123.
+    DateTimeRangeExample:
+      value:
+        gte: '2020-10-02T12:34:56+01:00'
+        lte: '2020-11-02T12:34:56+01:00'
+      summary: Search for a value between 2020-10-02 at 12:34:56 (GMT+1) and 2020-11-02 at 12:34:56 (GMT+1) (inclusive).
+    StringEqualsExample:
+      value:
+        eq: Example
+      summary: Search for a value equal to "Example".
+    DateTimeGreaterThanExample:
+      value:
+        gte: '2020-10-02T12:34:56+01:00'
+      summary: Search for a value after or equal to 2020-10-02 at 12:34:56 (GMT+1).
+    StringRangeExample:
+      value:
+        gte: Ex
+        lte: F
+      summary: Search for a value alphanumerically between "Ex" and "F".
+  schemas:
+    UrlParameterError:
+      description: An error occurred due to incorrect data supplied to url parameter.
+      type: object
+      properties:
+        message:
+          type: string
+          description: A message about the error.
+        messageDetail:
+          type: string
+          description: A detailed description about the error.
+    StringFilter:
+      description: Used to filter strings. Check for strings that start with, and/or contain the given value(s).
+      type: object
+      anyOf:
+      - $ref: '#/components/schemas/ContainsStringFilter'
+      - $ref: '#/components/schemas/StartsWithStringFilter'
+      example:
+        ctn: null
+        strtw: null
+    RangeOrEqualFilter:
+      description: Used to filter values. Check for values that are equal to, greater than or equal to, less than or equal to, or between the given value(s).
+      type: object
+      oneOf:
+      - $ref: '#/components/schemas/RangeFilter'
+      - $ref: '#/components/schemas/EqualsFilter'
+      example:
+        gte: null
+        lte: null
+        eq: null
+    GreaterThanOrEqualToFilter:
+      description: Used to filter values. Check for values that are greater than or equal to the given value.
+      type: object
+      properties:
+        gte:
+          type:
+          - object
+          - 'null'
+          description: The value that the field should be greater than or equal to.
+      example:
+        gte: null
+    AddLicense:
+      description: Contains details for adding a new license key.
+      type: object
+      properties:
+        encodedLicenseKey:
+          type: string
+          description: The encoded license key.
+      example:
+        encodedLicenseKey: PD94bWwgdmVyc2lvbj0iMS4
+    StartsWithStringFilter:
+      description: Used to filter strings. Check for strings that start with the given value.
+      type: object
+      properties:
+        strtw:
+          type:
+          - string
+          - 'null'
+          description: The value that the field should start with.
+      example:
+        strtw: null
+    ContainsStringFilter:
+      description: Used to filter strings. Check for strings that contain the given value.
+      type: object
+      properties:
+        ctn:
+          type:
+          - string
+          - 'null'
+          description: The value that the field should contain.
+      example:
+        ctn: null
+    ValidationError:
+      description: An error occurred during validation. See the response body for details on the invalid field.
+      type: object
+      properties:
+        invalidField:
+          type: string
+          description: The field which is invalid.
+        message:
+          type: string
+          description: A description of the error found with the field.
+    LicensesItemsPage:
+      description: Contains basic details of a licenses.
+      type: object
+      properties:
+        pagingToken:
+          $ref: '#/components/schemas/PagingToken'
+        items:
+          type: array
+          description: A collection of licenses.
+          items:
+            $ref: '#/components/schemas/License'
+    ErrorMessage:
+      description: A message describing the problem encountered.
+      type: string
+    PagingToken:
+      type: string
+      description: The token to be used in the next request to return the next collection of items.
+      example: U3VwZXIgc2VjcmV0IGRhdGEuIFNoaGho
+    AddLicenseResponseModel:
+      description: Contains the information of an added license.
+      type: object
+      properties:
+        id:
+          type: integer
+          description: The ID of the license.
+        status:
+          type: string
+          enum:
+          - Future
+          - Expired
+          - ExpiresSoon
+          - GracePeriodEndsSoon
+          - RequiresActivation
+          - Active
+          description: The status of the license.
+        expires:
+          type: string
+          description: The date at which this license expires.
+          format: date-time
+        owner:
+          type: string
+          description: The owner of the license.
+      example:
+        id: 1
+        status: Active
+        expires: '2023-01-31'
+        owner: Test License
+    LessThanOrEqualToFilter:
+      description: Used to filter values. Check for values that are less than or equal to the given value.
+      type: object
+      properties:
+        lte:
+          type:
+          - object
+          - 'null'
+          description: The value that the field should be less than or equal to.
+      example:
+        lte: null
+    FullStringFilter:
+      description: Used to filter strings. Check for strings that start with, contain, equal, are greater than, are less than, or are between the given value(s).
+      type: object
+      anyOf:
+      - $ref: '#/components/schemas/StringFilter'
+      - $ref: '#/components/schemas/RangeOrEqualFilter'
+      example:
+        ctn: null
+        strtw: null
+        gte: null
+        lte: null
+        eq: null
+    EqualsFilter:
+      description: Used to filter values. Check for values that are equal to the given value.
+      type: object
+      properties:
+        eq:
+          type:
+          - object
+          - 'null'
+          description: The value that the field should be equal to.
+      example:
+        eq: null
+    License:
+      description: Contains details of the license.
+      type: object
+      properties:
+        id:
+          type: integer
+          description: The ID of the license.
+        status:
+          type: string
+          enum:
+          - Future
+          - Expired
+          - ExpiresSoon
+          - GracePeriodEndsSoon
+          - RequiresActivation
+          - Active
+          description: The status of the license.
+        activationStatus:
+          type: string
+          enum:
+          - NotApplicable
+          - NotActivated
+          - Activated
+          description: The activationStatus of the license.
+        owner:
+          type: string
+          description: The owner of the license.
+        type:
+          type: string
+          enum:
+          - None
+          - Enterprise
+          - NHS
+          - Evaluation
+          - Education
+          - Desktop
+          description: The type of the license.
+        starts:
+          type: string
+          description: The date on which this license comes into effect.
+          format: date-time
+        expires:
+          type: string
+          description: The date at which this license expires.
+          format: date-time
+        processes:
+          type: string
+          description: The number of processes.
+        sessions:
+          type: string
+          description: The number of sessions.
+        resources:
+          type: string
+          description: The number of resources.
+        alerts:
+          type: string
+          description: The number of alerts.
+        standalone:
+          type: boolean
+          description: Does this license standalone?
+        decipherIDP:
+          type: boolean
+          description: Does this license have decipher permissions?
+      example:
+        id: 1
+        status: Active
+        owner: Test License
+        activationStatus: NotApplicable
+        type: Enterprise
+        starts: '2021-01-31'
+        expires: '2023-01-31'
+        processes: '1'
+        sessions: unlimited
+        resources: '5'
+        alerts: '50'
+        standalone: true
+        decipherIDP: false
+    RangeFilter:
+      description: Used to filter values. Check for values that are greater than or equal to, less than or equal to, or between the given value(s).
+      type: object
+      anyOf:
+      - $ref: '#/components/schemas/GreaterThanOrEqualToFilter'
+      - $ref: '#/components/schemas/LessThanOrEqualToFilter'
+      example:
+        gte: null
+        lte: null
+  responses:
+    NotAuthorized:
+      description: The authentication token was either missing or invalid and must be refreshed.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorMessage'
+    Forbidden:
+      description: The authentication token does not give sufficient permissions to perform this action.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorMessage'
+    BadRequest:
+      description: The request is malformed or contains incorrect information. See the response for more details.
+      content:
+        application/json:
+          schema:
+            oneOf:
+            - $ref: '#/components/schemas/UrlParameterError'
+            - $ref: '#/components/schemas/ValidationError'
+    NotFound:
+      description: The requested resource could not be found.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorMessage'
+  securitySchemes:
+    Bearer:
+      type: http
+      scheme: bearer
+      description: JWT token issued from Authentication Server.
+      bearerFormat: JWT
+    OAuth2:
+      type: oauth2
+      flows:
+        clientCredentials:
+          tokenUrl: https://auth-server/connect/token
+          scopes:
+            bp-api: API scope
+            bpserver: Blue Prism Application scope

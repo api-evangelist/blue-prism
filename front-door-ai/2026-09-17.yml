@@ -1,0 +1,34 @@
+# Front Door AI Index — blue-prism — 2026-09-17
+# AI vocabulary counted on the provider's root page. Generated; do not edit.
+# `score` is null unless ownership is `own` — see front_door_ai.py.
+front_door_ai:
+  slug: blue-prism
+  lexicon_version: '1.0'
+  probed_at: '2026-09-17'
+  host: www.blueprism.com
+  final_host: www.blueprism.com
+  ownership: own
+  owner: blue-prism
+  shares_host_with: null
+  inherited_from: null
+  verdict: scored
+  score: 137
+  host_score: 137
+  density: 63.08
+  words: 2172
+  tiers:
+    agentic: 57
+    core: 79
+    model: 1
+  ambiguous: 89
+  top_terms:
+    AI: 75
+    automation: 64
+    agentic: 42
+    agent: 22
+    AI agent: 15
+    intelligence: 3
+    generative ai: 2
+    GPT: 1
+    artificial intelligence: 1
+    gen ai: 1

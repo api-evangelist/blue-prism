@@ -1,0 +1,76 @@
+openapi: 3.2.0
+info:
+  title: Blue Prism Encryption Schemes API
+  description: An API to expose core functionality of the Blue Prism product.
+  version: 7.5.1
+security:
+- Bearer:
+  - bp-api
+  - bpserver
+- OAuth2:
+  - bp-api
+  - bpserver
+tags:
+- name: Encryption Schemes
+paths:
+  /api/v7/encryptionschemes:
+    get:
+      summary: Return a list of encryption schemes in the environment
+      operationId: getEncryptionSchemes
+      description: '> ### Permissions required: `Security - View Encryption Scheme Configuration`'
+      tags:
+      - Encryption Schemes
+      responses:
+        '200':
+          description: A list of encryption schemes was successfully retrieved.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/EncryptionScheme'
+components:
+  schemas:
+    EncryptionScheme:
+      description: Contains details of an encryption scheme.
+      type: object
+      properties:
+        name:
+          type: string
+          description: The name of the encryption scheme.
+        algorithm:
+          type: string
+          enum:
+          - None
+          - TripleDES
+          - Rijndael256
+          - AES256
+          description: The name of the encryption algorithm.
+        keyLocation:
+          type: string
+          enum:
+          - Database
+          - Server
+          description: If the key is stored in the database or server.
+        isAvailable:
+          type: boolean
+          description: If the encryption scheme is available.
+      example:
+        name: Example encryption scheme
+        algorithm: AES256
+        keyLocation: Server
+        isAvailable: true
+  securitySchemes:
+    Bearer:
+      type: http
+      scheme: bearer
+      description: JWT token issued from Authentication Server.
+      bearerFormat: JWT
+    OAuth2:
+      type: oauth2
+      flows:
+        clientCredentials:
+          tokenUrl: https://auth-server/connect/token
+          scopes:
+            bp-api: API scope
+            bpserver: Blue Prism Application scope

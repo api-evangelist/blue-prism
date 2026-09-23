@@ -1,0 +1,679 @@
+openapi: 3.2.0
+info:
+  title: Blue Prism Environment Variables API
+  description: An API to expose core functionality of the Blue Prism product.
+  version: 7.5.1
+security:
+- Bearer:
+  - bp-api
+  - bpserver
+- OAuth2:
+  - bp-api
+  - bpserver
+tags:
+- name: Environment Variables
+paths:
+  /api/v7/environmentvariables:
+    get:
+      summary: Return a list of environment variables
+      operationId: getEnvironmentVariables
+      description: '> ### Permissions required
+
+        At least one of: `Business Objects - View Environment Variables` | `Business Objects - Configure Environment Variables`
+
+        | `Processes - View Environment Variables` | `Processes - Configure Environment Variables`'
+      tags:
+      - Environment Variables
+      parameters:
+      - name: sortBy
+        description: The field that results should be sorted by and the direction they should be sorted in.
+        in: query
+        schema:
+          type: string
+          enum:
+          - NameAsc
+          - NameDesc
+          - DescriptionAsc
+          - DescriptionDesc
+          - DataTypeAsc
+          - DataTypeDesc
+      - name: itemsPerPage
+        description: The maximum number of items to retrieve.
+        in: query
+        schema:
+          type: integer
+          minimum: 1
+      - name: pagingToken
+        description: The token to point to the last item previously returned.
+        in: query
+        schema:
+          type: string
+      - name: name
+        description: A filter to search for the name of the environment variable.
+        in: query
+        style: deepObject
+        schema:
+          $ref: '#/components/schemas/BasicStringFilter'
+        examples:
+          equals:
+            $ref: '#/components/examples/StringEqualsExample'
+          startsWith:
+            $ref: '#/components/examples/StringStartsWithExample'
+          range:
+            $ref: '#/components/examples/StringRangeExample'
+          greater:
+            $ref: '#/components/examples/StringGreaterThanExample'
+      - name: description
+        in: query
+        style: deepObject
+        description: A filter to search for the description of the environment variable.
+        schema:
+          $ref: '#/components/schemas/BasicStringFilter'
+        examples:
+          equals:
+            $ref: '#/components/examples/StringEqualsExample'
+          startsWith:
+            $ref: '#/components/examples/StringStartsWithExample'
+          range:
+            $ref: '#/components/examples/StringRangeExample'
+          greater:
+            $ref: '#/components/examples/StringGreaterThanExample'
+      - name: dataType
+        in: query
+        style: form
+        explode: false
+        description: The type of the environment variable to search for.
+        schema:
+          type: array
+          items:
+            type: string
+            enum:
+            - Binary
+            - Date
+            - DateTime
+            - Flag
+            - Image
+            - Number
+            - Password
+            - RadioButtons
+            - Text
+            - Time
+            - TimeSpan
+      responses:
+        '200':
+          description: A list of environment variables was successfully retrieved.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EnvironmentVariableItemsPage'
+              examples:
+                text:
+                  $ref: '#/components/examples/EnvironmentVariableTextExample'
+                radiobuttons:
+                  $ref: '#/components/examples/EnvironmentVariableRadioButtonsExample'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/NotAuthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+    post:
+      summary: Creates an Environment Variable
+      operationId: createEnvironmentVariable
+      description: '> ### Permissions required: `Business Objects - Configure Environment Variables`, `Process - Configure Environment Variables`'
+      tags:
+      - Environment Variables
+      requestBody:
+        description: Details of the environment variable to create.
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateEnvironmentVariableModel'
+      responses:
+        '201':
+          description: The environment variable was successfully created.
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/NotAuthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+  /api/v7/environmentvariables/{environmentVariableId}/references:
+    get:
+      summary: Return references to a specified environment variable
+      operationId: getEnvironmentVariableReferences
+      description: '> ### Permissions required:
+
+        At least one of: `Business Objects - Configure Environment Variables`, `Processes - Configure Environment Variables`'
+      tags:
+      - Environment Variables
+      parameters:
+      - name: environmentVariableId
+        in: path
+        description: The id of the environment variable.
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: sortBy
+        description: The field that results should be sorted by and the direction they should be sorted in.
+        in: query
+        schema:
+          type: string
+          enum:
+          - NameAsc
+          - NameDesc
+          - DescriptionAsc
+          - DescriptionDesc
+          - ProcessTypeAsc
+          - ProcessTypeDesc
+      - name: itemsPerPage
+        description: The maximum number of items to retrieve.
+        in: query
+        schema:
+          type: integer
+          minimum: 1
+      - name: pagingToken
+        description: The token to point to the last item previously returned.
+        in: query
+        schema:
+          type: string
+      - name: name
+        description: A filter to search for the name of the environment variable.
+        in: query
+        style: deepObject
+        schema:
+          $ref: '#/components/schemas/BasicStringFilter'
+        examples:
+          equals:
+            $ref: '#/components/examples/StringEqualsExample'
+          startsWith:
+            $ref: '#/components/examples/StringStartsWithExample'
+          range:
+            $ref: '#/components/examples/StringRangeExample'
+          greater:
+            $ref: '#/components/examples/StringGreaterThanExample'
+      - name: description
+        in: query
+        style: deepObject
+        description: A filter to search for the description of the environment variable reference.
+        schema:
+          $ref: '#/components/schemas/BasicStringFilter'
+        examples:
+          equals:
+            $ref: '#/components/examples/StringEqualsExample'
+          startsWith:
+            $ref: '#/components/examples/StringStartsWithExample'
+          range:
+            $ref: '#/components/examples/StringRangeExample'
+          greater:
+            $ref: '#/components/examples/StringGreaterThanExample'
+      - name: processType
+        description: A filter to search for the references by process type.
+        in: query
+        schema:
+          $ref: '#/components/schemas/ProcessType'
+      responses:
+        '200':
+          description: A list of environment variables references was successfully retrieved.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EnvironmentVariableReferencesItemsPage'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/NotAuthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+  /api/v7/environmentvariables/{environmentVariableId}:
+    delete:
+      summary: Delete environment variable by ID
+      operationId: deleteEnvironmentVariable
+      description: '> ### Permissions required: `Business Objects - Configure Environment Variables` or `Processes - Configure Environment Variables`'
+      tags:
+      - Environment Variables
+      parameters:
+      - name: environmentVariableId
+        in: path
+        description: The id of the environment variable.
+        required: true
+        schema:
+          type: string
+          format: uuid
+      responses:
+        '204':
+          description: Environment variable was successfuly deleted
+        '401':
+          $ref: '#/components/responses/NotAuthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+    patch:
+      summary: Updates the Environment Variable by ID
+      operationId: updateEnvironmentVariable
+      description: '> ### Permissions required: `Business Objects - Configure Environment Variables` Or `Processes - Configure Environment Variables`'
+      tags:
+      - Environment Variables
+      parameters:
+      - name: environmentVariableId
+        in: path
+        required: true
+        description: The id of the environment variable to update.
+        schema:
+          type: string
+          format: uuid
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchRequest'
+            examples:
+              add (to array):
+                $ref: '#/components/examples/PatchAddToArrayExample'
+              add (to object):
+                $ref: '#/components/examples/PatchAddToObjectExample'
+              copy:
+                $ref: '#/components/examples/PatchCopyExample'
+              move:
+                $ref: '#/components/examples/PatchMoveExample'
+              remove:
+                $ref: '#/components/examples/PatchRemoveExample'
+              replace:
+                $ref: '#/components/examples/PatchReplaceExample'
+      responses:
+        '204':
+          description: The environment variable was successfully updated.
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/NotAuthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+components:
+  examples:
+    StringGreaterThanExample:
+      value:
+        gte: Example
+      summary: Search for a value alphanumerically after or equal to "Example".
+    EnvironmentVariableRadioButtonsExample:
+      summary: RadioButtons
+      value:
+        pagingToken: U3VwZXIgc2VjcmV0IGRhdGEuIFNoaGho
+        items:
+        - name: name of the radiobuttons variable
+          description: description of the radiobuttons variable
+          dataType: radiobuttons
+          value:
+          - name: rb1
+            selected: true
+          - name: rb2
+            selected: false
+    PatchReplaceExample:
+      summary: Replace the value in a property.
+      value:
+      - op: replace
+        path: /property
+        value: propertyValue
+    EnvironmentVariableTextExample:
+      summary: Text
+      value:
+        pagingToken: U3VwZXIgc2VjcmV0IGRhdGEuIFNoaGho
+        items:
+        - name: name of the text variable
+          description: description of the text variable
+          dataType: text
+          value: text value
+    StringStartsWithExample:
+      value:
+        strtw: Exa
+      summary: Search a value starting with "Exa".
+    StringEqualsExample:
+      value:
+        eq: Example
+      summary: Search for a value equal to "Example".
+    PatchCopyExample:
+      summary: Copy a value from one property to another.
+      value:
+      - op: copy
+        from: /sourceProperty
+        path: /destinationProperty
+    PatchAddToObjectExample:
+      summary: Add new property values to an object.
+      value:
+      - op: add
+        path: /property
+        value: propertyValue
+    PatchRemoveExample:
+      summary: Remove a property value.
+      value:
+      - op: remove
+        path: /propertyToDeleteValueFrom
+    PatchAddToArrayExample:
+      summary: Add values to a collection.
+      value:
+      - op: add
+        path: /someArrayProperty
+        value:
+        - item1
+        - item2
+    StringRangeExample:
+      value:
+        gte: Ex
+        lte: F
+      summary: Search for a value alphanumerically between "Ex" and "F".
+    PatchMoveExample:
+      summary: Move a value from one property to another.
+      value:
+      - op: move
+        from: /sourceProperty
+        path: /destinationProperty
+  schemas:
+    PatchDocument:
+      description: A JSONPatch document as defined by RFC 6902. See http://jsonpatch.com/
+      required:
+      - op
+      - path
+      properties:
+        op:
+          type: string
+          description: The operation to be performed.
+          enum:
+          - add
+          - remove
+          - replace
+          - move
+          - copy
+        path:
+          type: string
+          description: A JSON-Pointer.
+        value:
+          type: object
+          description: The value to be used within the operations..
+        from:
+          type: string
+          description: A string containing a JSON Pointer value.
+    PatchRequest:
+      description: A request containing a JSON Patch document. See PatchDocument for details.
+      type: array
+      items:
+        $ref: '#/components/schemas/PatchDocument'
+    UrlParameterError:
+      description: An error occurred due to incorrect data supplied to url parameter.
+      type: object
+      properties:
+        message:
+          type: string
+          description: A message about the error.
+        messageDetail:
+          type: string
+          description: A detailed description about the error.
+    RadioButton:
+      type: object
+      description: Contains details for creating a new radio button.
+      properties:
+        name:
+          type: string
+          description: The name of the radio button.
+        selected:
+          type: boolean
+          description: Returns True if the radio button is selected.
+      example:
+        name: button1
+        selected: true
+    EnvironmentVariable:
+      description: Contains details of an environment variable.
+      type: object
+      properties:
+        id:
+          type: string
+          description: The id of the environment variable.
+          format: uuid
+        name:
+          type: string
+          description: The name of the environment variable.
+        description:
+          type: string
+          description: The description of the environment variable.
+        dataType:
+          type: string
+          description: The type of the environment variable.
+        value:
+          type:
+          - object
+          - 'null'
+          description: The value of the environment variable.
+    BasicStringFilter:
+      description: Used to filter strings. Check for strings that start with, equal, are greater than, are less than, or are between the given value(s).
+      type: object
+      anyOf:
+      - $ref: '#/components/schemas/RangeOrEqualFilter'
+      - $ref: '#/components/schemas/StartsWithStringFilter'
+      example:
+        strtw: null
+        gte: null
+        lte: null
+        eq: null
+    RangeOrEqualFilter:
+      description: Used to filter values. Check for values that are equal to, greater than or equal to, less than or equal to, or between the given value(s).
+      type: object
+      oneOf:
+      - $ref: '#/components/schemas/RangeFilter'
+      - $ref: '#/components/schemas/EqualsFilter'
+      example:
+        gte: null
+        lte: null
+        eq: null
+    GreaterThanOrEqualToFilter:
+      description: Used to filter values. Check for values that are greater than or equal to the given value.
+      type: object
+      properties:
+        gte:
+          type:
+          - object
+          - 'null'
+          description: The value that the field should be greater than or equal to.
+      example:
+        gte: null
+    StartsWithStringFilter:
+      description: Used to filter strings. Check for strings that start with the given value.
+      type: object
+      properties:
+        strtw:
+          type:
+          - string
+          - 'null'
+          description: The value that the field should start with.
+      example:
+        strtw: null
+    ValidationError:
+      description: An error occurred during validation. See the response body for details on the invalid field.
+      type: object
+      properties:
+        invalidField:
+          type: string
+          description: The field which is invalid.
+        message:
+          type: string
+          description: A description of the error found with the field.
+    ErrorMessage:
+      description: A message describing the problem encountered.
+      type: string
+    EnvironmentVariableItemsPage:
+      description: Contains details of a page of environment variables.
+      type: object
+      properties:
+        pagingToken:
+          $ref: '#/components/schemas/PagingToken'
+        items:
+          type: array
+          description: A collection of environment variables.
+          items:
+            $ref: '#/components/schemas/EnvironmentVariable'
+    PagingToken:
+      type: string
+      description: The token to be used in the next request to return the next collection of items.
+      example: U3VwZXIgc2VjcmV0IGRhdGEuIFNoaGho
+    Reference:
+      description: Contains details of referenced item.
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          description: The ID of the process/object.
+        name:
+          type: string
+          description: The name of the process/object.
+          minLength: 1
+        description:
+          type: string
+          description: The description of process/object.
+        type:
+          type: string
+          enum:
+          - Process
+          - Object
+          - Unset
+          description: The type of process/object
+    RadioButtons:
+      description: Contains details for creating a new collection of radio buttons.
+      type: array
+      items:
+        $ref: '#/components/schemas/RadioButton'
+    ProcessType:
+      description: The process type of environment variable reference.
+      type: string
+      enum:
+      - Process
+      - Object
+    LessThanOrEqualToFilter:
+      description: Used to filter values. Check for values that are less than or equal to the given value.
+      type: object
+      properties:
+        lte:
+          type:
+          - object
+          - 'null'
+          description: The value that the field should be less than or equal to.
+      example:
+        lte: null
+    EqualsFilter:
+      description: Used to filter values. Check for values that are equal to the given value.
+      type: object
+      properties:
+        eq:
+          type:
+          - object
+          - 'null'
+          description: The value that the field should be equal to.
+      example:
+        eq: null
+    EnvironmentVariableReferencesItemsPage:
+      description: Contains details of a page of environment variables references.
+      type: object
+      properties:
+        pagingToken:
+          type: string
+          description: The token to be used in the next request to return the next collection of items.
+        items:
+          type: array
+          description: A collection of environment variables references.
+          items:
+            $ref: '#/components/schemas/Reference'
+    RangeFilter:
+      description: Used to filter values. Check for values that are greater than or equal to, less than or equal to, or between the given value(s).
+      type: object
+      anyOf:
+      - $ref: '#/components/schemas/GreaterThanOrEqualToFilter'
+      - $ref: '#/components/schemas/LessThanOrEqualToFilter'
+      example:
+        gte: null
+        lte: null
+    CreateEnvironmentVariableModel:
+      description: Contains details for creating a new environment variable.
+      type: object
+      properties:
+        name:
+          type: string
+          description: The name of the environment variable to create.
+          minLength: 1
+          maxLength: 64
+        description:
+          type: string
+          description: The description of the environment variable.
+        dataType:
+          type: string
+          description: Valid types for environment variables - Date (date), DateTime (date-time), Flag (boolean), Number (integer), Password (string), Text (string), Time (date), TimeSpan (time), Image (base64), Binary (base64), RadioButtons (object radioButtons).
+        value:
+          description: The value of the environment variable of a valid type that the user provides to save to the DB.
+          oneOf:
+          - type: string
+            format: base64
+            description: Used for Binary and Image data types. The image format must only be one of these BPM, JPG, JPEG, GIF, PNG, ICO or TIFF.
+          - type: string
+            format: date
+            description: Used for Date, DateTime and Time data types.
+          - type: boolean
+            description: Used for the Flag data type.
+          - type: number
+            description: Used for the Number data type.
+          - type: string
+            description: Used for Password and Text data types.
+          - type: string
+            format: time
+            description: Used for the TimeSpan data type.
+          - $ref: '#/components/schemas/RadioButtons'
+            description: Used for the RadioButtons data type.
+      example:
+        name: Test environment variable
+        description: Any text
+        value: Any text
+        dataType: Text
+  responses:
+    NotAuthorized:
+      description: The authentication token was either missing or invalid and must be refreshed.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorMessage'
+    Forbidden:
+      description: The authentication token does not give sufficient permissions to perform this action.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorMessage'
+    BadRequest:
+      description: The request is malformed or contains incorrect information. See the response for more details.
+      content:
+        application/json:
+          schema:
+            oneOf:
+            - $ref: '#/components/schemas/UrlParameterError'
+            - $ref: '#/components/schemas/ValidationError'
+    NotFound:
+      description: The requested resource could not be found.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorMessage'
+  securitySchemes:
+    Bearer:
+      type: http
+      scheme: bearer
+      description: JWT token issued from Authentication Server.
+      bearerFormat: JWT
+    OAuth2:
+      type: oauth2
+      flows:
+        clientCredentials:
+          tokenUrl: https://auth-server/connect/token
+          scopes:
+            bp-api: API scope
+            bpserver: Blue Prism Application scope

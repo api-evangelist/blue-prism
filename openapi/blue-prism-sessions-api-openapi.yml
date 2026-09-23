@@ -1,0 +1,1906 @@
+openapi: 3.2.0
+info:
+  title: Blue Prism Sessions API
+  description: An API to expose core functionality of the Blue Prism product.
+  version: 7.5.1
+security:
+- Bearer:
+  - bp-api
+  - bpserver
+- OAuth2:
+  - bp-api
+  - bpserver
+tags:
+- name: Sessions
+paths:
+  /api/v7/sessions:
+    get:
+      summary: Return a list of sessions in the environment
+      operationId: GetSessions
+      description: '> ### Permissions required
+
+        At least one of: `Create Process` | `Delete Process` | `Edit Process`
+
+        | `Edit Process Groups` | `Export Process` | `Execute Process` | `Execute Process as Web Service`
+
+        | `View Process Definition` | `Manage Process Access Rights`
+
+
+        And at least one of: `View Resource` | `View Resource Screen Captures` | `Configure Resource`
+
+        | `Control Resource` | `Manage Resource Access Rights`'
+      tags:
+      - Sessions
+      parameters:
+      - name: sortBy
+        description: The field that results should be sorted by and the direction they should be sorted in.
+        in: query
+        required: false
+        style: form
+        explode: false
+        schema:
+          title: getSessionsSortBy
+          type: string
+          enum:
+          - SessionNumberAsc
+          - SessionNumberDesc
+          - ProcessNameAsc
+          - ProcessNameDesc
+          - ResourceNameAsc
+          - ResourceNameDesc
+          - UserNameAsc
+          - UserNameDesc
+          - StatusAsc
+          - StatusDesc
+          - ExceptionTypeAsc
+          - ExceptionTypeDesc
+          - StartTimeAsc
+          - StartTimeDesc
+          - EndTimeAsc
+          - EndTimeDesc
+          - LatestStageAsc
+          - LatestStageDesc
+          - StageStartedAsc
+          - StageStartedDesc
+      - name: itemsPerPage
+        description: The maximum number of items to retrieve.
+        in: query
+        required: false
+        schema:
+          type: integer
+          minimum: 1
+      - name: pagingToken
+        description: The token to point to the last item previously returned.
+        in: query
+        required: false
+        schema:
+          type: string
+      - name: processName
+        description: A filter to search for the name of the process being run by the session.
+        in: query
+        style: deepObject
+        required: false
+        schema:
+          $ref: '#/components/schemas/BasicStringFilter'
+        examples:
+          equals:
+            $ref: '#/components/examples/StringEqualsExample'
+          startsWith:
+            $ref: '#/components/examples/StringStartsWithExample'
+          range:
+            $ref: '#/components/examples/StringRangeExample'
+          greater:
+            $ref: '#/components/examples/StringGreaterThanExample'
+      - name: sessionNumber
+        description: A filter to search for the session number.
+        style: deepObject
+        required: false
+        in: query
+        schema:
+          $ref: '#/components/schemas/BasicNumericFilter'
+        examples:
+          startsWith:
+            $ref: '#/components/examples/IntegerStartsWithExample'
+          equals:
+            $ref: '#/components/examples/IntegerEqualsExample'
+          range:
+            $ref: '#/components/examples/IntegerRangeExample'
+          greater:
+            $ref: '#/components/examples/IntegerGreaterThanExample'
+      - name: resourceName
+        description: A filter to search for the name of the resource on which the session is running/ran.
+        in: query
+        required: false
+        style: deepObject
+        schema:
+          $ref: '#/components/schemas/BasicStringFilter'
+        examples:
+          equals:
+            $ref: '#/components/examples/StringEqualsExample'
+          startsWith:
+            $ref: '#/components/examples/StringStartsWithExample'
+          range:
+            $ref: '#/components/examples/StringRangeExample'
+          greater:
+            $ref: '#/components/examples/StringGreaterThanExample'
+      - name: userName
+        description: A filter to search for the name of the user that triggered the session.
+        in: query
+        required: false
+        style: deepObject
+        schema:
+          $ref: '#/components/schemas/BasicStringFilter'
+        examples:
+          equals:
+            $ref: '#/components/examples/StringEqualsExample'
+          startsWith:
+            $ref: '#/components/examples/StringStartsWithExample'
+          range:
+            $ref: '#/components/examples/StringRangeExample'
+          greater:
+            $ref: '#/components/examples/StringGreaterThanExample'
+      - name: status
+        description: The status of the sessions to search for.
+        in: query
+        required: false
+        style: form
+        explode: false
+        schema:
+          type: array
+          items:
+            $ref: '#/components/schemas/SessionStatus'
+      - name: sessionSource
+        description: The source of the sessions to search for.
+        in: query
+        required: false
+        style: form
+        explode: false
+        schema:
+          type: array
+          items:
+            $ref: '#/components/schemas/SessionSource'
+      - name: startTime
+        description: A filter to search for the time that the session started.
+        in: query
+        style: deepObject
+        required: false
+        schema:
+          $ref: '#/components/schemas/RangeOrEqualFilter'
+        examples:
+          equals:
+            $ref: '#/components/examples/DateTimeEqualsExample'
+          range:
+            $ref: '#/components/examples/DateTimeRangeExample'
+          greater:
+            $ref: '#/components/examples/DateTimeGreaterThanExample'
+      - name: endTime
+        description: A filter to search for the time that the session ended.
+        in: query
+        style: deepObject
+        schema:
+          $ref: '#/components/schemas/RangeOrEqualFilter'
+        examples:
+          equals:
+            $ref: '#/components/examples/DateTimeEqualsExample'
+          range:
+            $ref: '#/components/examples/DateTimeRangeExample'
+          greater:
+            $ref: '#/components/examples/DateTimeGreaterThanExample'
+      - name: latestStage
+        description: A filter to search for the name of the latest stage.
+        in: query
+        style: deepObject
+        schema:
+          $ref: '#/components/schemas/BasicStringFilter'
+        examples:
+          equals:
+            $ref: '#/components/examples/DateTimeEqualsExample'
+          range:
+            $ref: '#/components/examples/DateTimeRangeExample'
+          greater:
+            $ref: '#/components/examples/DateTimeGreaterThanExample'
+      - name: stageStarted
+        description: A filter to search for the time when the latest stage started.
+        in: query
+        style: deepObject
+        schema:
+          $ref: '#/components/schemas/RangeOrEqualFilter'
+        examples:
+          equals:
+            $ref: '#/components/examples/DateTimeEqualsExample'
+          range:
+            $ref: '#/components/examples/DateTimeRangeExample'
+          greater:
+            $ref: '#/components/examples/DateTimeGreaterThanExample'
+      - name: onlySessionsForCurrentUser
+        description: Flag to restrict sessions to API user.
+        in: query
+        schema:
+          type:
+          - boolean
+          - 'null'
+      - name: processId.eq
+        description: The ID of the process to retrieve data for.
+        in: query
+        required: false
+        schema:
+          type:
+          - string
+          - 'null'
+          format: uuid
+      responses:
+        '200':
+          description: An array of session summaries.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SessionItemsPage'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/NotAuthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+    post:
+      summary: Create a new session for the given resource ID and process ID
+      operationId: createSession
+      description: '> ### Permissions required
+
+        At least one of: `Create Process` | `Edit Process` | `Execute Process`
+
+
+        and `Control Resource`'
+      tags:
+      - Sessions
+      requestBody:
+        description: Parameters to create a new session
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateSessionParameters'
+      responses:
+        '200':
+          description: A newly created session ID.
+          content:
+            application/json:
+              schema:
+                type: string
+                format: uuid
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/NotAuthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+  /api/v7/sessions/{sessionId}:
+    get:
+      summary: Return details of a specified session
+      operationId: getSession
+      description: '> ### Permissions required
+
+        At least one of: `Create Process` | `Delete Process` | `Edit Process`
+
+        | `Edit Process Groups` | `Export Process` | `Execute Process` | `Execute Process as Web Service`
+
+        | `View Process Definition` | `Manage Process Access Rights`
+
+
+        And at least one of: `View Resource` | `View Resource Screen Captures` | `Configure Resource`
+
+        | `Control Resource` | `Manage Resource Access Rights`'
+      tags:
+      - Sessions
+      parameters:
+      - name: sessionId
+        in: path
+        description: The ID of the session to retrieve data for.
+        required: true
+        schema:
+          type: string
+          format: uuid
+      responses:
+        '200':
+          description: The session was successfully retrieved.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SessionSummary'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/NotAuthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFoundSession'
+    delete:
+      summary: Deletes a specified pending session
+      operationId: deleteSession
+      description: '> ### Permissions required
+
+        `Control Resource`
+
+
+        And at least one of: `View Process Definition` | `Edit Process` | `Create Process`'
+      tags:
+      - Sessions
+      parameters:
+      - name: sessionId
+        in: path
+        description: The ID of the pending session to delete.
+        required: true
+        schema:
+          type: string
+          format: uuid
+      responses:
+        '204':
+          description: The pending session was successfully deleted.
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/NotAuthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+    patch:
+      summary: Update the session for the given session ID
+      operationId: updateSession
+      description: '> ### Permissions required
+
+        At least one of: `Create Process` | `Edit Process` | `Execute Process`
+
+
+        and `Control Resource`'
+      tags:
+      - Sessions
+      parameters:
+      - name: sessionId
+        in: path
+        description: The ID of the session to update.
+        required: true
+        schema:
+          type: string
+          format: uuid
+      requestBody:
+        description: Details of the session to update, only supports 'Running', 'Stopping' and 'Stopped' statuses.
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateSession'
+      responses:
+        '202':
+          description: The session has been successfully updated.
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/NotAuthorized'
+        '403':
+          $ref: '#/components/responses/SessionForbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '409':
+          $ref: '#/components/responses/Conflict'
+  /api/v7/sessions/{sessionId}/parameters:
+    get:
+      summary: Get start-up parameters for a specified session
+      operationId: getSessionStartUpParameters
+      description: '> ### Permissions required
+
+        At least one of: `Create Process` | `Edit Process` | `Export Process`
+
+        | `Execute Process` | `View Process Definition`
+
+
+        And at least one of: `View Resource` | `View Resource Screen Captures` | `Configure Resource`
+
+        | `Control Resource` | `Manage Resource Access Rights`'
+      tags:
+      - Sessions
+      parameters:
+      - name: sessionId
+        in: path
+        description: The ID of the session to retrieve start-up parameters for.
+        required: true
+        schema:
+          type: string
+          format: uuid
+      responses:
+        '200':
+          description: Start-up parameters of the requested session were successfully retrieved.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SessionStartUpParameters'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/NotAuthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+    put:
+      summary: Update start-up parameters for a specified session
+      operationId: updateSessionStartupParameters
+      description: '> ### Permissions required
+
+        At least one of: `Create Process` | `Edit Process` | `Execute Process`
+
+
+        and `Control Resource`'
+      tags:
+      - Sessions
+      parameters:
+      - name: sessionId
+        in: path
+        description: The ID of the session to update start-up parameters for.
+        required: true
+        schema:
+          type: string
+          format: uuid
+      requestBody:
+        description: A start-up parameters for session.
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SessionStartUpParameters'
+      responses:
+        '204':
+          description: Associated parameters for a specific session were successfully updated.
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/NotAuthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '409':
+          $ref: '#/components/responses/Conflict'
+  /api/v7/sessions/{sessionId}/logs:
+    get:
+      summary: Return all logs for a specified session
+      operationId: getSessionLogs
+      description: '> ### Permissions required
+
+        At least one of: `Create Process` | `Delete Process` | `Edit Process`
+
+        | `Edit Process Groups` | `Export Process` | `Execute Process`
+
+        | `Execute Process as Web Service` | `View Process Definition`
+
+        | `Manage Process Access Rights`
+
+
+        And at least one of: `View Resource` | `View Resource Screen Captures`
+
+        | `Configure Resource` | `Control Resource` | `Manage Resource Access Rights`
+
+
+        and `Audit - Process Logs`'
+      tags:
+      - Sessions
+      parameters:
+      - name: sessionId
+        in: path
+        description: The ID of the session to retrieve data for.
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: sortBy
+        in: query
+        description: The field that results should be sorted by and the direction they should be sorted in.
+        required: false
+        style: form
+        explode: false
+        schema:
+          title: getSessionLogsSortBy
+          type: string
+          enum:
+          - LogNumberAsc
+          - LogNumberDesc
+          - StageIdAsc
+          - StageIdDesc
+          - StageNameAsc
+          - StageNameDesc
+          - StageTypeAsc
+          - StageTypeDesc
+          - ProcessNameAsc
+          - ProcessNameDesc
+          - PageNameAsc
+          - PageNameDesc
+          - ObjectNameAsc
+          - ObjectNameDesc
+          - ActionNameAsc
+          - ActionNameDesc
+          - ResultAsc
+          - ResultDesc
+          - ResultTypeAsc
+          - ResultTypeDesc
+          - ResourceStartTimeAsc
+          - ResourceStartTimeDesc
+          - ResourceEndTimeAsc
+          - ResourceEndTimeDesc
+          - BluePrismMemoryAsc
+          - BluePrismMemoryDesc
+          - TargetAppIdAsc
+          - TargetAppIdDesc
+          - TargetMemoryAsc
+          - TargetMemoryDesc
+      - name: logNumber
+        in: query
+        description: A filter to search for the log id/number.
+        style: deepObject
+        required: false
+        schema:
+          $ref: '#/components/schemas/RangeOrEqualFilter'
+        examples:
+          equals:
+            $ref: '#/components/examples/IntegerEqualsExample'
+          range:
+            $ref: '#/components/examples/IntegerRangeExample'
+          less:
+            $ref: '#/components/examples/IntegerLessThanExample'
+      - name: stageId
+        in: query
+        description: A filter to search for the id of the stage.
+        required: false
+        style: deepObject
+        schema:
+          $ref: '#/components/schemas/EqualsFilter'
+        examples:
+          equals:
+            $ref: '#/components/examples/StringEqualsExample'
+      - name: stageName
+        in: query
+        description: A filter to search for the name of the stage.
+        required: false
+        style: deepObject
+        schema:
+          $ref: '#/components/schemas/FullStringFilter'
+        examples:
+          equals:
+            $ref: '#/components/examples/StringEqualsExample'
+          startsWith:
+            $ref: '#/components/examples/StringStartsWithExample'
+          contains:
+            $ref: '#/components/examples/StringContainsExample'
+          range:
+            $ref: '#/components/examples/StringRangeExample'
+          greater:
+            $ref: '#/components/examples/StringGreaterThanExample'
+      - name: stageType
+        in: query
+        description: A filter to search for the type of the stage.
+        required: false
+        style: form
+        explode: false
+        schema:
+          type: array
+          items:
+            $ref: '#/components/schemas/StageType'
+      - name: processName
+        in: query
+        description: A filter to search for the name of the process.
+        required: false
+        style: deepObject
+        schema:
+          $ref: '#/components/schemas/FullStringFilter'
+        examples:
+          equals:
+            $ref: '#/components/examples/StringEqualsExample'
+          startsWith:
+            $ref: '#/components/examples/StringStartsWithExample'
+          contains:
+            $ref: '#/components/examples/StringContainsExample'
+          range:
+            $ref: '#/components/examples/StringRangeExample'
+          greater:
+            $ref: '#/components/examples/StringGreaterThanExample'
+      - name: pageName
+        in: query
+        description: A filter to search for the name of the page.
+        required: false
+        style: deepObject
+        schema:
+          $ref: '#/components/schemas/FullStringFilter'
+        examples:
+          equals:
+            $ref: '#/components/examples/StringEqualsExample'
+          startsWith:
+            $ref: '#/components/examples/StringStartsWithExample'
+          contains:
+            $ref: '#/components/examples/StringContainsExample'
+          range:
+            $ref: '#/components/examples/StringRangeExample'
+          greater:
+            $ref: '#/components/examples/StringGreaterThanExample'
+      - name: objectName
+        in: query
+        description: A filter to search for the name of the object.
+        required: false
+        style: deepObject
+        schema:
+          $ref: '#/components/schemas/FullStringFilter'
+        examples:
+          equals:
+            $ref: '#/components/examples/StringEqualsExample'
+          startsWith:
+            $ref: '#/components/examples/StringStartsWithExample'
+          contains:
+            $ref: '#/components/examples/StringContainsExample'
+          range:
+            $ref: '#/components/examples/StringRangeExample'
+          greater:
+            $ref: '#/components/examples/StringGreaterThanExample'
+      - name: actionName
+        in: query
+        description: A filter to search for the name of the action.
+        required: false
+        style: deepObject
+        schema:
+          $ref: '#/components/schemas/FullStringFilter'
+        examples:
+          equals:
+            $ref: '#/components/examples/StringEqualsExample'
+          startsWith:
+            $ref: '#/components/examples/StringStartsWithExample'
+          contains:
+            $ref: '#/components/examples/StringContainsExample'
+          range:
+            $ref: '#/components/examples/StringRangeExample'
+          greater:
+            $ref: '#/components/examples/StringGreaterThanExample'
+      - name: result
+        in: query
+        description: A filter to search for the result.
+        required: false
+        style: deepObject
+        schema:
+          $ref: '#/components/schemas/FullStringFilter'
+        examples:
+          equals:
+            $ref: '#/components/examples/StringEqualsExample'
+          startsWith:
+            $ref: '#/components/examples/StringStartsWithExample'
+          contains:
+            $ref: '#/components/examples/StringContainsExample'
+          range:
+            $ref: '#/components/examples/StringRangeExample'
+          greater:
+            $ref: '#/components/examples/StringGreaterThanExample'
+      - name: resultType
+        in: query
+        description: A filter to search for the type of the result.
+        required: false
+        style: form
+        explode: false
+        schema:
+          type: array
+          items:
+            $ref: '#/components/schemas/ResultType'
+      - name: resourceStartTime
+        description: A filter to search for the time that the session started.
+        in: query
+        style: deepObject
+        required: false
+        schema:
+          $ref: '#/components/schemas/RangeOrEqualFilter'
+        examples:
+          equals:
+            $ref: '#/components/examples/DateTimeEqualsExample'
+          range:
+            $ref: '#/components/examples/DateTimeRangeExample'
+          greater:
+            $ref: '#/components/examples/DateTimeGreaterThanExample'
+      - name: resourceEndTime
+        description: A filter to search for the time that the ended started.
+        in: query
+        style: deepObject
+        required: false
+        schema:
+          $ref: '#/components/schemas/RangeOrEqualFilter'
+        examples:
+          equals:
+            $ref: '#/components/examples/DateTimeEqualsExample'
+          range:
+            $ref: '#/components/examples/DateTimeRangeExample'
+          greater:
+            $ref: '#/components/examples/DateTimeGreaterThanExample'
+      - name: bluePrismMemory
+        in: query
+        description: A filter to search for the blue prism memory.
+        style: deepObject
+        required: false
+        schema:
+          $ref: '#/components/schemas/RangeOrEqualFilter'
+        examples:
+          equals:
+            $ref: '#/components/examples/IntegerEqualsExample'
+          range:
+            $ref: '#/components/examples/IntegerRangeExample'
+          less:
+            $ref: '#/components/examples/IntegerLessThanExample'
+      - name: targetAppId
+        in: query
+        description: A filter to search for the target app id.
+        required: false
+        style: deepObject
+        schema:
+          $ref: '#/components/schemas/FullStringFilter'
+        examples:
+          equals:
+            $ref: '#/components/examples/StringEqualsExample'
+          startsWith:
+            $ref: '#/components/examples/StringStartsWithExample'
+          contains:
+            $ref: '#/components/examples/StringContainsExample'
+          range:
+            $ref: '#/components/examples/StringRangeExample'
+          greater:
+            $ref: '#/components/examples/StringGreaterThanExample'
+      - name: targetMemory
+        in: query
+        description: A filter to search for the target memory.
+        style: deepObject
+        required: false
+        schema:
+          $ref: '#/components/schemas/RangeOrEqualFilter'
+        examples:
+          equals:
+            $ref: '#/components/examples/IntegerEqualsExample'
+          range:
+            $ref: '#/components/examples/IntegerRangeExample'
+          less:
+            $ref: '#/components/examples/IntegerLessThanExample'
+      - name: itemsPerPage
+        in: query
+        description: The maximum number of items to retrieve per page.
+        schema:
+          type: integer
+          minimum: 1
+      - name: pagingToken
+        in: query
+        description: The token to point to the last item previously returned.
+        schema:
+          type: string
+      responses:
+        '200':
+          description: A list of session logs was successfully retrieved.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SessionLogsPage'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/NotAuthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+  /api/v7/sessions/{sessionId}/logslight:
+    get:
+      summary: Return fewer logs fields (logid,startdatetime,starttimezoneoffset,stagetype,obje…
+      operationId: getSessionLogsLight
+      description: '> ### Permissions required
+
+        At least one of: `Create Process` | `Delete Process` | `Edit Process`
+
+        | `Edit Process Groups` | `Export Process` | `Execute Process`
+
+        | `Execute Process as Web Service` | `View Process Definition`
+
+        | `Manage Process Access Rights`
+
+
+        And at least one of: `View Resource` | `View Resource Screen Captures`
+
+        | `Configure Resource` | `Control Resource` | `Manage Resource Access Rights`
+
+
+        and `Audit - Process Logs`'
+      tags:
+      - Sessions
+      parameters:
+      - name: sessionId
+        in: path
+        description: The ID of the session to retrieve data for.
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: sortBy
+        in: query
+        description: The field that results should be sorted by and the direction they should be sorted in.
+        required: false
+        style: form
+        explode: false
+        schema:
+          title: getSessionLogsSortBy
+          type: string
+          enum:
+          - LogNumberAsc
+          - LogNumberDesc
+          - StageIdAsc
+          - StageIdDesc
+          - StageNameAsc
+          - StageNameDesc
+          - StageTypeAsc
+          - StageTypeDesc
+          - ProcessNameAsc
+          - ProcessNameDesc
+          - PageNameAsc
+          - PageNameDesc
+          - ObjectNameAsc
+          - ObjectNameDesc
+          - ActionNameAsc
+          - ActionNameDesc
+          - ResultAsc
+          - ResultDesc
+          - ResultTypeAsc
+          - ResultTypeDesc
+          - ResourceStartTimeAsc
+          - ResourceStartTimeDesc
+          - ResourceEndTimeAsc
+          - ResourceEndTimeDesc
+          - BluePrismMemoryAsc
+          - BluePrismMemoryDesc
+          - TargetAppIdAsc
+          - TargetAppIdDesc
+          - TargetMemoryAsc
+          - TargetMemoryDesc
+      - name: logNumber
+        in: query
+        description: A filter to search for the log id/number.
+        style: deepObject
+        required: false
+        schema:
+          $ref: '#/components/schemas/RangeOrEqualFilter'
+        examples:
+          equals:
+            $ref: '#/components/examples/IntegerEqualsExample'
+          range:
+            $ref: '#/components/examples/IntegerRangeExample'
+          less:
+            $ref: '#/components/examples/IntegerLessThanExample'
+      - name: stageId
+        in: query
+        description: A filter to search for the id of the stage.
+        required: false
+        style: deepObject
+        schema:
+          $ref: '#/components/schemas/EqualsFilter'
+        examples:
+          equals:
+            $ref: '#/components/examples/StringEqualsExample'
+      - name: stageName
+        in: query
+        description: A filter to search for the name of the stage.
+        required: false
+        style: deepObject
+        schema:
+          $ref: '#/components/schemas/FullStringFilter'
+        examples:
+          equals:
+            $ref: '#/components/examples/StringEqualsExample'
+          startsWith:
+            $ref: '#/components/examples/StringStartsWithExample'
+          contains:
+            $ref: '#/components/examples/StringContainsExample'
+          range:
+            $ref: '#/components/examples/StringRangeExample'
+          greater:
+            $ref: '#/components/examples/StringGreaterThanExample'
+      - name: stageType
+        in: query
+        description: A filter to search for the type of the stage.
+        required: false
+        style: form
+        explode: false
+        schema:
+          type: array
+          items:
+            $ref: '#/components/schemas/StageType'
+      - name: processName
+        in: query
+        description: A filter to search for the name of the process.
+        required: false
+        style: deepObject
+        schema:
+          $ref: '#/components/schemas/FullStringFilter'
+        examples:
+          equals:
+            $ref: '#/components/examples/StringEqualsExample'
+          startsWith:
+            $ref: '#/components/examples/StringStartsWithExample'
+          contains:
+            $ref: '#/components/examples/StringContainsExample'
+          range:
+            $ref: '#/components/examples/StringRangeExample'
+          greater:
+            $ref: '#/components/examples/StringGreaterThanExample'
+      - name: pageName
+        in: query
+        description: A filter to search for the name of the page.
+        required: false
+        style: deepObject
+        schema:
+          $ref: '#/components/schemas/FullStringFilter'
+        examples:
+          equals:
+            $ref: '#/components/examples/StringEqualsExample'
+          startsWith:
+            $ref: '#/components/examples/StringStartsWithExample'
+          contains:
+            $ref: '#/components/examples/StringContainsExample'
+          range:
+            $ref: '#/components/examples/StringRangeExample'
+          greater:
+            $ref: '#/components/examples/StringGreaterThanExample'
+      - name: objectName
+        in: query
+        description: A filter to search for the name of the object.
+        required: false
+        style: deepObject
+        schema:
+          $ref: '#/components/schemas/FullStringFilter'
+        examples:
+          equals:
+            $ref: '#/components/examples/StringEqualsExample'
+          startsWith:
+            $ref: '#/components/examples/StringStartsWithExample'
+          contains:
+            $ref: '#/components/examples/StringContainsExample'
+          range:
+            $ref: '#/components/examples/StringRangeExample'
+          greater:
+            $ref: '#/components/examples/StringGreaterThanExample'
+      - name: actionName
+        in: query
+        description: A filter to search for the name of the action.
+        required: false
+        style: deepObject
+        schema:
+          $ref: '#/components/schemas/FullStringFilter'
+        examples:
+          equals:
+            $ref: '#/components/examples/StringEqualsExample'
+          startsWith:
+            $ref: '#/components/examples/StringStartsWithExample'
+          contains:
+            $ref: '#/components/examples/StringContainsExample'
+          range:
+            $ref: '#/components/examples/StringRangeExample'
+          greater:
+            $ref: '#/components/examples/StringGreaterThanExample'
+      - name: result
+        in: query
+        description: A filter to search for the result.
+        required: false
+        style: deepObject
+        schema:
+          $ref: '#/components/schemas/FullStringFilter'
+        examples:
+          equals:
+            $ref: '#/components/examples/StringEqualsExample'
+          startsWith:
+            $ref: '#/components/examples/StringStartsWithExample'
+          contains:
+            $ref: '#/components/examples/StringContainsExample'
+          range:
+            $ref: '#/components/examples/StringRangeExample'
+          greater:
+            $ref: '#/components/examples/StringGreaterThanExample'
+      - name: resultType
+        in: query
+        description: A filter to search for the type of the result.
+        required: false
+        style: form
+        explode: false
+        schema:
+          type: array
+          items:
+            $ref: '#/components/schemas/ResultType'
+      - name: resourceStartTime
+        description: A filter to search for the time that the session started.
+        in: query
+        style: deepObject
+        required: false
+        schema:
+          $ref: '#/components/schemas/RangeOrEqualFilter'
+        examples:
+          equals:
+            $ref: '#/components/examples/DateTimeEqualsExample'
+          range:
+            $ref: '#/components/examples/DateTimeRangeExample'
+          greater:
+            $ref: '#/components/examples/DateTimeGreaterThanExample'
+      - name: resourceEndTime
+        description: A filter to search for the time that the ended started.
+        in: query
+        style: deepObject
+        required: false
+        schema:
+          $ref: '#/components/schemas/RangeOrEqualFilter'
+        examples:
+          equals:
+            $ref: '#/components/examples/DateTimeEqualsExample'
+          range:
+            $ref: '#/components/examples/DateTimeRangeExample'
+          greater:
+            $ref: '#/components/examples/DateTimeGreaterThanExample'
+      - name: bluePrismMemory
+        in: query
+        description: A filter to search for the blue prism memory.
+        style: deepObject
+        required: false
+        schema:
+          $ref: '#/components/schemas/RangeOrEqualFilter'
+        examples:
+          equals:
+            $ref: '#/components/examples/IntegerEqualsExample'
+          range:
+            $ref: '#/components/examples/IntegerRangeExample'
+          less:
+            $ref: '#/components/examples/IntegerLessThanExample'
+      - name: targetAppId
+        in: query
+        description: A filter to search for the target app id.
+        required: false
+        style: deepObject
+        schema:
+          $ref: '#/components/schemas/FullStringFilter'
+        examples:
+          equals:
+            $ref: '#/components/examples/StringEqualsExample'
+          startsWith:
+            $ref: '#/components/examples/StringStartsWithExample'
+          contains:
+            $ref: '#/components/examples/StringContainsExample'
+          range:
+            $ref: '#/components/examples/StringRangeExample'
+          greater:
+            $ref: '#/components/examples/StringGreaterThanExample'
+      - name: targetMemory
+        in: query
+        description: A filter to search for the target memory.
+        style: deepObject
+        required: false
+        schema:
+          $ref: '#/components/schemas/RangeOrEqualFilter'
+        examples:
+          equals:
+            $ref: '#/components/examples/IntegerEqualsExample'
+          range:
+            $ref: '#/components/examples/IntegerRangeExample'
+          less:
+            $ref: '#/components/examples/IntegerLessThanExample'
+      - name: itemsPerPage
+        in: query
+        description: The maximum number of items to retrieve per page.
+        schema:
+          type: integer
+          minimum: 1
+      - name: pagingToken
+        in: query
+        description: The token to point to the last item previously returned.
+        schema:
+          type: string
+      responses:
+        '200':
+          description: A list of session logs was successfully retrieved.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SessionLogsPage'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/NotAuthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+  /api/v7/sessions/{sessionId}/logs/{logId}/parameters:
+    get:
+      summary: Return all parameters for a specified session log
+      operationId: getSessionLogParameters
+      description: '> ### Permissions required
+
+        At least one of: `Create Process` | `Delete Process` | `Edit Process`
+
+        | `Edit Process Groups` | `Export Process` | `Execute Process`
+
+        | `Execute Process as Web Service` | `View Process Definition`
+
+        | `Manage Process Access Rights`
+
+
+        And at least one of: `View Resource` | `View Resource Screen Captures`
+
+        | `Configure Resource` | `Control Resource` | `Manage Resource Access Rights`
+
+
+        and `Audit - Process Logs`'
+      tags:
+      - Sessions
+      parameters:
+      - name: sessionId
+        in: path
+        description: The ID of the session to retrieve data for.
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: logId
+        in: path
+        description: The ID of the log to retrieve for the session.
+        required: true
+        schema:
+          type: integer
+          minimum: 1
+      responses:
+        '200':
+          description: A list of session log parameters was successfully retrieved.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SessionLogParametersResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/NotAuthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+components:
+  examples:
+    StringGreaterThanExample:
+      value:
+        gte: Example
+      summary: Search for a value alphanumerically after or equal to "Example".
+    StringContainsExample:
+      value:
+        ctn: amp
+      summary: Search a value containing "amp"
+    IntegerLessThanExample:
+      value:
+        lte: 123
+      summary: Search for a value less than or equal to 123.
+    DateTimeEqualsExample:
+      value:
+        eq: '2020-10-02T12:34:56+01:00'
+      summary: Search for a value equal to 2020-10-02 at 12:34:56 (GMT+1).
+    IntegerRangeExample:
+      value:
+        gte: 123
+        lte: 321
+      summary: Search for a value between 123 and 321 inclusive.
+    StringStartsWithExample:
+      value:
+        strtw: Exa
+      summary: Search a value starting with "Exa".
+    IntegerEqualsExample:
+      value:
+        eq: 123
+      summary: Search for a value equal to 123.
+    IntegerGreaterThanExample:
+      value:
+        gte: 123
+      summary: Search for a value greater than or equal to 123.
+    IntegerStartsWithExample:
+      value:
+        strtw: 123
+      summary: Search for a value starting with 123
+    DateTimeRangeExample:
+      value:
+        gte: '2020-10-02T12:34:56+01:00'
+        lte: '2020-11-02T12:34:56+01:00'
+      summary: Search for a value between 2020-10-02 at 12:34:56 (GMT+1) and 2020-11-02 at 12:34:56 (GMT+1) (inclusive).
+    StringEqualsExample:
+      value:
+        eq: Example
+      summary: Search for a value equal to "Example".
+    DateTimeGreaterThanExample:
+      value:
+        gte: '2020-10-02T12:34:56+01:00'
+      summary: Search for a value after or equal to 2020-10-02 at 12:34:56 (GMT+1).
+    StringRangeExample:
+      value:
+        gte: Ex
+        lte: F
+      summary: Search for a value alphanumerically between "Ex" and "F".
+  schemas:
+    UrlParameterError:
+      description: An error occurred due to incorrect data supplied to url parameter.
+      type: object
+      properties:
+        message:
+          type: string
+          description: A message about the error.
+        messageDetail:
+          type: string
+          description: A detailed description about the error.
+    SessionStartUpParameters:
+      description: Contains start-up parameters of a session.
+      type: object
+      properties:
+        parameters:
+          $ref: '#/components/schemas/DataRow'
+      example:
+        parameters:
+          parameter1:
+            valueType: Text
+            value: Example value
+            additionalParameters:
+            - UTF-8
+          parameter2:
+            valueType: Number
+            value: 123
+            additionalParameters: null
+          parameter3:
+            valueType: Image
+            value: isAWPOCldncNSNLnacnKNsnaNAlknKLKScnsaklcn...
+            additionalParameters:
+            - C:\Path\To\File.ext
+            - 01/01/2022 01:01:01 AM
+    StringFilter:
+      description: Used to filter strings. Check for strings that start with, and/or contain the given value(s).
+      type: object
+      anyOf:
+      - $ref: '#/components/schemas/ContainsStringFilter'
+      - $ref: '#/components/schemas/StartsWithStringFilter'
+      example:
+        ctn: null
+        strtw: null
+    SessionSummary:
+      description: Contains basic details of a session,
+      type: object
+      properties:
+        sessionId:
+          type: string
+          description: The ID of the session,
+          format: uuid
+        sessionNumber:
+          type: integer
+          description: The unique number of the session,
+        areStartupParamsSet:
+          type: boolean
+          description: The flag which shows whether startup parameters were set,
+        AreInputParamsSet:
+          type: boolean
+          description: The flag which shows whether input parameters were set,
+        processId:
+          type: string
+          description: The ID of the process in the session,
+          format: uuid
+        processName:
+          type: string
+          description: The name of the session's process,
+        resourceId:
+          type: string
+          description: The ID of the resource in the session,
+          format: uuid
+        resourceName:
+          type: string
+          description: The name of the resource in the session,
+        username:
+          type: string
+          description: The username of the user that initialized the session,
+        status:
+          $ref: '#/components/schemas/SessionStatus'
+          description: The current state of the session,
+        startTime:
+          type:
+          - string
+          - 'null'
+          description: The start time of the session,
+          format: date-time
+        endTime:
+          type:
+          - string
+          - 'null'
+          description: The end time of the session,
+          format: date-time
+        latestStage:
+          type:
+          - string
+          - 'null'
+          description: The latest stage name of the session,
+        stageStarted:
+          type:
+          - string
+          - 'null'
+          description: The stage start time of the session,
+          format: date-time
+        exceptionMessage:
+          type:
+          - string
+          - 'null'
+          description: The exception message of the failed session,
+        terminationReason:
+          type:
+          - string
+          - 'null'
+          enum:
+          - None
+          - ProcessError
+          - InternalError
+          description: The reason for the termination of the session,
+        exceptionType:
+          type:
+          - string
+          - 'null'
+          description: Type of the exception.
+        sessionSource:
+          $ref: '#/components/schemas/SessionSource'
+          description: Source of the session.
+        processAttribute:
+          type: array
+          description: The attributes of the process.
+          items:
+            $ref: '#/components/schemas/ProcessAttribute'
+      example:
+        sessionId: 01234567-89ab-cdef-0123-456789abcdef
+        sessionNumber: 123
+        areStartupParamsSet: true
+        areInputParamsSet: true
+        processId: 01234567-89ab-cdef-0123-456789abcdef
+        processName: Example process
+        resourceId: 01234567-89ab-cdef-0123-456789abcdef
+        resourceName: Example resource
+        username: Example user
+        status: Running
+        startTime: '2020-10-02T12:34:56+02:00'
+        endTime: '2020-10-03T13:36:21+02:00'
+        latestStage: Example stage
+        stageStarted: '2020-10-02T12:35:30+02:00'
+        exceptionMessage: Exception message
+        terminationReason: InternalError
+        exceptionType: Exception type
+        sessionSource: Enterprise
+        processAttribute:
+        - Retired
+        - Published
+        - PublishedWebService
+    DataRow:
+      description: A dictionary which represents a row of data from a Blue Prism collection.
+      type: object
+      additionalProperties:
+        $ref: '#/components/schemas/DataValue'
+    SessionLogSummary:
+      description: Contains basic details of a session log.
+      type: object
+      properties:
+        logId:
+          type: integer
+          description: The ID of the session log.
+        logNumber:
+          type: integer
+          description: The number of the session log.
+        stageId:
+          type: string
+          description: The id of the stage that created this log entry.
+        stageName:
+          type: string
+          description: The name of the stage that created this log entry.
+        stageType:
+          description: The type of the stage that created this log entry.
+          type: string
+          $ref: '#/components/schemas/StageType'
+        processName:
+          type: string
+          description: The name of the processes.
+        pageName:
+          type: string
+          description: The name of the page.
+        objectName:
+          type: string
+          description: The name of the object.
+        actionName:
+          type: string
+          description: The name of the action.
+        result:
+          type: string
+          description: The result of the stage.
+        resultType:
+          type: string
+          description: The result type of the stage.
+          $ref: '#/components/schemas/ResultType'
+        resourceStartTime:
+          type: string
+          format: date-time
+          description: The date and time that the resource started running.
+        resourceEndTime:
+          type: string
+          format: date-time
+          description: The date and time that the resource ended running.
+        bluePrismMemory:
+          type: integer
+          description: The automate memory.
+        targetAppId:
+          type: string
+          description: The id of the target app.
+        targetMemory:
+          type: integer
+          description: The tareget memory.
+        hasParameters:
+          type: boolean
+          description: If the session log has parameters.
+      example:
+        logId: 123
+        logNumber: 123
+        stageId: 00000000-0000-0000-0000-000000000000
+        stageName: Example stage
+        stageType: Calculation
+        processName: Example process
+        pageName: Example page
+        objectName: Example object
+        actionName: Example action
+        result: Some result
+        resultType: Collection
+        resourceStartTime: '2020-10-02T12:34:56+01:00'
+        resourceEndTime: '2020-10-02T13:34:56+01:00'
+        bluePrismMemory: 123
+        targetAppId: Example target
+        targetMemory: 123
+        hasParameters: true
+    BasicStringFilter:
+      description: Used to filter strings. Check for strings that start with, equal, are greater than, are less than, or are between the given value(s).
+      type: object
+      anyOf:
+      - $ref: '#/components/schemas/RangeOrEqualFilter'
+      - $ref: '#/components/schemas/StartsWithStringFilter'
+      example:
+        strtw: null
+        gte: null
+        lte: null
+        eq: null
+    RangeOrEqualFilter:
+      description: Used to filter values. Check for values that are equal to, greater than or equal to, less than or equal to, or between the given value(s).
+      type: object
+      oneOf:
+      - $ref: '#/components/schemas/RangeFilter'
+      - $ref: '#/components/schemas/EqualsFilter'
+      example:
+        gte: null
+        lte: null
+        eq: null
+    GreaterThanOrEqualToFilter:
+      description: Used to filter values. Check for values that are greater than or equal to the given value.
+      type: object
+      properties:
+        gte:
+          type:
+          - object
+          - 'null'
+          description: The value that the field should be greater than or equal to.
+      example:
+        gte: null
+    SessionStatus:
+      description: The status of a session
+      type: string
+      enum:
+      - Pending
+      - Running
+      - Terminated
+      - Stopped
+      - Completed
+      - Stopping
+      - Warning
+    DataValue:
+      description: Represents a single item of data in a Blue Prism format.
+      type: object
+      properties:
+        valueType:
+          description: The type of object contained in the value field.
+          type: string
+          enum:
+          - Binary
+          - Collection
+          - Date
+          - DateTime
+          - Flag
+          - Image
+          - Number
+          - Password
+          - RadioButtons
+          - Text
+          - Time
+          - TimeSpan
+        value:
+          description: The value of the object.
+          oneOf:
+          - type: string
+            format: base64
+            description: Used for Binary and Image data types. The image format must only be one of these BPM, JPG, JPEG, GIF, PNG, ICO or TIFF.
+          - $ref: '#/components/schemas/DataCollection'
+            description: Used for the Collection data type.
+          - type: string
+            format: date
+            description: Used for Date and Time data types.
+          - type: boolean
+            description: Used for the Flag data type.
+          - type: number
+            description: Used for the Number data type.
+          - type: string
+            description: Used for Password and Text data types.
+          - type: string
+            format: time
+            description: Used for the TimeSpan data type.
+          - $ref: '#/components/schemas/RadioButtonsArray'
+        additionalParameters:
+          description: Custom extra parameters i.e. Binary's file path.
+          type: array
+          items:
+            type: string
+    SessionSource:
+      description: The source of a session
+      type: string
+      enum:
+      - Desktop
+      - Enterprise
+    CreateSessionParameters:
+      description: Contain a parameter used to create a new session
+      type: object
+      properties:
+        resourceId:
+          type: string
+          format: uuid
+          description: The ID of the resource or pool to create session.
+        processId:
+          type: string
+          format: uuid
+          description: The ID of the process to create session.
+    BasicNumericFilter:
+      description: Used to filter numbers. Check for numbers that start with, equal, are greater than, are less than, or are between the given values(s).
+      type: object
+      oneOf:
+      - $ref: '#/components/schemas/RangeOrEqualFilter'
+      - $ref: '#/components/schemas/StartsWithStringFilter'
+      example:
+        strtw: null
+        eq: null
+        lte: null
+        gte: null
+    StartsWithStringFilter:
+      description: Used to filter strings. Check for strings that start with the given value.
+      type: object
+      properties:
+        strtw:
+          type:
+          - string
+          - 'null'
+          description: The value that the field should start with.
+      example:
+        strtw: null
+    ContainsStringFilter:
+      description: Used to filter strings. Check for strings that contain the given value.
+      type: object
+      properties:
+        ctn:
+          type:
+          - string
+          - 'null'
+          description: The value that the field should contain.
+      example:
+        ctn: null
+    ProcessAttribute:
+      description: The attributes of the process.
+      type: string
+      enum:
+      - None
+      - Retired
+      - Published
+      - PublishedWebService
+      - PublishedDesktop
+    DataCollection:
+      description: Represents a Blue Prism collection.
+      type: object
+      properties:
+        rows:
+          description: A collection of rows representing the data contained within the collection.
+          type: array
+          items:
+            $ref: '#/components/schemas/DataRow'
+    ValidationError:
+      description: An error occurred during validation. See the response body for details on the invalid field.
+      type: object
+      properties:
+        invalidField:
+          type: string
+          description: The field which is invalid.
+        message:
+          type: string
+          description: A description of the error found with the field.
+    ErrorMessage:
+      description: A message describing the problem encountered.
+      type: string
+    PagingToken:
+      type: string
+      description: The token to be used in the next request to return the next collection of items.
+      example: U3VwZXIgc2VjcmV0IGRhdGEuIFNoaGho
+    UpdateSession:
+      description: Contains details for updating a session.
+      type: object
+      properties:
+        status:
+          type: string
+          description: The status of the session.
+          enum:
+          - Pending
+          - Running
+          - Stopped
+          - Terminated
+          - Completed
+          - Stopping
+          - Warning
+    StageType:
+      description: The stage type of a session
+      type: string
+      enum:
+      - Undefined
+      - Action
+      - Decision
+      - Calculation
+      - Data
+      - Collection
+      - Process
+      - SubSheet
+      - ProcessInfo
+      - SubSheetInfo
+      - Start
+      - End
+      - Anchor
+      - Note
+      - LoopStart
+      - LoopEnd
+      - Read
+      - Write
+      - Navigate
+      - Code
+      - ChoiceStart
+      - ChoiceEnd
+      - WaitStart
+      - WaitEnd
+      - Alert
+      - Exception
+      - Recover
+      - Resume
+      - Block
+      - MultipleCalculation
+      - Skill
+      - Input
+      - Output
+      - EnterpriseSession
+    SessionItemsPage:
+      description: Contains details of a page of sessions.
+      type: object
+      properties:
+        pagingToken:
+          $ref: '#/components/schemas/PagingToken'
+        items:
+          type: array
+          description: A collection of session summary.
+          items:
+            $ref: '#/components/schemas/SessionSummary'
+          example:
+          - sessionId: 01234567-89ab-cdef-0123-456789abcdef
+            sessionNumber: 123
+            processId: 01234567-89ab-cdef-0123-456789abcdef
+            processName: Example process
+            resourceId: 01234567-89ab-cdef-0123-456789abcdef
+            resourceName: Example resource
+            username: Example user
+            status: Running
+            startTime: '2020-10-02T12:34:56+02:00'
+            endTime: '2020-10-03T13:36:21+02:00'
+            latestStage: Example stage
+            stageStarted: '2020-10-02T12:35:30+02:00'
+            exceptionMessage: Exception message
+            terminationReason: InternalError
+            exceptionType: Exception type
+            sessionSource: Enterprise
+            processAttribute: Published
+    SessionLogsPage:
+      description: Contains details of a page of session logs.
+      type: object
+      properties:
+        pagingToken:
+          type: string
+          description: The token to be used in the next request to return the next collection of items.
+        items:
+          type: array
+          description: A collection of items
+          items:
+            $ref: '#/components/schemas/SessionLogSummary'
+      example:
+        pagingToken: U3VwZXIgc2VjcmV0IGRhdGEuIFNoaGho
+        items:
+        - logId: 123
+          logNumber: 123
+          stageId: 00000000-0000-0000-0000-000000000000
+          stageName: Example stage
+          stageType: Calculation
+          processName: Example process
+          pageName: Example page
+          objectName: Example object
+          actionName: Example action
+          result: Some result
+          resultType: Collection
+          resourceStartTime: '2020-10-02T12:34:56+01:00'
+          resourceEndTime: '2020-10-02T13:34:56+01:00'
+          bluePrismMemory: 123
+          targetAppId: Example target
+          targetMemory: 123
+          hasParameters: true
+    LessThanOrEqualToFilter:
+      description: Used to filter values. Check for values that are less than or equal to the given value.
+      type: object
+      properties:
+        lte:
+          type:
+          - object
+          - 'null'
+          description: The value that the field should be less than or equal to.
+      example:
+        lte: null
+    FullStringFilter:
+      description: Used to filter strings. Check for strings that start with, contain, equal, are greater than, are less than, or are between the given value(s).
+      type: object
+      anyOf:
+      - $ref: '#/components/schemas/StringFilter'
+      - $ref: '#/components/schemas/RangeOrEqualFilter'
+      example:
+        ctn: null
+        strtw: null
+        gte: null
+        lte: null
+        eq: null
+    EqualsFilter:
+      description: Used to filter values. Check for values that are equal to the given value.
+      type: object
+      properties:
+        eq:
+          type:
+          - object
+          - 'null'
+          description: The value that the field should be equal to.
+      example:
+        eq: null
+    RadioButtonsArray:
+      description: Used for the RadioButtons data type.
+      type: array
+      items:
+        type: object
+        properties:
+          name:
+            type: string
+          selected:
+            type: boolean
+    RangeFilter:
+      description: Used to filter values. Check for values that are greater than or equal to, less than or equal to, or between the given value(s).
+      type: object
+      anyOf:
+      - $ref: '#/components/schemas/GreaterThanOrEqualToFilter'
+      - $ref: '#/components/schemas/LessThanOrEqualToFilter'
+      example:
+        gte: null
+        lte: null
+    Error:
+      description: A general error occurred. See errorMessage for details.
+      type: object
+      properties:
+        errorMessage:
+          description: A message describing the problem encountered.
+          type: string
+    SessionLogParametersResponse:
+      description: Contains input and output parameters of a session log.
+      type: object
+      properties:
+        inputs:
+          $ref: '#/components/schemas/DataRow'
+        outputs:
+          $ref: '#/components/schemas/DataRow'
+      example:
+        inputs:
+          parameter1:
+            valueType: Text
+            value: Example value
+          parameter2:
+            valueType: Number
+            value: 123
+        outputs:
+          parameter1:
+            valueType: Collection
+            value:
+              rows:
+              - valueType: Number
+                value: 321
+              - valueType: Date
+                value: '2020-10-02T12:34:56+01:00'
+    ResultType:
+      description: The result type of a session
+      type: string
+      enum:
+      - Unknown
+      - Binary
+      - Collection
+      - Date
+      - DateTime
+      - Flag
+      - Image
+      - Number
+      - Password
+      - Text
+      - Time
+      - TimeSpan
+      - RadioButton
+  responses:
+    Conflict:
+      description: The request conflicts with the current state of the resource.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorMessage'
+    NotAuthorized:
+      description: The authentication token was either missing or invalid and must be refreshed.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorMessage'
+    Forbidden:
+      description: The authentication token does not give sufficient permissions to perform this action.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorMessage'
+    NotFoundSession:
+      description: The requested session could not be found.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorMessage'
+    SessionForbidden:
+      description: The user does not have execute permission for this action, or the number of sessions permitted by the current license would be exceeded.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    BadRequest:
+      description: The request is malformed or contains incorrect information. See the response for more details.
+      content:
+        application/json:
+          schema:
+            oneOf:
+            - $ref: '#/components/schemas/UrlParameterError'
+            - $ref: '#/components/schemas/ValidationError'
+    NotFound:
+      description: The requested resource could not be found.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorMessage'
+  securitySchemes:
+    Bearer:
+      type: http
+      scheme: bearer
+      description: JWT token issued from Authentication Server.
+      bearerFormat: JWT
+    OAuth2:
+      type: oauth2
+      flows:
+        clientCredentials:
+          tokenUrl: https://auth-server/connect/token
+          scopes:
+            bp-api: API scope
+            bpserver: Blue Prism Application scope

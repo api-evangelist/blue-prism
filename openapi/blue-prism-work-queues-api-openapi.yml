@@ -1,0 +1,2592 @@
+openapi: 3.2.0
+info:
+  title: Blue Prism Work Queues API
+  description: An API to expose core functionality of the Blue Prism product.
+  version: 7.5.1
+security:
+- Bearer:
+  - bp-api
+  - bpserver
+- OAuth2:
+  - bp-api
+  - bpserver
+tags:
+- name: Work Queues
+paths:
+  /api/v7/workqueues:
+    get:
+      summary: Return a list of work queues in the environment
+      operationId: getWorkqueues
+      description: '> ### Permissions required
+
+        At least one of: `Read Access to Queue Management` | `Full Access to Queue Management`'
+      tags:
+      - Work Queues
+      parameters:
+      - name: sortBy
+        description: The field that results should be sorted by and the direction they should be sorted in.
+        in: query
+        required: false
+        schema:
+          type: string
+          enum:
+          - NameAsc
+          - NameDesc
+          - StatusAsc
+          - StatusDesc
+          - KeyFieldAsc
+          - KeyFieldDesc
+          - MaxAttemptsAsc
+          - MaxAttemptsDesc
+          - IsEncryptedAsc
+          - IsEncryptedDesc
+          - TotalItemCountAsc
+          - TotalItemCountDesc
+          - CompletedItemCountAsc
+          - CompletedItemCountDesc
+          - PendingItemCountAsc
+          - PendingItemCountDesc
+          - LockedItemCountAsc
+          - LockedItemCountDesc
+          - ExceptionedItemCountAsc
+          - ExceptionedItemCountDesc
+          - TotalCaseDurationAsc
+          - TotalCaseDurationDesc
+          - AverageWorkTimeAsc
+          - AverageWorkTimeDesc
+      - name: name
+        description: A filter to search for the name of the work queue.
+        in: query
+        style: deepObject
+        schema:
+          $ref: '#/components/schemas/FullStringFilter'
+        examples:
+          equals:
+            $ref: '#/components/examples/StringEqualsExample'
+          startsWith:
+            $ref: '#/components/examples/StringStartsWithExample'
+          contains:
+            $ref: '#/components/examples/StringContainsExample'
+          range:
+            $ref: '#/components/examples/StringRangeExample'
+          greater:
+            $ref: '#/components/examples/StringGreaterThanExample'
+      - name: keyField
+        description: A filter to search for the name of the work queue's key field.
+        in: query
+        style: deepObject
+        schema:
+          $ref: '#/components/schemas/FullStringFilter'
+        examples:
+          equals:
+            $ref: '#/components/examples/StringEqualsExample'
+          startsWith:
+            $ref: '#/components/examples/StringStartsWithExample'
+          contains:
+            $ref: '#/components/examples/StringContainsExample'
+          range:
+            $ref: '#/components/examples/StringRangeExample'
+          greater:
+            $ref: '#/components/examples/StringGreaterThanExample'
+      - name: status.eq
+        description: A filter to search for the current status of the work queue.
+        in: query
+        schema:
+          $ref: '#/components/schemas/QueueStatus'
+      - name: maxAttempts
+        description: A filter to search for the configured maximum attempts of the work queue.
+        in: query
+        schema:
+          $ref: '#/components/schemas/RangeOrEqualFilter'
+        examples:
+          equals:
+            $ref: '#/components/examples/IntegerEqualsExample'
+          range:
+            $ref: '#/components/examples/IntegerRangeExample'
+          less:
+            $ref: '#/components/examples/IntegerLessThanExample'
+      - name: pendingItemCount
+        description: A filter to search for the pending item count of the work queue.
+        in: query
+        schema:
+          $ref: '#/components/schemas/RangeOrEqualFilter'
+        examples:
+          equals:
+            $ref: '#/components/examples/IntegerEqualsExample'
+          range:
+            $ref: '#/components/examples/IntegerRangeExample'
+          less:
+            $ref: '#/components/examples/IntegerLessThanExample'
+      - name: lockedItemCount
+        description: A filter to search for the locked item count of the work queue.
+        in: query
+        schema:
+          $ref: '#/components/schemas/RangeOrEqualFilter'
+        examples:
+          equals:
+            $ref: '#/components/examples/IntegerEqualsExample'
+          range:
+            $ref: '#/components/examples/IntegerRangeExample'
+          less:
+            $ref: '#/components/examples/IntegerLessThanExample'
+      - name: completedItemCount
+        description: A filter to search for the completed item count of the work queue.
+        in: query
+        schema:
+          $ref: '#/components/schemas/RangeOrEqualFilter'
+        examples:
+          equals:
+            $ref: '#/components/examples/IntegerEqualsExample'
+          range:
+            $ref: '#/components/examples/IntegerRangeExample'
+          less:
+            $ref: '#/components/examples/IntegerLessThanExample'
+      - name: exceptionedItemCount
+        description: A filter to search for the exceptioned item count of the work queue.
+        in: query
+        schema:
+          $ref: '#/components/schemas/RangeOrEqualFilter'
+        examples:
+          equals:
+            $ref: '#/components/examples/IntegerEqualsExample'
+          range:
+            $ref: '#/components/examples/IntegerRangeExample'
+          less:
+            $ref: '#/components/examples/IntegerLessThanExample'
+      - name: totalItemCount
+        description: A filter to search for the total item count of the work queue.
+        in: query
+        schema:
+          $ref: '#/components/schemas/RangeOrEqualFilter'
+        examples:
+          equals:
+            $ref: '#/components/examples/IntegerEqualsExample'
+          range:
+            $ref: '#/components/examples/IntegerRangeExample'
+          less:
+            $ref: '#/components/examples/IntegerLessThanExample'
+      - name: averageWorkTime
+        description: A filter to search for the average work time of the work queue.
+        in: query
+        schema:
+          $ref: '#/components/schemas/RangeOrEqualFilter'
+        examples:
+          equals:
+            $ref: '#/components/examples/TimeEqualsExample'
+          range:
+            $ref: '#/components/examples/TimeRangeExample'
+          greater:
+            $ref: '#/components/examples/TimeLessThanExample'
+      - name: totalCaseDuration
+        description: A filter to search for the total case duration of the work queue.
+        in: query
+        schema:
+          $ref: '#/components/schemas/RangeOrEqualFilter'
+        examples:
+          equals:
+            $ref: '#/components/examples/TimeEqualsExample'
+          range:
+            $ref: '#/components/examples/TimeRangeExample'
+          greater:
+            $ref: '#/components/examples/TimeLessThanExample'
+      - name: itemsPerPage
+        description: The maximum number of items to retrieve per page.
+        in: query
+        schema:
+          type: integer
+          minimum: 1
+      - name: pagingToken
+        description: The token to point to the last item previously returned.
+        in: query
+        schema:
+          type: string
+      responses:
+        '200':
+          description: A list of work queue summaries was successfully retrieved.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WorkQueuesItemsPage'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/NotAuthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+    post:
+      summary: Create a new work queue
+      operationId: createWorkQueue
+      description: '> ### Permissions required
+
+        For creating work queue: `Workflow - Work Queue Configuration`
+
+
+        For creating active work queue: `Workflow - Work Queue Configuration` and `Control Resource` and at least one of: `Create Process` | `Edit Process` | `Execute Process`
+
+        > This endpoint does not support application server-based encryption keys. Only database-based encryption keys can be used.'
+      tags:
+      - Work Queues
+      requestBody:
+        description: Details of the queue to create.
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateWorkQueue'
+      responses:
+        '201':
+          description: The work queue was successfully created.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Identifier'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/NotAuthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '409':
+          description: A work queue with this name already exists.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /api/v7/workqueues/light:
+    get:
+      summary: Return fewer information about work queue(all fields except work queue…
+      operationId: getWorkqueuesLight
+      description: '> ### Permissions required
+
+        At least one of: `Read Access to Queue Management` | `Full Access to Queue Management`'
+      tags:
+      - Work Queues
+      parameters:
+      - name: sortBy
+        description: The field that results should be sorted by and the direction they should be sorted in.
+        in: query
+        required: false
+        schema:
+          type: string
+          enum:
+          - NameAsc
+          - NameDesc
+          - StatusAsc
+          - StatusDesc
+          - KeyFieldAsc
+          - KeyFieldDesc
+          - MaxAttemptsAsc
+          - MaxAttemptsDesc
+          - IsEncryptedAsc
+          - IsEncryptedDesc
+          - TotalItemCountAsc
+          - TotalItemCountDesc
+          - CompletedItemCountAsc
+          - CompletedItemCountDesc
+          - PendingItemCountAsc
+          - PendingItemCountDesc
+          - LockedItemCountAsc
+          - LockedItemCountDesc
+          - ExceptionedItemCountAsc
+          - ExceptionedItemCountDesc
+          - TotalCaseDurationAsc
+          - TotalCaseDurationDesc
+          - AverageWorkTimeAsc
+          - AverageWorkTimeDesc
+      - name: name
+        description: A filter to search for the name of the work queue.
+        in: query
+        style: deepObject
+        schema:
+          $ref: '#/components/schemas/FullStringFilter'
+        examples:
+          equals:
+            $ref: '#/components/examples/StringEqualsExample'
+          startsWith:
+            $ref: '#/components/examples/StringStartsWithExample'
+          contains:
+            $ref: '#/components/examples/StringContainsExample'
+          range:
+            $ref: '#/components/examples/StringRangeExample'
+          greater:
+            $ref: '#/components/examples/StringGreaterThanExample'
+      - name: keyField
+        description: A filter to search for the name of the work queue's key field.
+        in: query
+        style: deepObject
+        schema:
+          $ref: '#/components/schemas/FullStringFilter'
+        examples:
+          equals:
+            $ref: '#/components/examples/StringEqualsExample'
+          startsWith:
+            $ref: '#/components/examples/StringStartsWithExample'
+          contains:
+            $ref: '#/components/examples/StringContainsExample'
+          range:
+            $ref: '#/components/examples/StringRangeExample'
+          greater:
+            $ref: '#/components/examples/StringGreaterThanExample'
+      - name: status.eq
+        description: A filter to search for the current status of the work queue.
+        in: query
+        schema:
+          $ref: '#/components/schemas/QueueStatus'
+      - name: maxAttempts
+        description: A filter to search for the configured maximum attempts of the work queue.
+        in: query
+        schema:
+          $ref: '#/components/schemas/RangeOrEqualFilter'
+        examples:
+          equals:
+            $ref: '#/components/examples/IntegerEqualsExample'
+          range:
+            $ref: '#/components/examples/IntegerRangeExample'
+          less:
+            $ref: '#/components/examples/IntegerLessThanExample'
+      - name: pendingItemCount
+        description: A filter to search for the pending item count of the work queue.
+        in: query
+        schema:
+          $ref: '#/components/schemas/RangeOrEqualFilter'
+        examples:
+          equals:
+            $ref: '#/components/examples/IntegerEqualsExample'
+          range:
+            $ref: '#/components/examples/IntegerRangeExample'
+          less:
+            $ref: '#/components/examples/IntegerLessThanExample'
+      - name: lockedItemCount
+        description: A filter to search for the locked item count of the work queue.
+        in: query
+        schema:
+          $ref: '#/components/schemas/RangeOrEqualFilter'
+        examples:
+          equals:
+            $ref: '#/components/examples/IntegerEqualsExample'
+          range:
+            $ref: '#/components/examples/IntegerRangeExample'
+          less:
+            $ref: '#/components/examples/IntegerLessThanExample'
+      - name: completedItemCount
+        description: A filter to search for the completed item count of the work queue.
+        in: query
+        schema:
+          $ref: '#/components/schemas/RangeOrEqualFilter'
+        examples:
+          equals:
+            $ref: '#/components/examples/IntegerEqualsExample'
+          range:
+            $ref: '#/components/examples/IntegerRangeExample'
+          less:
+            $ref: '#/components/examples/IntegerLessThanExample'
+      - name: exceptionedItemCount
+        description: A filter to search for the exceptioned item count of the work queue.
+        in: query
+        schema:
+          $ref: '#/components/schemas/RangeOrEqualFilter'
+        examples:
+          equals:
+            $ref: '#/components/examples/IntegerEqualsExample'
+          range:
+            $ref: '#/components/examples/IntegerRangeExample'
+          less:
+            $ref: '#/components/examples/IntegerLessThanExample'
+      - name: totalItemCount
+        description: A filter to search for the total item count of the work queue.
+        in: query
+        schema:
+          $ref: '#/components/schemas/RangeOrEqualFilter'
+        examples:
+          equals:
+            $ref: '#/components/examples/IntegerEqualsExample'
+          range:
+            $ref: '#/components/examples/IntegerRangeExample'
+          less:
+            $ref: '#/components/examples/IntegerLessThanExample'
+      - name: averageWorkTime
+        description: A filter to search for the average work time of the work queue.
+        in: query
+        schema:
+          $ref: '#/components/schemas/RangeOrEqualFilter'
+        examples:
+          equals:
+            $ref: '#/components/examples/TimeEqualsExample'
+          range:
+            $ref: '#/components/examples/TimeRangeExample'
+          greater:
+            $ref: '#/components/examples/TimeLessThanExample'
+      - name: totalCaseDuration
+        description: A filter to search for the total case duration of the work queue.
+        in: query
+        schema:
+          $ref: '#/components/schemas/RangeOrEqualFilter'
+        examples:
+          equals:
+            $ref: '#/components/examples/TimeEqualsExample'
+          range:
+            $ref: '#/components/examples/TimeRangeExample'
+          greater:
+            $ref: '#/components/examples/TimeLessThanExample'
+      - name: itemsPerPage
+        description: The maximum number of items to retrieve per page.
+        in: query
+        schema:
+          type: integer
+          minimum: 1
+      - name: pagingToken
+        description: The token to point to the last item previously returned.
+        in: query
+        schema:
+          type: string
+      responses:
+        '200':
+          description: A list of work queue summaries was successfully retrieved.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WorkQueuesItemsPage'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/NotAuthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+  /api/v7/workqueues/configurations:
+    get:
+      summary: Return configuration(id, name, assignedProcessId, assignedResourceGroupId and…
+      operationId: getWorkQueueConfiguration
+      description: '> ### Permissions required
+
+        At least one of: `Read Access to Queue Management` | `Full Access to Queue Management`'
+      tags:
+      - Work Queues
+      parameters:
+      - name: sortBy
+        description: The field that results should be sorted by and the direction they should be sorted in.
+        in: query
+        required: false
+        schema:
+          type: string
+          enum:
+          - NameAsc
+          - NameDesc
+      - name: name
+        description: A filter to search for the name of the work queue configuration.
+        in: query
+        style: deepObject
+        schema:
+          $ref: '#/components/schemas/FullStringFilter'
+        examples:
+          equals:
+            $ref: '#/components/examples/StringEqualsExample'
+          startsWith:
+            $ref: '#/components/examples/StringStartsWithExample'
+          contains:
+            $ref: '#/components/examples/StringContainsExample'
+          range:
+            $ref: '#/components/examples/StringRangeExample'
+          greater:
+            $ref: '#/components/examples/StringGreaterThanExample'
+      - name: itemsPerPage
+        description: The maximum number of items to retrieve per page.
+        in: query
+        schema:
+          type: integer
+          minimum: 1
+      - name: pagingToken
+        description: The token to point to the last item previously returned.
+        in: query
+        schema:
+          type: string
+      responses:
+        '200':
+          description: A list of work queue configurations was successfully retrieved.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WorkQueueConfigurationsPage'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/NotAuthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+  /api/v7/workqueues/{workQueueId}:
+    get:
+      summary: Return details of a work queue
+      operationId: getWorkQueue
+      description: '> ### Permissions required
+
+        At least one of: `Read Access to Queue Management` | `Full Access to Queue Management`'
+      tags:
+      - Work Queues
+      parameters:
+      - name: workQueueId
+        in: path
+        description: The ID of the queue to retrieve details for.
+        required: true
+        schema:
+          type: string
+          format: uuid
+      responses:
+        '200':
+          description: The work queue details were successfully retrieved.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WorkQueueSummary'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/NotAuthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+    patch:
+      summary: Modify the work queue as described in the patch document
+      operationId: updateWorkQueue
+      description: '> ### Permissions required
+
+        At least one of: `Read Access to Queue Management` | `Full Access to Queue Management`
+
+
+        and `Workflow - Work Queue Configuration`
+
+        > This endpoint does not support application server-based encryption keys. Only database-based encryption keys can be used.'
+      tags:
+      - Work Queues
+      parameters:
+      - name: workQueueId
+        in: path
+        description: The ID of the queue to modify.
+        required: true
+        schema:
+          type: string
+          format: uuid
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchRequest'
+            examples:
+              add (to array):
+                $ref: '#/components/examples/PatchAddToArrayExample'
+              add (to object):
+                $ref: '#/components/examples/PatchAddToObjectExample'
+              copy:
+                $ref: '#/components/examples/PatchCopyExample'
+              move:
+                $ref: '#/components/examples/PatchMoveExample'
+              remove:
+                $ref: '#/components/examples/PatchRemoveExample'
+              replace:
+                $ref: '#/components/examples/PatchReplaceExample'
+      responses:
+        '204':
+          description: The work queue was successfully updated.
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/NotAuthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+    delete:
+      summary: Delete a specified work queue
+      operationId: deleteWorkQueue
+      description: '> ### Permissions required: `Workflow - Work Queue Configuration`'
+      tags:
+      - Work Queues
+      parameters:
+      - name: workQueueId
+        in: path
+        description: The ID of the queue to delete.
+        required: true
+        schema:
+          type: string
+          format: uuid
+      responses:
+        '204':
+          description: The queue was successfully deleted.
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/NotAuthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '409':
+          description: Either the queue is not empty or still has running sessions.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /api/v7/workqueues/{workQueueId}/references:
+    get:
+      summary: Return references to a specified work queue
+      operationId: getWorkQueueReferences
+      description: '> ### Permissions required: `Workflow - Work Queue Configuration`'
+      tags:
+      - Work Queues
+      parameters:
+      - name: workQueueId
+        description: The ID of the queue to get references of.
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: sortBy
+        description: The field that results should be sorted by and the direction they should be sorted in.
+        in: query
+        schema:
+          type: string
+          enum:
+          - NameAsc
+          - NameDesc
+          - DescriptionAsc
+          - DescriptionDesc
+          - ProcessTypeAsc
+          - ProcessTypeDesc
+      - name: itemsPerPage
+        description: The maximum number of items to retrieve.
+        in: query
+        schema:
+          type: integer
+          minimum: 1
+      - name: pagingToken
+        description: The token to point to the last item previously returned.
+        in: query
+        schema:
+          type: string
+      - name: name
+        description: A filter to search for the name of the reference.
+        in: query
+        style: deepObject
+        schema:
+          $ref: '#/components/schemas/BasicStringFilter'
+        examples:
+          equals:
+            $ref: '#/components/examples/StringEqualsExample'
+          startsWith:
+            $ref: '#/components/examples/StringStartsWithExample'
+          range:
+            $ref: '#/components/examples/StringRangeExample'
+          greater:
+            $ref: '#/components/examples/StringGreaterThanExample'
+      - name: description
+        in: query
+        style: deepObject
+        description: A filter to search for the description of the reference.
+        schema:
+          $ref: '#/components/schemas/BasicStringFilter'
+        examples:
+          equals:
+            $ref: '#/components/examples/StringEqualsExample'
+          startsWith:
+            $ref: '#/components/examples/StringStartsWithExample'
+          range:
+            $ref: '#/components/examples/StringRangeExample'
+          greater:
+            $ref: '#/components/examples/StringGreaterThanExample'
+      - name: processType
+        in: query
+        style: form
+        explode: false
+        description: The type of the process to search for.
+        schema:
+          type: array
+          items:
+            type: string
+            enum:
+            - Process
+            - Object
+      responses:
+        '200':
+          description: An list of queue references was successfully retrieved.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ReferencesItemsPage'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/NotAuthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+  /api/v7/workqueues/{workQueueId}/items:
+    get:
+      summary: Return items in a specified work queue
+      operationId: getWorkQueueItems
+      description: '> ### Permissions required
+
+        At least one of: `Read Access to Queue Management` | `Full Access to Queue Management`
+
+        > ### Additional permissions for accessing Active Queue items
+
+        At least one of: `Create Process` | `Edit Process` | `Execute Process`
+
+        And `Control Resource`'
+      tags:
+      - Work Queues
+      parameters:
+      - name: workQueueId
+        description: The ID of the queue to get an item from.
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: sortBy
+        description: The field that results should be sorted by and the direction they should be sorted in.
+        in: query
+        required: false
+        schema:
+          type: string
+          enum:
+          - AttemptAsc
+          - AttemptDesc
+          - AttemptWorkTimeAsc
+          - AttemptWorkTimeDesc
+          - CompletedAsc
+          - CompletedDesc
+          - DeferredAsc
+          - DeferredDesc
+          - ExceptionAsc
+          - ExceptionDesc
+          - ExceptionReasonAsc
+          - ExceptionReasonDesc
+          - KeyValueAsc
+          - KeyValueDesc
+          - LastUpdatedAsc
+          - LastUpdatedDesc
+          - LoadedAsc
+          - LoadedDesc
+          - LockedAsc
+          - LockedDesc
+          - PriorityAsc
+          - PriorityDesc
+          - StatusAsc
+          - StatusDesc
+          - WorkTimeAsc
+          - WorkTimeDesc
+          - SlaAsc
+          - SlaDesc
+          - SlaDateTimeAsc
+          - SlaDateTimeDesc
+          - ProcessNameAsc
+          - ProcessNameDesc
+          - IsSuggestedAsc
+          - IsSuggestedDesc
+      - name: keyValue
+        description: A filter to search for the value of the key field of the work queue item.
+        in: query
+        schema:
+          $ref: '#/components/schemas/FullStringFilter'
+        examples:
+          equals:
+            $ref: '#/components/examples/StringEqualsExample'
+          startsWith:
+            $ref: '#/components/examples/StringStartsWithExample'
+          contains:
+            $ref: '#/components/examples/StringContainsExample'
+          range:
+            $ref: '#/components/examples/StringRangeExample'
+          greater:
+            $ref: '#/components/examples/StringGreaterThanExample'
+      - name: status
+        description: A filter to search for the status of the work queue item.
+        in: query
+        schema:
+          $ref: '#/components/schemas/FullStringFilter'
+        examples:
+          equals:
+            $ref: '#/components/examples/StringEqualsExample'
+          startsWith:
+            $ref: '#/components/examples/StringStartsWithExample'
+          contains:
+            $ref: '#/components/examples/StringContainsExample'
+          range:
+            $ref: '#/components/examples/StringRangeExample'
+          greater:
+            $ref: '#/components/examples/StringGreaterThanExample'
+      - name: state
+        description: A filter to search for the current state of the work queue item.
+        in: query
+        style: form
+        explode: false
+        schema:
+          type: array
+          items:
+            type: string
+            enum:
+            - Pending
+            - Locked
+            - Deferred
+            - Completed
+            - Exceptioned
+      - name: totalWorkTime
+        description: A filter to search for the total work time of the work queue item.
+        in: query
+        schema:
+          $ref: '#/components/schemas/RangeOrEqualFilter'
+        examples:
+          equals:
+            $ref: '#/components/examples/TimeEqualsExample'
+          range:
+            $ref: '#/components/examples/TimeRangeExample'
+          greater:
+            $ref: '#/components/examples/TimeLessThanExample'
+      - name: loadedDate
+        description: A filter to search for the time the work queue item was loaded onto the queue.
+        in: query
+        schema:
+          $ref: '#/components/schemas/RangeOrEqualFilter'
+        examples:
+          equals:
+            $ref: '#/components/examples/DateTimeEqualsExample'
+          range:
+            $ref: '#/components/examples/DateTimeRangeExample'
+          greater:
+            $ref: '#/components/examples/DateTimeGreaterThanExample'
+      - name: deferredDate
+        description: A filter to search for the time the work queue item is deferred until.
+        in: query
+        schema:
+          $ref: '#/components/schemas/RangeOrEqualFilter'
+        examples:
+          equals:
+            $ref: '#/components/examples/DateTimeEqualsExample'
+          range:
+            $ref: '#/components/examples/DateTimeRangeExample'
+          greater:
+            $ref: '#/components/examples/DateTimeGreaterThanExample'
+      - name: lockedDate
+        description: A filter to search for the time the work queue item was locked.
+        in: query
+        schema:
+          $ref: '#/components/schemas/RangeOrEqualFilter'
+        examples:
+          equals:
+            $ref: '#/components/examples/DateTimeEqualsExample'
+          range:
+            $ref: '#/components/examples/DateTimeRangeExample'
+          greater:
+            $ref: '#/components/examples/DateTimeGreaterThanExample'
+      - name: completedDate
+        description: A filter to search for the time the work queue item was completed.
+        in: query
+        schema:
+          $ref: '#/components/schemas/RangeOrEqualFilter'
+        examples:
+          equals:
+            $ref: '#/components/examples/DateTimeEqualsExample'
+          range:
+            $ref: '#/components/examples/DateTimeRangeExample'
+          greater:
+            $ref: '#/components/examples/DateTimeGreaterThanExample'
+      - name: exceptionedDate
+        description: A filter to search for the time the work queue item exceptioned.
+        in: query
+        schema:
+          $ref: '#/components/schemas/RangeOrEqualFilter'
+        examples:
+          equals:
+            $ref: '#/components/examples/DateTimeEqualsExample'
+          range:
+            $ref: '#/components/examples/DateTimeRangeExample'
+          greater:
+            $ref: '#/components/examples/DateTimeGreaterThanExample'
+      - name: lastUpdated
+        description: A filter to search for the time the work queue item was last updated.
+        in: query
+        schema:
+          $ref: '#/components/schemas/RangeOrEqualFilter'
+        examples:
+          equals:
+            $ref: '#/components/examples/DateTimeEqualsExample'
+          range:
+            $ref: '#/components/examples/DateTimeRangeExample'
+          greater:
+            $ref: '#/components/examples/DateTimeGreaterThanExample'
+      - name: attempt
+        description: A filter to search for the current attempt number of the work queue item.
+        in: query
+        schema:
+          $ref: '#/components/schemas/RangeOrEqualFilter'
+        examples:
+          equals:
+            $ref: '#/components/examples/IntegerEqualsExample'
+          range:
+            $ref: '#/components/examples/IntegerRangeExample'
+          less:
+            $ref: '#/components/examples/IntegerLessThanExample'
+      - name: priority
+        description: A filter to search for the priority of the work queue item.
+        in: query
+        schema:
+          $ref: '#/components/schemas/RangeOrEqualFilter'
+        examples:
+          equals:
+            $ref: '#/components/examples/IntegerEqualsExample'
+          range:
+            $ref: '#/components/examples/IntegerRangeExample'
+          less:
+            $ref: '#/components/examples/IntegerLessThanExample'
+      - name: exceptionReason
+        description: A filter to search for the reason that the work queue item exceptioned.
+        in: query
+        schema:
+          $ref: '#/components/schemas/FullStringFilter'
+        examples:
+          equals:
+            $ref: '#/components/examples/StringEqualsExample'
+          contains:
+            $ref: '#/components/examples/StringContainsExample'
+          startsWith:
+            $ref: '#/components/examples/StringStartsWithExample'
+          range:
+            $ref: '#/components/examples/StringRangeExample'
+          greater:
+            $ref: '#/components/examples/StringGreaterThanExample'
+      - name: slaDateTime
+        description: A filter to search for the sla time the work queue item.
+        in: query
+        schema:
+          $ref: '#/components/schemas/RangeOrEqualFilter'
+        examples:
+          equals:
+            $ref: '#/components/examples/DateTimeEqualsExample'
+          range:
+            $ref: '#/components/examples/DateTimeRangeExample'
+          greater:
+            $ref: '#/components/examples/DateTimeGreaterThanExample'
+      - name: processName
+        description: A filter to search for the process name of the work queue item.
+        in: query
+        schema:
+          $ref: '#/components/schemas/FullStringFilter'
+        examples:
+          equals:
+            $ref: '#/components/examples/StringEqualsExample'
+          startsWith:
+            $ref: '#/components/examples/StringStartsWithExample'
+          contains:
+            $ref: '#/components/examples/StringContainsExample'
+          range:
+            $ref: '#/components/examples/StringRangeExample'
+          greater:
+            $ref: '#/components/examples/StringGreaterThanExample'
+      - name: sla
+        description: A filter to search for the sla time of the work queue item.
+        in: query
+        schema:
+          $ref: '#/components/schemas/RangeOrEqualFilter'
+        examples:
+          equals:
+            $ref: '#/components/examples/TimeEqualsExample'
+          range:
+            $ref: '#/components/examples/TimeRangeExample'
+          greater:
+            $ref: '#/components/examples/TimeLessThanExample'
+      - name: withinSla
+        in: query
+        description: Flag to get work queue items within sla time.
+        schema:
+          type: boolean
+      - name: isSuggested
+        in: query
+        description: A filter to search the work queue items which is used to help troubleshoot issues.
+        schema:
+          $ref: '#/components/schemas/EqualsFilter'
+      - name: itemsPerPage
+        description: The maximum number of items to retrieve per page.
+        in: query
+        schema:
+          type: integer
+      - name: pagingToken
+        description: The token to point to the last item previously returned.
+        in: query
+        schema:
+          type: string
+      responses:
+        '200':
+          description: An list of queue items was successfully retrieved.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WorkQueueItemsPage'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/NotAuthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+    post:
+      deprecated: true
+      summary: Create work queue item(s)
+      operationId: createWorkQueueItem
+      description: '> ### Permissions required: `Full Access to Queue Management`
+
+        > ### Additional permissions for accessing Active Queue items
+
+        At least one of: `Create Process` | `Edit Process` | `Execute Process`
+
+        And `Control Resource`'
+      tags:
+      - Work Queues
+      parameters:
+      - name: workQueueId
+        in: path
+        description: The ID of the queue to insert into.
+        required: true
+        schema:
+          type: string
+          format: uuid
+      requestBody:
+        description: Details of the queue items to create.
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateWorkQueueItems'
+      responses:
+        '201':
+          description: The item was successfully added
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Identifiers'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/NotAuthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+  /api/v7/workqueues/{workQueueId}/items/batch:
+    post:
+      summary: Create work queue items
+      operationId: createWorkQueueItems
+      description: '> ### Permissions required: `Full Access to Queue Management`
+
+        > ### Additional permissions for accessing Active Queue items
+
+        At least one of: `Create Process` | `Edit Process` | `Execute Process`
+
+        And `Control Resource`
+
+        > This endpoint does not support application server-based encryption keys. Only work queues that are not encrypted, or use database-based encryption keys can use this endpoint.'
+      tags:
+      - Work Queues
+      parameters:
+      - name: workQueueId
+        in: path
+        description: The ID of the queue to insert into.
+        required: true
+        schema:
+          type: string
+          format: uuid
+      requestBody:
+        description: Details of the queue items to create.
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateWorkQueueItems'
+      responses:
+        '201':
+          description: The item was successfully added
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Identifiers'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/NotAuthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+  /api/v7/workqueues/items/{workQueueItemId}:
+    get:
+      deprecated: true
+      summary: Return details of a specified item from a work queue
+      operationId: getWorkQueueItem
+      description: '> ### Permissions required
+
+        At least one of: `Read Access to Queue Management` | `Full Access to Queue Management`
+
+        > ### Additional permissions for accessing Active Queue items
+
+        At least one of: `Create Process` | `Edit Process` | `Execute Process`
+
+        And `Control Resource`
+
+        This endpoint does not support application server-based encryption keys. Only work queues that are not encrypted, or use database-based encryption keys can use this endpoint.'
+      tags:
+      - Work Queues
+      parameters:
+      - name: workQueueItemId
+        in: path
+        description: The ID of the item to get.
+        required: true
+        schema:
+          type: string
+          format: uuid
+      responses:
+        '200':
+          description: The specified work queue item was successfully retrieved.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WorkQueueItem'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '404':
+          $ref: '#/components/responses/NotFound'
+  /api/v7/workqueues/{workQueueId}/items/{workQueueItemId}:
+    get:
+      summary: Return details of a specified item from a work queue
+      operationId: getWorkQueueItemFromWorkQueue
+      description: '> ### Permissions required
+
+        At least one of: `Read Access to Queue Management` | `Full Access to Queue Management`.
+
+        > ### Additional permissions for accessing Active Queue item
+
+        At least one of: `Create Process` | `Edit Process` | `Execute Process`
+
+        And `Control Resource`
+
+        > This endpoint does not support application server-based encryption keys. Only work queues that are not encrypted, or use database-based encryption keys can use this endpoint.'
+      tags:
+      - Work Queues
+      parameters:
+      - name: workQueueId
+        in: path
+        description: The queue ID of the item to get.
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: workQueueItemId
+        in: path
+        description: The ID of the item to get.
+        required: true
+        schema:
+          type: string
+          format: uuid
+      responses:
+        '200':
+          description: The specified work queue item was successfully retrieved.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WorkQueueItem'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '404':
+          $ref: '#/components/responses/NotFound'
+  /api/v7/workqueues/{workQueueId}/items/{workQueueItemId}/attempts:
+    get:
+      summary: Returns all attempts for the given work queue item
+      operationId: getWorkQueueItemAttempts
+      description: '> ### Permissions required
+
+        At least one of: `Read Access to Queue Management` | `Full Access to Queue Management`.
+
+        > ### Additional permissions for accessing Active Queue item
+
+        At least one of: `Create Process` | `Edit Process` | `Execute Process`
+
+        And `Control Resource`'
+      tags:
+      - Work Queues
+      parameters:
+      - name: workQueueId
+        in: path
+        description: The queue ID of the item to return attempts.
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: workQueueItemId
+        in: path
+        description: The ID of the item to return attempts.
+        required: true
+        schema:
+          type: string
+          format: uuid
+      responses:
+        '200':
+          description: A collection of work queue items.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/WorkQueueItemNoData'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/NotAuthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+    post:
+      summary: Creates a new work queue item attempt by forcing an item to retry
+      operationId: createWorkQueueItemAttempt
+      description: '> ### Permissions required: `Full Access to Queue Management`'
+      tags:
+      - Work Queues
+      parameters:
+      - name: workQueueId
+        in: path
+        description: The queue ID of the item to force retry.
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: workQueueItemId
+        in: path
+        description: The ID of the item to force retry.
+        required: true
+        schema:
+          type: string
+          format: uuid
+      responses:
+        '201':
+          description: The work queue item attempt was successfully created.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreateWorkQueueItemAttemptResponseModel'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/NotAuthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+  /api/v7/workqueues/{workQueueId}/items/{workQueueItemId}/attempts/{attemptId}:
+    delete:
+      summary: Deletes a worked queue item
+      operationId: deleteWorkQueueItemAttempt
+      description: '> ### Permissions required: `Full Access to Queue Management`'
+      tags:
+      - Work Queues
+      parameters:
+      - name: workQueueId
+        in: path
+        description: The queue ID of the item to delete.
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: workQueueItemId
+        in: path
+        description: The ID of the item to delete.
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: attemptId
+        in: path
+        description: The ID of the attempt of the work queue item to delete
+        required: true
+        schema:
+          type: number
+      responses:
+        '204':
+          description: The worked queue item was successfully deleted.
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/NotAuthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+    patch:
+      summary: Modify the work queue item as described in the patch document
+      operationId: updateWorkQueueItemAttempt
+      description: '> ### Permissions required: `Full Access to Queue Management`'
+      tags:
+      - Work Queues
+      parameters:
+      - name: workQueueId
+        in: path
+        description: The queue ID of the item to update.
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: workQueueItemId
+        in: path
+        description: The ID of the item to update.
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: attemptId
+        in: path
+        description: The ID of the attempt of the work queue item to update
+        required: true
+        schema:
+          type: number
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchRequest'
+            examples:
+              replace:
+                $ref: '#/components/examples/PatchReplaceExample'
+      responses:
+        '204':
+          description: The work queue item was successfully updated.
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/NotAuthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+  /api/v7/workqueues/{workQueueId}/items/{workQueueItemId}/callbacks:
+    post:
+      summary: Creates a new work queue web hook item
+      operationId: CreateWebHookWorkQueueItem
+      description: '> ### Permissions required:
+
+        At least one of: `Read Access to Queue Management` | `Full Access to Queue Management`
+
+        And `Full Access to webhooks`'
+      tags:
+      - Work Queues
+      parameters:
+      - name: workQueueId
+        in: path
+        description: The queue ID of the item.
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: workQueueItemId
+        in: path
+        description: The ID of the item.
+        required: true
+        schema:
+          type: string
+          format: uuid
+      requestBody:
+        description: Details of the webhook subscriptions to create.
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateWebhookWorkQueueItem'
+      responses:
+        '201':
+          description: The work queue webhook item  was successfully created.
+          content:
+            application/json:
+              schema:
+                oneOf:
+                - $ref: '#/components/schemas/WorkQueueItemWebhookSubscriptionResponse'
+                - $ref: '#/components/schemas/WorkQueueItemSubscriptionCustomResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/NotAuthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+components:
+  examples:
+    TimeEqualsExample:
+      value:
+        eq: '12:34:56'
+      summary: Search for a value equal to 12:34:56.
+    StringGreaterThanExample:
+      value:
+        gte: Example
+      summary: Search for a value alphanumerically after or equal to "Example".
+    PatchReplaceExample:
+      summary: Replace the value in a property.
+      value:
+      - op: replace
+        path: /property
+        value: propertyValue
+    StringContainsExample:
+      value:
+        ctn: amp
+      summary: Search a value containing "amp"
+    IntegerLessThanExample:
+      value:
+        lte: 123
+      summary: Search for a value less than or equal to 123.
+    TimeRangeExample:
+      value:
+        gte: 01:23:45
+        lte: '12:34:56'
+      summary: Search for a value between 01:23:45 and 12:34:56 (inclusive)
+    DateTimeEqualsExample:
+      value:
+        eq: '2020-10-02T12:34:56+01:00'
+      summary: Search for a value equal to 2020-10-02 at 12:34:56 (GMT+1).
+    IntegerRangeExample:
+      value:
+        gte: 123
+        lte: 321
+      summary: Search for a value between 123 and 321 inclusive.
+    StringStartsWithExample:
+      value:
+        strtw: Exa
+      summary: Search a value starting with "Exa".
+    IntegerEqualsExample:
+      value:
+        eq: 123
+      summary: Search for a value equal to 123.
+    TimeLessThanExample:
+      value:
+        lte: '12:34:56'
+      summary: Search for a value less than or equal to 12:34:56
+    DateTimeRangeExample:
+      value:
+        gte: '2020-10-02T12:34:56+01:00'
+        lte: '2020-11-02T12:34:56+01:00'
+      summary: Search for a value between 2020-10-02 at 12:34:56 (GMT+1) and 2020-11-02 at 12:34:56 (GMT+1) (inclusive).
+    StringEqualsExample:
+      value:
+        eq: Example
+      summary: Search for a value equal to "Example".
+    DateTimeGreaterThanExample:
+      value:
+        gte: '2020-10-02T12:34:56+01:00'
+      summary: Search for a value after or equal to 2020-10-02 at 12:34:56 (GMT+1).
+    PatchCopyExample:
+      summary: Copy a value from one property to another.
+      value:
+      - op: copy
+        from: /sourceProperty
+        path: /destinationProperty
+    PatchRemoveExample:
+      summary: Remove a property value.
+      value:
+      - op: remove
+        path: /propertyToDeleteValueFrom
+    PatchAddToObjectExample:
+      summary: Add new property values to an object.
+      value:
+      - op: add
+        path: /property
+        value: propertyValue
+    PatchAddToArrayExample:
+      summary: Add values to a collection.
+      value:
+      - op: add
+        path: /someArrayProperty
+        value:
+        - item1
+        - item2
+    StringRangeExample:
+      value:
+        gte: Ex
+        lte: F
+      summary: Search for a value alphanumerically between "Ex" and "F".
+    PatchMoveExample:
+      summary: Move a value from one property to another.
+      value:
+      - op: move
+        from: /sourceProperty
+        path: /destinationProperty
+  schemas:
+    ActiveWorkQueueConfiguration:
+      description: Contains details of an active work queue.
+      type: object
+      properties:
+        assignedProcessId:
+          type: string
+          description: ID of the assigned process.
+          format: uuid
+        assignedResourceGroupId:
+          type: string
+          description: ID of the assigned resource group.
+          format: uuid
+      example:
+        assignedProcessId: axe34dfx-1234-2435-fedc-ba9876500987
+        assignedResourceGroupId: xv3fd45s-6543-6231-exrf-we23e456781
+    PatchRequest:
+      description: A request containing a JSON Patch document. See PatchDocument for details.
+      type: array
+      items:
+        $ref: '#/components/schemas/PatchDocument'
+    PatchDocument:
+      description: A JSONPatch document as defined by RFC 6902. See http://jsonpatch.com/
+      required:
+      - op
+      - path
+      properties:
+        op:
+          type: string
+          description: The operation to be performed.
+          enum:
+          - add
+          - remove
+          - replace
+          - move
+          - copy
+        path:
+          type: string
+          description: A JSON-Pointer.
+        value:
+          type: object
+          description: The value to be used within the operations..
+        from:
+          type: string
+          description: A string containing a JSON Pointer value.
+    UrlParameterError:
+      description: An error occurred due to incorrect data supplied to url parameter.
+      type: object
+      properties:
+        message:
+          type: string
+          description: A message about the error.
+        messageDetail:
+          type: string
+          description: A detailed description about the error.
+    WorkQueueItemsPage:
+      description: Contains details of a page of work queue items.
+      type: object
+      properties:
+        pagingToken:
+          type: string
+          description: The token to be used in the next request to return the next collection of items.
+        items:
+          type: array
+          description: A collection of work queue items.
+          items:
+            $ref: '#/components/schemas/WorkQueueItemNoData'
+      example:
+        pagingToken: U3VwZXIgc2VjcmV0IGRhdGEuIFNoaGho
+        items:
+        - id: 01234567-89ab-cdef-0123-456789abcdef
+          priority: 3
+          ident: 5112
+          state: Pending
+          keyValue: Example value
+          status: Example status
+          tags:
+          - Example tag 1
+          - Example tag 2
+          attemptNumber: 1
+          loadedDate: '2020-10-02T12:34:56+01:00'
+          deferredDate: '2020-10-02T12:34:56+01:00'
+          lockedDate: '0001-01-01T00:00:00Z'
+          completedDate: '0001-01-01T00:00:00Z'
+          exceptionedDate: '0001-01-01T00:00:00Z'
+          exceptionReason: Example reason
+          lastUpdated: '2020-10-02T12:34:56+01:00'
+          workTimeInSeconds: 123
+          attemptWorkTimeInSeconds: 56
+          resource: Example resource
+          sessionId: 01234567-89ab-cdef-0123-456789abcdef
+          sla: 7200
+          slaDateTime: '0001-01-01T00:00:00Z'
+          processName: Example process name
+          isSuggested: false
+    WorkQueueItemWebhookSubscriptionResponse:
+      description: Response containing webhook subscription details.
+      type: object
+      required:
+      - id
+      - secret
+      - subscriptions
+      properties:
+        id:
+          type: string
+          format: uuid
+          description: The ID of the webhook subscription.
+        secret:
+          type: string
+          description: The secret for validating webhook payloads.
+        subscriptions:
+          type: array
+          description: The list of subscriptions according to event types.
+          items:
+            $ref: '#/components/schemas/WorkQueueItemEventSubscriptionResponse'
+    WorkQueueItem:
+      description: Contains details of a work queue item including the data.
+      type: object
+      properties:
+        id:
+          type: string
+          description: The ID of the item.
+          format: uuid
+        priority:
+          type: integer
+          description: The priority value assigned to the item.
+        ident:
+          type: integer
+          description: The database-specific identity of the item.
+        state:
+          type: string
+          enum:
+          - None
+          - Pending
+          - Locked
+          - Deferred
+          - Completed
+          - Exceptioned
+          description: The current state of the item.
+        keyValue:
+          type: string
+          description: The value of the key field.
+        status:
+          type: string
+          description: The user-supplied status value.
+        tags:
+          type: array
+          description: A collection of tags assigned to the item.
+          items:
+            type: string
+        attemptNumber:
+          type: integer
+          description: The number of the attempt next time this item is worked.
+          format: integer
+          minimum: 1
+        loadedDate:
+          type: string
+          description: The time and date that the item was loaded into the system.
+          format: date-time
+        deferredDate:
+          type: string
+          description: The earliest time and date that this item is deferred until.
+          format: date-time
+        lockedDate:
+          type: string
+          description: The time and date that this item was locked; or the minimum date-time value if not locked.
+          format: date-time
+        completedDate:
+          type: string
+          description: The time and date that this item was completed; or the minimum date-time value if not completed.
+          format: date-time
+        exceptionedDate:
+          type: string
+          description: The time and date that this item was marked as exceptioned; or the minimum date-time value if not exceptioned.
+          format: date-time
+        exceptionReason:
+          type: string
+          description: The error message which caused the exception, if any.
+        lastUpdated:
+          type: string
+          description: The time and date that this item was last updated.
+          format: date-time
+        workTimeInSeconds:
+          type: integer
+          description: The number of seconds that this item has been worked on so far (including any previous attempts).
+          format: integer
+        attemptWorkTimeInSeconds:
+          type: integer
+          description: The number of seconds that this item has been worked on so far in this attempt.
+          format: integer
+        resource:
+          type: string
+          description: The name of the resource.
+        sessionId:
+          type: string
+          description: The ID of the session.
+          format: uuid
+        sla:
+          type: integer
+          description: Business SLA of the item in seconds.
+          format: integer
+        slaDateTime:
+          type: string
+          description: SLA DateTime
+          format: date-time
+        processName:
+          type: string
+          description: Process name
+        isSuggested:
+          type: boolean
+          description: Is Suggested
+        data:
+          $ref: '#/components/schemas/DataCollection'
+      example:
+        id: 01234567-89ab-cdef-0123-456789abcdef
+        priority: 3
+        ident: 123
+        state: Completed
+        keyValue: Example value
+        status: Example status
+        tags:
+        - Example tag 1
+        - Example tag 2
+        attemptNumber: 1
+        loadedDate: '2020-10-02T12:34:56+01:00'
+        deferredDate: '2020-10-02T12:34:56+01:00'
+        lockedDate: '0001-01-01T00:00:00Z'
+        completedDate: '2020-10-02T13:00:00+01:00'
+        exceptionedDate: '0001-01-01T00:00:00Z'
+        exceptionReason: Example reason
+        lastUpdated: '2020-10-02T13:00:00+01:00'
+        workTimeInSeconds: 123
+        attemptWorkTimeInSeconds: 123
+        resource: Example resource
+        sessionId: 01234567-89ab-cdef-0123-456789abcdef
+        data:
+          rows:
+          - valueType: Number
+            value: 321
+          - valueType: Date
+            value: '2020-10-02T12:34:56+01:00'
+        sla: 7200
+        slaDateTime: '0001-01-01T00:00:00Z'
+        processName: Example process name
+        isSuggested: false
+    StringFilter:
+      description: Used to filter strings. Check for strings that start with, and/or contain the given value(s).
+      type: object
+      anyOf:
+      - $ref: '#/components/schemas/ContainsStringFilter'
+      - $ref: '#/components/schemas/StartsWithStringFilter'
+      example:
+        ctn: null
+        strtw: null
+    ReferencesItemsPage:
+      description: Contains references of a specified object.
+      type: object
+      properties:
+        pagingToken:
+          $ref: '#/components/schemas/PagingToken'
+        items:
+          type: array
+          description: A collection of references.
+          items:
+            $ref: '#/components/schemas/Reference'
+    DataRow:
+      description: A dictionary which represents a row of data from a Blue Prism collection.
+      type: object
+      additionalProperties:
+        $ref: '#/components/schemas/DataValue'
+    BasicStringFilter:
+      description: Used to filter strings. Check for strings that start with, equal, are greater than, are less than, or are between the given value(s).
+      type: object
+      anyOf:
+      - $ref: '#/components/schemas/RangeOrEqualFilter'
+      - $ref: '#/components/schemas/StartsWithStringFilter'
+      example:
+        strtw: null
+        gte: null
+        lte: null
+        eq: null
+    ActiveWorkQueueStatistics:
+      description: Contains statistics for an active work queue.
+      type:
+      - object
+      - 'null'
+      properties:
+        activeSessions:
+          type: integer
+          description: the current number of active sessions for this queue.
+        availableResources:
+          type: integer
+          description: the current number of available resources assigned to this queue.
+        timeRemaining:
+          type: string
+          description: the amount of time remaining for this queue based on the number of pending cases and the average work time for a case.
+          format: time-span
+        elapsedRemaining:
+          type: string
+          description: the amount of time remaining for all currently assigned sessions to work the remaining pending cases.
+          format: time-span
+        ETA:
+          type: string
+          description: the projected end time for this queue in local time.
+          format: date-time
+      example:
+        activeSessions: '10'
+        availableResources: '5'
+        timeRemaining: 01:25:10
+        elapsedRemaining: 00:05:10
+        ETA: '2020-10-03T13:36:21+02:00'
+    RangeOrEqualFilter:
+      description: Used to filter values. Check for values that are equal to, greater than or equal to, less than or equal to, or between the given value(s).
+      type: object
+      oneOf:
+      - $ref: '#/components/schemas/RangeFilter'
+      - $ref: '#/components/schemas/EqualsFilter'
+      example:
+        gte: null
+        lte: null
+        eq: null
+    GreaterThanOrEqualToFilter:
+      description: Used to filter values. Check for values that are greater than or equal to the given value.
+      type: object
+      properties:
+        gte:
+          type:
+          - object
+          - 'null'
+          description: The value that the field should be greater than or equal to.
+      example:
+        gte: null
+    DataValue:
+      description: Represents a single item of data in a Blue Prism format.
+      type: object
+      properties:
+        valueType:
+          description: The type of object contained in the value field.
+          type: string
+          enum:
+          - Binary
+          - Collection
+          - Date
+          - DateTime
+          - Flag
+          - Image
+          - Number
+          - Password
+          - RadioButtons
+          - Text
+          - Time
+          - TimeSpan
+        value:
+          description: The value of the object.
+          oneOf:
+          - type: string
+            format: base64
+            description: Used for Binary and Image data types. The image format must only be one of these BPM, JPG, JPEG, GIF, PNG, ICO or TIFF.
+          - $ref: '#/components/schemas/DataCollection'
+            description: Used for the Collection data type.
+          - type: string
+            format: date
+            description: Used for Date and Time data types.
+          - type: boolean
+            description: Used for the Flag data type.
+          - type: number
+            description: Used for the Number data type.
+          - type: string
+            description: Used for Password and Text data types.
+          - type: string
+            format: time
+            description: Used for the TimeSpan data type.
+          - $ref: '#/components/schemas/RadioButtonsArray'
+        additionalParameters:
+          description: Custom extra parameters i.e. Binary's file path.
+          type: array
+          items:
+            type: string
+    WorkQueueItemSubscriptionCustomResponse:
+      description: Response containing custom subscription details.
+      type: object
+      required:
+      - subscriptionId
+      - subscriptions
+      properties:
+        subscriptionId:
+          type: string
+          format: uuid
+          description: The ID of the subscription.
+      subscriptions:
+        type: array
+        description: The list of subscriptions according to event types.
+        items:
+          $ref: '#/components/schemas/WorkQueueItemEventSubscriptionResponse'
+    CreateWorkQueueItemAttemptResponseModel:
+      description: Contains the ID of a new work queue item attempt.
+      type: object
+      properties:
+        attemptId:
+          type: integer
+          description: The ID of the work queue item attempt.
+    WorkQueueItemEventSubscriptionResponse:
+      type: object
+      description: The subscription created for an event type.
+      properties:
+        subscriptionId:
+          type: string
+          description: The ID of the subscription.
+          format: uuid
+        eventType:
+          type: string
+          description: The event type subscribed to.
+          example: exception
+    StartsWithStringFilter:
+      description: Used to filter strings. Check for strings that start with the given value.
+      type: object
+      properties:
+        strtw:
+          type:
+          - string
+          - 'null'
+          description: The value that the field should start with.
+      example:
+        strtw: null
+    ContainsStringFilter:
+      description: Used to filter strings. Check for strings that contain the given value.
+      type: object
+      properties:
+        ctn:
+          type:
+          - string
+          - 'null'
+          description: The value that the field should contain.
+      example:
+        ctn: null
+    WorkQueueSummary:
+      description: Contains basic details of a work queue.
+      type: object
+      properties:
+        id:
+          type: string
+          description: The ID of the queue.
+          format: uuid
+        name:
+          type: string
+          description: The name of the queue.
+          minLength: 1
+        keyField:
+          type: string
+          description: The name of the column used as the queue's key.
+        status:
+          $ref: '#/components/schemas/QueueStatus'
+        isEncrypted:
+          type: boolean
+          description: True if the queue is encrypted; otherwise, false.
+        maxAttempts:
+          type: integer
+          description: The maximum number of retry attempts for items in the queue.
+        pendingItemCount:
+          type: integer
+          description: The number of items in the queue in a pending state.
+        completedItemCount:
+          type: integer
+          description: The number of items in the queue in a completed state.
+        lockedItemCount:
+          type: integer
+          description: The number of items in the queue in a locked state.
+        exceptionedItemCount:
+          type: integer
+          description: The number of items in the queue in an exceptioned state.
+        totalItemCount:
+          type: integer
+          description: The total number of items in the queue.
+        averageWorkTime:
+          type: string
+          format: time-span
+          description: The average amount of time an items spends being worked.
+        totalCaseDuration:
+          type: string
+          format: time-span
+          description: The total amount of time items have been worked.
+        groupName:
+          type: string
+          description: The name of the group in which the queue is located.
+        groupId:
+          type: string
+          description: ID of the group in which the queue is located.
+          format: uuid
+        isRetryItems:
+          type: boolean
+          description: True if Retry items in this queue in the event of an unexpected session termination is enabled; otherwise, false.
+        isSnapshotEnabled:
+          type: boolean
+          description: True if there is information related to Snapshot Configuration; otherwise, false.
+        isActiveQueue:
+          type: boolean
+          description: True if the queue is active; otherwise, false.
+        activeWorkQueueConfiguration:
+          $ref: '#/components/schemas/ActiveWorkQueueConfiguration'
+        activeQueueStats:
+          $ref: '#/components/schemas/ActiveWorkQueueStatistics'
+      example:
+        id: 01234567-89ab-cdef-0123-456789abcdef
+        name: Example work queue
+        keyField: Example field
+        status: Running
+        isEncrypted: false
+        maxAttempts: 5
+        pendingItemCount: 10
+        completedItemCount: 75
+        lockedItemCount: 1
+        exceptionedItemCount: 3
+        totalItemCount: 14
+        averageWorkTime: 00:01:23
+        totalCaseDuration: 06:12:53
+        groupName: Example group
+        groupId: fedcba98-7654-3210-fedc-ba9876543210
+        isRetryItems: true
+        isSnapshotEnabled: true
+        isActiveQueue: true
+        activeWorkQueueConfiguration:
+          assignedProcessId: axe34dfx-1234-2435-fedc-ba9876500987
+          assignedResourceGroupId: xv3fd45s-6543-6231-exrf-we23e456781
+    CreateWorkQueue:
+      description: Contains details for creating a new work queue.
+      type: object
+      properties:
+        name:
+          type: string
+          description: The name of the queue to create.
+          minLength: 1
+          maxLength: 255
+        keyField:
+          type: string
+          description: The name of the column to be used as the queue's key.
+          minLength: 0
+          maxLength: 255
+        maxAttempts:
+          type: integer
+          description: The maximum number of retry attempts for items in the queue.
+          minimum: 1
+          maximum: 999999
+        status:
+          $ref: '#/components/schemas/QueueStatus'
+        encryptionKeyId:
+          type: integer
+          description: The ID of the encryption key to use for the queue. If no encryption is required,  this field should be 0.
+        sessionExceptionRetry:
+          type: boolean
+          description: Retry items in this queue in the event of an unexpected session termination.
+        activeQueueAssignedProcessId:
+          type: string
+          format: uuid
+          description: The ID of the process to use for an active queue.
+        activeQueueAssignedResourceGroupId:
+          type: string
+          format: uuid
+          description: The ID of the resource group to use for an active queue.
+        groupid:
+          type: object
+          description: The ID of the group to use for the queue. If no group id is required, this field should be empty string like "" or empty Guid - "00000000-0000-0000-0000-000000000000".
+      example:
+        name: Example queue
+        keyField: Example field
+        maxAttempts: 3
+        status: Running
+        encryptionKeyId: 0
+        sessionExceptionRetry: false
+        activeQueueAssignedProcessId: 658de89c-a43d-4b18-a38c-d26d5eb26659
+        activeQueueAssignedResourceGroupId: 5180390c-b21a-4d69-9753-b876e34f100d
+        groupid: a4e0b0ba-3b8f-443d-bdb0-ee519299bd01
+    DataCollection:
+      description: Represents a Blue Prism collection.
+      type: object
+      properties:
+        rows:
+          description: A collection of rows representing the data contained within the collection.
+          type: array
+          items:
+            $ref: '#/components/schemas/DataRow'
+    ValidationError:
+      description: An error occurred during validation. See the response body for details on the invalid field.
+      type: object
+      properties:
+        invalidField:
+          type: string
+          description: The field which is invalid.
+        message:
+          type: string
+          description: A description of the error found with the field.
+    WorkQueueConfigurationsPage:
+      description: Contains details of a page of work queues configrations.
+      type: object
+      properties:
+        pagingToken:
+          type:
+          - string
+          - 'null'
+          description: The token to be used in the next request to return the next collection of items.
+        items:
+          type: array
+          description: A collection of work queues configurations.
+          items:
+            $ref: '#/components/schemas/WorkQueueConfigurationSummary'
+      example:
+        pagingToken: A5VwZXIgg2VjcmV2IKLcdGEuLFNoaGhu
+        items:
+        - id: f83a55c4-1151-41b1-89b0-6ad81ad50d7e
+          name: Example work queue
+          activeWorkQueueConfiguration:
+            assignedProcessId: 5ebaf769-6325-4f8a-b175-aefb150ea64f
+            assignedResourceGroupId: 49df134f-974b-4f81-b4a7-8518c04fa970
+          activeQueueStats:
+            activeSessions: '10'
+            availableResources: '5'
+            timeRemaining: 01:25:10
+            elapsedRemaining: 00:05:10
+            ETA: '2020-10-03T13:36:21+02:00'
+    ErrorMessage:
+      description: A message describing the problem encountered.
+      type: string
+    WorkQueuesItemsPage:
+      description: Contains details of a page of work queues.
+      type: object
+      properties:
+        pagingToken:
+          type:
+          - string
+          - 'null'
+          description: The token to be used in the next request to return the next collection of items.
+        items:
+          type: array
+          description: A collection of work queues.
+          items:
+            $ref: '#/components/schemas/WorkQueueSummary'
+      example:
+        pagingToken: U3VwZXIgc2VjcmV0IGRhdGEuIFNoaGho
+        items:
+        - id: 01234567-89ab-cdef-0123-456789abcdef
+          name: Example work queue
+          keyField: Example field
+          status: Running
+          isEncrypted: false
+          maxAttempts: 5
+          pendingItemCount: 10
+          completedItemCount: 75
+          lockedItemCount: 1
+          exceptionedItemCount: 3
+          totalItemCount: 14
+          averageWorkTime: 00:01:23
+          totalCaseDuration: 06:12:53
+          groupName: Example group
+          groupId: fedcba98-7654-3210-fedc-ba9876543210
+          isRetryItems: true
+          isSnapshotEnabled: true
+          isActiveQueue: true
+          activeWorkQueueConfiguration:
+            assignedProcessId: axe34dfx-1234-2435-fedc-ba9876500987
+            assignedResourceGroupId: xv3fd45s-6543-6231-exrf-we23e456781
+          activeQueueStats:
+            activeSessions: '10'
+            availableResources: '5'
+            timeRemaining: 01:25:10
+            elapsedRemaining: 00:05:10
+            ETA: '2020-10-03T13:36:21+02:00'
+    PagingToken:
+      type: string
+      description: The token to be used in the next request to return the next collection of items.
+      example: U3VwZXIgc2VjcmV0IGRhdGEuIFNoaGho
+    Reference:
+      description: Contains details of referenced item.
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          description: The ID of the process/object.
+        name:
+          type: string
+          description: The name of the process/object.
+          minLength: 1
+        description:
+          type: string
+          description: The description of process/object.
+        type:
+          type: string
+          enum:
+          - Process
+          - Object
+          - Unset
+          description: The type of process/object
+    LessThanOrEqualToFilter:
+      description: Used to filter values. Check for values that are less than or equal to the given value.
+      type: object
+      properties:
+        lte:
+          type:
+          - object
+          - 'null'
+          description: The value that the field should be less than or equal to.
+      example:
+        lte: null
+    FullStringFilter:
+      description: Used to filter strings. Check for strings that start with, contain, equal, are greater than, are less than, or are between the given value(s).
+      type: object
+      anyOf:
+      - $ref: '#/components/schemas/StringFilter'
+      - $ref: '#/components/schemas/RangeOrEqualFilter'
+      example:
+        ctn: null
+        strtw: null
+        gte: null
+        lte: null
+        eq: null
+    EqualsFilter:
+      description: Used to filter values. Check for values that are equal to the given value.
+      type: object
+      properties:
+        eq:
+          type:
+          - object
+          - 'null'
+          description: The value that the field should be equal to.
+      example:
+        eq: null
+    CreateWorkQueueItems:
+      description: Contains details for creating a number of work queue items.
+      type: array
+      items:
+        $ref: '#/components/schemas/CreateWorkQueueItem'
+    QueueStatus:
+      description: The current status of the queue.
+      type: string
+      enum:
+      - Running
+      - Paused
+    CreateWorkQueueItem:
+      description: Contains details for creating a work queue item in a queue.
+      type: object
+      properties:
+        data:
+          $ref: '#/components/schemas/DataCollection'
+        deferredDate:
+          type:
+          - string
+          - 'null'
+          description: The earliest time and date that this item is deferred until.
+          format: date-time
+        priority:
+          type: integer
+          description: The priority value assigned to the item.
+          format: integer
+        tags:
+          type: array
+          description: A collection of tags assigned to the item.
+          items:
+            type: string
+        status:
+          type: string
+          description: The user-supplied status value.
+        sla:
+          type:
+          - integer
+          - 'null'
+          description: The user-supplied sla value.
+        processName:
+          type: string
+          description: The user-supplied process name value.
+        isSuggested:
+          type: boolean
+          description: The user-supplied isSuggested value - default value should be false.
+      example:
+        data:
+          rows:
+          - valueType: Number
+            value: 321
+          - valueType: Date
+            value: '2020-10-02T12:34:56+01:00'
+        deferredDate: '2020-10-02T12:34:56+01:00'
+        priority: 3
+        tags:
+        - Example tag 1
+        - Example tag 2
+        status: Example status
+        sla: 7200
+        processName: Example process name
+        isSuggested: false
+    WorkQueueItemNoData:
+      description: Contains details of a work queue item but does not return the data contained in it.
+      type: object
+      properties:
+        id:
+          type: string
+          description: The ID of the item.
+          format: uuid
+        priority:
+          type: integer
+          description: The priority value assigned to the item.
+        ident:
+          type: integer
+          description: The database-specific identity of the item.
+        state:
+          type: string
+          enum:
+          - None
+          - Pending
+          - Locked
+          - Deferred
+          - Completed
+          - Exceptioned
+          description: The current state of the item.
+        keyValue:
+          type: string
+          description: The value of the key field.
+        status:
+          type: string
+          description: The user-supplied status value.
+        tags:
+          type: array
+          description: A collection of tags assigned to the item.
+          items:
+            type: string
+        attemptNumber:
+          type: integer
+          description: The number of the attempt next time this item is worked.
+          format: integer
+          minimum: 1
+        loadedDate:
+          type: string
+          description: The time and date that the item was loaded into the system.
+          format: date-time
+        deferredDate:
+          type: string
+          description: The earliest time and date that this item is deferred until.
+          format: date-time
+        lockedDate:
+          type: string
+          description: The time and date that this item was locked; or the minimum date-time value if not locked.
+          format: date-time
+        completedDate:
+          type: string
+          description: The time and date that this item was completed; or the minimum date-time value if not completed.
+          format: date-time
+        exceptionedDate:
+          type: string
+          description: The time and date that this item was marked as exceptioned; or the minimum date-time value if not exceptioned.
+          format: date-time
+        lastUpdated:
+          type: string
+          description: The time and date that this item was last updated.
+          format: date-time
+        workTimeInSeconds:
+          type: integer
+          description: The number of seconds that this item has been worked on so far (including any previous attempts).
+          format: integer
+        attemptWorkTimeInSeconds:
+          type: integer
+          description: The number of seconds that this item has been worked on so far in this attempt.
+          format: integer
+        exceptionReason:
+          type: string
+          description: The error message which caused the exception, if any.
+        resource:
+          type: string
+          description: The name of the resource.
+        sessionId:
+          type: string
+          description: The session ID of the item.
+          format: uuid
+        sla:
+          type: integer
+          description: Business SLA of the item in seconds.
+          format: integer
+        slaDatetime:
+          type: string
+          description: SLA DateTime
+          format: date-time
+        processName:
+          type: string
+          description: Process name
+        isSuggested:
+          type: boolean
+          description: Is Suggested
+      example:
+        id: 01234567-89ab-cdef-0123-456789abcdef
+        priority: 3
+        ident: 5112
+        state: Pending
+        keyValue: Example value
+        status: Example status
+        tags:
+        - Example tag 1
+        - Example tag 2
+        attemptNumber: 1
+        loadedDate: '2020-10-02T12:34:56+01:00'
+        deferredDate: '2020-10-02T12:34:56+01:00'
+        lockedDate: '0001-01-01T00:00:00Z'
+        completedDate: '0001-01-01T00:00:00Z'
+        exceptionedDate: '0001-01-01T00:00:00Z'
+        lastUpdated: '2020-10-02T12:34:56+01:00'
+        workTimeInSeconds: 123
+        attemptWorkTimeInSeconds: 56
+        resource: Example resource
+        sessionId: 01234567-89ab-cdef-0123-456789abcdef
+        sla: 7200
+        slaDateTime: '0001-01-01T00:00:00Z'
+        processName: Example process name
+        isSuggested: false
+    CreateWebhookWorkQueueItem:
+      description: Contains details for creating a webhook subscriptions for a work queue item in a queue.
+      type: object
+      required:
+      - eventtypes
+      - callbackurl
+      properties:
+        eventtypes:
+          type: array
+          description: List of events that trigger the webhook.
+          items:
+            type: string
+            enum:
+            - exception
+            - completed
+            - prioritychanged
+            - dataupdated
+            - status
+            - deferred
+            - locked
+            - retryexception
+        callbackurl:
+          type: string
+          description: The url to send callbacl request.
+          format: uri
+          example: https://your-api.com/webhook/callback
+        extensions:
+          type: object
+          description: Optional security and metadata configuration.
+          required:
+          - security
+          properties:
+            data:
+              type: object
+              description: Custom JSON object for client-specific metadata. Can be empty
+              additionalProperties: true
+              example:
+                clientId: '1'
+            security:
+              type: object
+              description: The authentication callback detailes.
+              required:
+              - credentialName
+              - type
+              properties:
+                credentialName:
+                  description: The name of the credentials registered in BPE Credential Manager.
+                  type: string
+                  example: Client1
+                type:
+                  type: string
+                  description: The type of the credentials.
+                  example: BasicAuthentication
+    Identifiers:
+      description: A collection of GUID resource IDs.
+      type: object
+      properties:
+        ids:
+          description: A collection of resource IDs.
+          type: array
+          items:
+            type: string
+            description: The IDs of the newly created items.
+            format: uuid
+    Error:
+      description: A general error occurred. See errorMessage for details.
+      type: object
+      properties:
+        errorMessage:
+          description: A message describing the problem encountered.
+          type: string
+    RadioButtonsArray:
+      description: Used for the RadioButtons data type.
+      type: array
+      items:
+        type: object
+        properties:
+          name:
+            type: string
+          selected:
+            type: boolean
+    RangeFilter:
+      description: Used to filter values. Check for values that are greater than or equal to, less than or equal to, or between the given value(s).
+      type: object
+      anyOf:
+      - $ref: '#/components/schemas/GreaterThanOrEqualToFilter'
+      - $ref: '#/components/schemas/LessThanOrEqualToFilter'
+      example:
+        gte: null
+        lte: null
+    WorkQueueConfigurationSummary:
+      description: Contains details of a work queue configuration.
+      type: object
+      properties:
+        id:
+          type: string
+          description: The ID of the queue.
+          format: uuid
+        name:
+          type: string
+          description: The name of the queue.
+          minLength: 1
+        activeWorkQueueConfiguration:
+          $ref: '#/components/schemas/ActiveWorkQueueConfiguration'
+        activeQueueStats:
+          $ref: '#/components/schemas/ActiveWorkQueueStatistics'
+      example:
+        id: f83a55c4-1151-41b1-89b0-6ad81ad50d7e
+        name: Example work queue
+        activeWorkQueueConfiguration:
+          assignedProcessId: 5ebaf769-6325-4f8a-b175-aefb150ea64f
+          assignedResourceGroupId: 49df134f-974b-4f81-b4a7-8518c04fa970
+        activeQueueStats:
+          activeSessions: '10'
+          availableResources: '5'
+          timeRemaining: 01:25:10
+          elapsedRemaining: 00:05:10
+          ETA: '2020-10-03T13:36:21+02:00'
+    Identifier:
+      description: A GUID resource ID.
+      type: object
+      properties:
+        id:
+          type: string
+          description: The ID of the newly created resource.
+          format: uuid
+  responses:
+    NotAuthorized:
+      description: The authentication token was either missing or invalid and must be refreshed.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorMessage'
+    Forbidden:
+      description: The authentication token does not give sufficient permissions to perform this action.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorMessage'
+    BadRequest:
+      description: The request is malformed or contains incorrect information. See the response for more details.
+      content:
+        application/json:
+          schema:
+            oneOf:
+            - $ref: '#/components/schemas/UrlParameterError'
+            - $ref: '#/components/schemas/ValidationError'
+    NotFound:
+      description: The requested resource could not be found.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorMessage'
+  securitySchemes:
+    Bearer:
+      type: http
+      scheme: bearer
+      description: JWT token issued from Authentication Server.
+      bearerFormat: JWT
+    OAuth2:
+      type: oauth2
+      flows:
+        clientCredentials:
+          tokenUrl: https://auth-server/connect/token
+          scopes:
+            bp-api: API scope
+            bpserver: Blue Prism Application scope

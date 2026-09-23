@@ -1,0 +1,88 @@
+openapi: 3.2.0
+info:
+  title: Blue Prism Time Zones API
+  description: An API to expose core functionality of the Blue Prism product.
+  version: 7.5.1
+security:
+- Bearer:
+  - bp-api
+  - bpserver
+- OAuth2:
+  - bp-api
+  - bpserver
+tags:
+- name: Timezones
+paths:
+  /api/v7/timezones:
+    get:
+      summary: Return a list of time zones
+      operationId: getTimezones
+      tags:
+      - Timezones
+      responses:
+        '200':
+          description: A list of time zones was successfully retrieved.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TimeZones'
+        '401':
+          $ref: '#/components/responses/NotAuthorized'
+components:
+  schemas:
+    TimeZone:
+      description: Contains details of a time zone.
+      type: object
+      properties:
+        id:
+          type: string
+          description: The time zone identifier.
+        displayName:
+          type: string
+          description: The general display name that represents the time zone.
+        baseUtcOffset:
+          type: string
+          format: time-span
+          description: The time difference between the current time zone's standard time and Coordinated Universal Time (UTC).
+        standardName:
+          type: string
+          description: The display name for the time zone's standard time.
+    ErrorMessage:
+      description: A message describing the problem encountered.
+      type: string
+    TimeZones:
+      description: A collection of time zones.
+      type: array
+      items:
+        $ref: '#/components/schemas/TimeZone'
+      example:
+        items:
+        - id: Dateline Standard Time
+          displayName: (UTC-12:00) International Date Line West
+          baseUtcOffset: '-12:00:00'
+          standardName: Dateline Standard Time
+        - id: UTC-11
+          displayName: (UTC-11:00) Co-ordinated Universal Time-11
+          baseUtcOffset: '-11:00:00'
+          standardName: UTC-11
+  responses:
+    NotAuthorized:
+      description: The authentication token was either missing or invalid and must be refreshed.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorMessage'
+  securitySchemes:
+    Bearer:
+      type: http
+      scheme: bearer
+      description: JWT token issued from Authentication Server.
+      bearerFormat: JWT
+    OAuth2:
+      type: oauth2
+      flows:
+        clientCredentials:
+          tokenUrl: https://auth-server/connect/token
+          scopes:
+            bp-api: API scope
+            bpserver: Blue Prism Application scope

@@ -1,0 +1,575 @@
+openapi: 3.2.0
+info:
+  title: Blue Prism Work Queue Groups API
+  description: An API to expose core functionality of the Blue Prism product.
+  version: 7.5.1
+security:
+- Bearer:
+  - bp-api
+  - bpserver
+- OAuth2:
+  - bp-api
+  - bpserver
+tags:
+- name: Work Queue Groups
+paths:
+  /api/v7/workqueuegroups/{identifier}:
+    get:
+      summary: Return details of a work queue group
+      operationId: getWorkQueueGroup
+      description: '> ### Permissions required: `Workflow - Work Queue Configuration`'
+      tags:
+      - Work Queue Groups
+      parameters:
+      - name: identifier
+        in: path
+        description: It can be 'root' value to get a root group or the ID of the work queue group to retrieve details for.
+        required: true
+        schema:
+          type: string
+          format: uuid or "root"
+      responses:
+        '200':
+          description: The work queue group details were successfully retrieved.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WorkQueueGroup'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/NotAuthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+    patch:
+      summary: Modify the work queue group as described in the patch document
+      operationId: updateWorkQueueGroup
+      description: '> ### Permissions required: `Workflow - Work Queue Configuration`'
+      tags:
+      - Work Queue Groups
+      parameters:
+      - name: identifier
+        in: path
+        description: The ID of the work queue group to update.
+        required: true
+        schema:
+          type: string
+          format: uuid or "root"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchRequest'
+            examples:
+              replace:
+                $ref: '#/components/examples/PatchReplaceExample'
+      responses:
+        '204':
+          description: The work queue group was successfully updated.
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/NotAuthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+  /api/v7/workqueuegroups:
+    post:
+      summary: Creates a work queue group
+      operationId: createWorkQueueGroup
+      description: '> ### Permissions required: `Workflow - Work Queue Configuration`'
+      tags:
+      - Work Queue Groups
+      requestBody:
+        description: Details of the group to create.
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateWorkQueueGroup'
+      responses:
+        '201':
+          description: The work queue group was successfully created.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreateWorkQueueGroupResponseModel'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/NotAuthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+  /api/v7/workqueuegroups/{workQueueGroupId}:
+    delete:
+      summary: Deletes a work queue group
+      operationId: deleteWorkQueueGroup
+      description: '> ### Permissions required: `Workflow - Work Queue Configuration`'
+      tags:
+      - Work Queue Groups
+      parameters:
+      - name: workQueueGroupId
+        in: path
+        description: The ID of the work queue group to delete.
+        required: true
+        schema:
+          type: string
+          format: uuid
+      responses:
+        '204':
+          description: The work queue group was successfully deleted.
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/NotAuthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+  /api/v7/workqueuegroups/{identifier}/items:
+    get:
+      summary: Return a list of work queues belonging to a work queue group
+      operationId: getWorkQueuesInGroup
+      description: '> ### Permissions required: `Workflow - Work Queue Configuration`'
+      tags:
+      - Work Queue Groups
+      parameters:
+      - name: identifier
+        in: path
+        description: It can be a 'root' value to get work queues from the root queue group or the ID of the work queue group to retrieve work queues from it.
+        required: true
+        schema:
+          type: string
+          format: uuid or "root"
+      - name: sortBy
+        description: The field that results should be sorted by and the direction they should be sorted in.
+        in: query
+        required: false
+        schema:
+          type: string
+          enum:
+          - NameAsc
+          - NameDesc
+      - name: itemsPerPage
+        description: The maximum number of items to retrieve per page.
+        in: query
+        schema:
+          type: integer
+          minimum: 1
+      - name: pagingToken
+        description: The token to point to the last item previously returned.
+        in: query
+        schema:
+          type: string
+      - name: name
+        description: A filter to search for the name of items inside work queue group.
+        in: query
+        style: deepObject
+        schema:
+          $ref: '#/components/schemas/BasicStringFilter'
+        examples:
+          equals:
+            $ref: '#/components/examples/StringEqualsExample'
+          startsWith:
+            $ref: '#/components/examples/StringStartsWithExample'
+          range:
+            $ref: '#/components/examples/StringRangeExample'
+          greater:
+            $ref: '#/components/examples/StringGreaterThanExample'
+      responses:
+        '200':
+          description: The work queue group work queues were successfully retrieved.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WorkQueuesFromGroupItemsPage'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/NotAuthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+  /api/v7/workqueuegroups/{identifier}/childgroups:
+    get:
+      summary: Return details of child groups of work queue group
+      operationId: getChildGroupsInWorkQueueGroup
+      description: '> ### Permissions required: `Workflow - Work Queue Configuration`'
+      tags:
+      - Work Queue Groups
+      parameters:
+      - name: identifier
+        in: path
+        description: It can be a 'root' value to get details of groups from the root or the ID of the parent work queue group to retrieve details of child groups.
+        required: true
+        schema:
+          type: string
+          format: uuid or "root"
+      - name: sortBy
+        description: The field that results should be sorted by and the direction they should be sorted in.
+        in: query
+        schema:
+          type: string
+          enum:
+          - NameAsc
+          - NameDesc
+          - HasChildGroupsAsc
+          - HasChildGroupsDesc
+          - HasChildItemsAsc
+          - HasChildItemsDesc
+      - name: itemsPerPage
+        description: The maximum number of items to retrieve per page.
+        in: query
+        schema:
+          type: integer
+          minimum: 1
+      - name: pagingToken
+        description: The token to point to the last item previously returned.
+        in: query
+        schema:
+          type: string
+      - name: name
+        description: A filter to search for the name of the queue group.
+        in: query
+        style: deepObject
+        schema:
+          $ref: '#/components/schemas/BasicStringFilter'
+        examples:
+          equals:
+            $ref: '#/components/examples/StringEqualsExample'
+          startsWith:
+            $ref: '#/components/examples/StringStartsWithExample'
+          range:
+            $ref: '#/components/examples/StringRangeExample'
+          greater:
+            $ref: '#/components/examples/StringGreaterThanExample'
+      - name: hasChildGroups
+        in: query
+        style: form
+        explode: false
+        description: The availability of child groups in the group.
+        schema:
+          type: array
+          items:
+            type: string
+            enum:
+            - 'true'
+            - 'false'
+      - name: hasChildItems
+        in: query
+        style: form
+        explode: false
+        description: The availability of child items in the group.
+        schema:
+          type: array
+          items:
+            type: string
+            enum:
+            - 'true'
+            - 'false'
+      responses:
+        '200':
+          description: The work child groups details were successfully retrieved.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WorkQueueChildGroups'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/NotAuthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+components:
+  examples:
+    StringGreaterThanExample:
+      value:
+        gte: Example
+      summary: Search for a value alphanumerically after or equal to "Example".
+    PatchReplaceExample:
+      summary: Replace the value in a property.
+      value:
+      - op: replace
+        path: /property
+        value: propertyValue
+    StringStartsWithExample:
+      value:
+        strtw: Exa
+      summary: Search a value starting with "Exa".
+    StringEqualsExample:
+      value:
+        eq: Example
+      summary: Search for a value equal to "Example".
+    StringRangeExample:
+      value:
+        gte: Ex
+        lte: F
+      summary: Search for a value alphanumerically between "Ex" and "F".
+  schemas:
+    PatchDocument:
+      description: A JSONPatch document as defined by RFC 6902. See http://jsonpatch.com/
+      required:
+      - op
+      - path
+      properties:
+        op:
+          type: string
+          description: The operation to be performed.
+          enum:
+          - add
+          - remove
+          - replace
+          - move
+          - copy
+        path:
+          type: string
+          description: A JSON-Pointer.
+        value:
+          type: object
+          description: The value to be used within the operations..
+        from:
+          type: string
+          description: A string containing a JSON Pointer value.
+    PatchRequest:
+      description: A request containing a JSON Patch document. See PatchDocument for details.
+      type: array
+      items:
+        $ref: '#/components/schemas/PatchDocument'
+    UrlParameterError:
+      description: An error occurred due to incorrect data supplied to url parameter.
+      type: object
+      properties:
+        message:
+          type: string
+          description: A message about the error.
+        messageDetail:
+          type: string
+          description: A detailed description about the error.
+    WorkQueueChildGroups:
+      description: Contains basic details of a work queue group.
+      type: object
+      properties:
+        pagingToken:
+          $ref: '#/components/schemas/PagingToken'
+        items:
+          type: array
+          description: A collection of work queue groups.
+          items:
+            $ref: '#/components/schemas/WorkQueueGroup'
+    BasicStringFilter:
+      description: Used to filter strings. Check for strings that start with, equal, are greater than, are less than, or are between the given value(s).
+      type: object
+      anyOf:
+      - $ref: '#/components/schemas/RangeOrEqualFilter'
+      - $ref: '#/components/schemas/StartsWithStringFilter'
+      example:
+        strtw: null
+        gte: null
+        lte: null
+        eq: null
+    RangeOrEqualFilter:
+      description: Used to filter values. Check for values that are equal to, greater than or equal to, less than or equal to, or between the given value(s).
+      type: object
+      oneOf:
+      - $ref: '#/components/schemas/RangeFilter'
+      - $ref: '#/components/schemas/EqualsFilter'
+      example:
+        gte: null
+        lte: null
+        eq: null
+    GreaterThanOrEqualToFilter:
+      description: Used to filter values. Check for values that are greater than or equal to the given value.
+      type: object
+      properties:
+        gte:
+          type:
+          - object
+          - 'null'
+          description: The value that the field should be greater than or equal to.
+      example:
+        gte: null
+    CreateWorkQueueGroupResponseModel:
+      description: Contains the ID of a new work queue group.
+      type: object
+      properties:
+        groupId:
+          type: string
+          format: uuid
+          description: The ID of the created work queue group.
+    WorkQueuesFromGroupItemsPage:
+      description: Contains details of a page of work queues from the work queue group.
+      type: object
+      properties:
+        pagingToken:
+          type: string
+          description: The token to be used in the next request to return the next collection of items.
+        items:
+          type: array
+          description: A collection of work queues from the work queue group.
+          items:
+            $ref: '#/components/schemas/WorkQueueInGroup'
+      example:
+        pagingToken: U3VwZXIgc2VjcmV0IGRhdGEuIFNoaGho
+        items:
+        - id: 01234567-89ab-cdef-0123-456789abcdef
+          name: queue 1
+    StartsWithStringFilter:
+      description: Used to filter strings. Check for strings that start with the given value.
+      type: object
+      properties:
+        strtw:
+          type:
+          - string
+          - 'null'
+          description: The value that the field should start with.
+      example:
+        strtw: null
+    WorkQueueInGroup:
+      description: Contains details of the work queue from the work queue group.
+      type: object
+      properties:
+        id:
+          type: string
+          description: The ID of the queue.
+          format: uuid
+        name:
+          type: string
+          description: The name of the queue.
+    ValidationError:
+      description: An error occurred during validation. See the response body for details on the invalid field.
+      type: object
+      properties:
+        invalidField:
+          type: string
+          description: The field which is invalid.
+        message:
+          type: string
+          description: A description of the error found with the field.
+    ErrorMessage:
+      description: A message describing the problem encountered.
+      type: string
+    PagingToken:
+      type: string
+      description: The token to be used in the next request to return the next collection of items.
+      example: U3VwZXIgc2VjcmV0IGRhdGEuIFNoaGho
+    WorkQueueGroup:
+      description: Contains basic details of a work queue group.
+      type: object
+      properties:
+        id:
+          type: string
+          description: The ID of the work queue group.
+          format: uuid or "root"
+        name:
+          type: string
+          description: The name of the work queue group.
+        parentGroupId:
+          type: string
+          description: The ID of the parent work queue group.
+          format: uuid or "root"
+        hasChildGroups:
+          type: boolean
+          description: True if the group containes other groups; otherwise, false.
+        hasChildItems:
+          type: boolean
+          description: True if the group containes work queues; otherwise, false.
+      example:
+        id: 01234567-89ab-cdef-0123-456789abcdef
+        name: Example work queue group
+        parentGroupId: fedcba98-7654-3210-fedc-ba9876543210
+        hasChildGroups: false
+        hasChildItems: false
+    LessThanOrEqualToFilter:
+      description: Used to filter values. Check for values that are less than or equal to the given value.
+      type: object
+      properties:
+        lte:
+          type:
+          - object
+          - 'null'
+          description: The value that the field should be less than or equal to.
+      example:
+        lte: null
+    EqualsFilter:
+      description: Used to filter values. Check for values that are equal to the given value.
+      type: object
+      properties:
+        eq:
+          type:
+          - object
+          - 'null'
+          description: The value that the field should be equal to.
+      example:
+        eq: null
+    CreateWorkQueueGroup:
+      description: Contains details for creating a new work queue group.
+      type: object
+      properties:
+        name:
+          type: string
+          description: The name of the group to create.
+          minLength: 1
+          maxLength: 255
+        parentGroupId:
+          type: string
+          format: uuid or "root"
+          description: The ID of the group to use as a parent.
+      example:
+        name: Test Group
+        parentGroupId: a4e0b0ba-3b8f-443d-bdb0-ee519299bd01
+    RangeFilter:
+      description: Used to filter values. Check for values that are greater than or equal to, less than or equal to, or between the given value(s).
+      type: object
+      anyOf:
+      - $ref: '#/components/schemas/GreaterThanOrEqualToFilter'
+      - $ref: '#/components/schemas/LessThanOrEqualToFilter'
+      example:
+        gte: null
+        lte: null
+  responses:
+    NotAuthorized:
+      description: The authentication token was either missing or invalid and must be refreshed.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorMessage'
+    Forbidden:
+      description: The authentication token does not give sufficient permissions to perform this action.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorMessage'
+    BadRequest:
+      description: The request is malformed or contains incorrect information. See the response for more details.
+      content:
+        application/json:
+          schema:
+            oneOf:
+            - $ref: '#/components/schemas/UrlParameterError'
+            - $ref: '#/components/schemas/ValidationError'
+    NotFound:
+      description: The requested resource could not be found.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorMessage'
+  securitySchemes:
+    Bearer:
+      type: http
+      scheme: bearer
+      description: JWT token issued from Authentication Server.
+      bearerFormat: JWT
+    OAuth2:
+      type: oauth2
+      flows:
+        clientCredentials:
+          tokenUrl: https://auth-server/connect/token
+          scopes:
+            bp-api: API scope
+            bpserver: Blue Prism Application scope

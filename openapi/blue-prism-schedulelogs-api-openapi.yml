@@ -1,0 +1,532 @@
+openapi: 3.2.0
+info:
+  title: Blue Prism Schedule Logs API
+  description: An API to expose core functionality of the Blue Prism product.
+  version: 7.5.1
+security:
+- Bearer:
+  - bp-api
+  - bpserver
+- OAuth2:
+  - bp-api
+  - bpserver
+tags:
+- name: ScheduleLogs
+paths:
+  /api/v7/scheduleLogs:
+    get:
+      summary: Return all schedule logs
+      operationId: getScheduleLogs
+      description: '> ### Permissions required
+
+        At least one of: `View Schedule` | `Edit Schedule` | `Delete Schedule`
+
+        | `Create Schedule` | `Retire Schedule` | `System - Scheduler`'
+      tags:
+      - ScheduleLogs
+      parameters:
+      - name: sortBy
+        description: The field that results should be sorted by and the direction they should be sorted in.
+        in: query
+        required: false
+        schema:
+          type: string
+          enum:
+          - EndTimeAsc
+          - EndTimeDesc
+          - ScheduleLogIdAsc
+          - ScheduleLogIdDesc
+          - ScheduleNameAsc
+          - ScheduleNameDesc
+          - ServerNameAsc
+          - ServerNameDesc
+          - StartTimeAsc
+          - StartTimeDesc
+          - StatusAsc
+          - StatusDesc
+          - DurationAsc
+          - DurationDesc
+      - name: itemsPerPage
+        description: The maximum number of items to retrieve per page.
+        in: query
+        required: false
+        schema:
+          type: integer
+      - name: scheduleLogStatus
+        description: A filter to search for the status of the log.
+        in: query
+        style: form
+        explode: false
+        schema:
+          type: array
+          items:
+            type: string
+            enum:
+            - Pending
+            - Running
+            - Terminated
+            - Completed
+            - PartExceptioned
+      - name: startTime
+        description: A filter to search for the log start time.
+        in: query
+        style: deepObject
+        schema:
+          $ref: '#/components/schemas/RangeOrEqualFilter'
+        examples:
+          equals:
+            $ref: '#/components/examples/DateTimeEqualsExample'
+          range:
+            $ref: '#/components/examples/DateTimeRangeExample'
+          greater:
+            $ref: '#/components/examples/DateTimeGreaterThanExample'
+      - name: endTime
+        description: A filter to search for the log end time.
+        in: query
+        style: deepObject
+        schema:
+          $ref: '#/components/schemas/RangeOrEqualFilter'
+        examples:
+          equals:
+            $ref: '#/components/examples/DateTimeEqualsExample'
+          range:
+            $ref: '#/components/examples/DateTimeRangeExample'
+          greater:
+            $ref: '#/components/examples/DateTimeGreaterThanExample'
+      - name: duration
+        description: A filter to search for the schedules duration.
+        in: query
+        style: deepObject
+        schema:
+          $ref: '#/components/schemas/RangeOrEqualFilter'
+        examples:
+          equals:
+            $ref: '#/components/examples/TimeEqualsExample'
+          range:
+            $ref: '#/components/examples/TimeRangeExample'
+          greater:
+            $ref: '#/components/examples/TimeLessThanExample'
+      - name: pagingToken
+        in: query
+        description: The token to point to the last item previously returned.
+        schema:
+          type: string
+      - name: scheduleName
+        description: A filter to search for name of the schedule.
+        in: query
+        style: deepObject
+        schema:
+          $ref: '#/components/schemas/BasicStringFilter'
+        examples:
+          equals:
+            $ref: '#/components/examples/StringEqualsExample'
+          startsWith:
+            $ref: '#/components/examples/StringStartsWithExample'
+          range:
+            $ref: '#/components/examples/StringRangeExample'
+          greater:
+            $ref: '#/components/examples/StringGreaterThanExample'
+      - name: serverName
+        description: A filter to search for name of the server.
+        in: query
+        style: deepObject
+        schema:
+          $ref: '#/components/schemas/BasicStringFilter'
+        examples:
+          equals:
+            $ref: '#/components/examples/StringEqualsExample'
+          startsWith:
+            $ref: '#/components/examples/StringStartsWithExample'
+          range:
+            $ref: '#/components/examples/StringRangeExample'
+          greater:
+            $ref: '#/components/examples/StringGreaterThanExample'
+      responses:
+        '200':
+          description: A page containing a list of schedule log items and a paging token are successfully retrieved.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ScheduleLogItemsPage'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/NotAuthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+  /api/v7/scheduleLogs/{scheduleId}:
+    get:
+      summary: Return all logs for a specified schedule
+      operationId: getScheduleLogsById
+      description: '> ### Permissions required
+
+        At least one of: `View Schedule` | `Edit Schedule` | `Delete Schedule`
+
+        | `Create Schedule` | `Retire Schedule` | `System - Scheduler`'
+      tags:
+      - ScheduleLogs
+      parameters:
+      - name: scheduleId
+        description: The ID of the schedule to retrieve data for.
+        in: path
+        required: true
+        schema:
+          type: integer
+      - name: sortBy
+        description: The field that results should be sorted by and the direction they should be sorted in.
+        in: query
+        required: false
+        schema:
+          type: string
+          enum:
+          - EndTimeAsc
+          - EndTimeDesc
+          - ScheduleLogIdAsc
+          - ScheduleLogIdDesc
+          - ServerNameAsc
+          - ServerNameDesc
+          - StartTimeAsc
+          - StartTimeDesc
+          - StatusAsc
+          - StatusDesc
+          - DurationAsc
+          - DurationDesc
+      - name: itemsPerPage
+        description: The maximum number of items to retrieve per page.
+        in: query
+        required: false
+        schema:
+          type: integer
+      - name: scheduleLogStatus
+        description: A filter to search for the status of the log.
+        in: query
+        style: form
+        explode: false
+        schema:
+          type: array
+          items:
+            type: string
+            enum:
+            - Pending
+            - Running
+            - Terminated
+            - Completed
+            - PartExceptioned
+      - name: startTime
+        description: A filter to search for the log start time.
+        in: query
+        style: deepObject
+        schema:
+          $ref: '#/components/schemas/RangeOrEqualFilter'
+        examples:
+          equals:
+            $ref: '#/components/examples/DateTimeEqualsExample'
+          range:
+            $ref: '#/components/examples/DateTimeRangeExample'
+          greater:
+            $ref: '#/components/examples/DateTimeGreaterThanExample'
+      - name: endTime
+        description: A filter to search for the log end time.
+        in: query
+        style: deepObject
+        schema:
+          $ref: '#/components/schemas/RangeOrEqualFilter'
+        examples:
+          equals:
+            $ref: '#/components/examples/DateTimeEqualsExample'
+          range:
+            $ref: '#/components/examples/DateTimeRangeExample'
+          greater:
+            $ref: '#/components/examples/DateTimeGreaterThanExample'
+      - name: duration
+        description: A filter to search for the schedules duration.
+        in: query
+        style: deepObject
+        schema:
+          $ref: '#/components/schemas/RangeOrEqualFilter'
+        examples:
+          equals:
+            $ref: '#/components/examples/TimeEqualsExample'
+          range:
+            $ref: '#/components/examples/TimeRangeExample'
+          greater:
+            $ref: '#/components/examples/TimeLessThanExample'
+      - name: pagingToken
+        description: The token to point to the last item previously returned.
+        in: query
+        schema:
+          type: string
+      - name: serverName
+        description: A filter to search for name of the server.
+        in: query
+        style: deepObject
+        schema:
+          $ref: '#/components/schemas/BasicStringFilter'
+        examples:
+          equals:
+            $ref: '#/components/examples/StringEqualsExample'
+          startsWith:
+            $ref: '#/components/examples/StringStartsWithExample'
+          range:
+            $ref: '#/components/examples/StringRangeExample'
+          greater:
+            $ref: '#/components/examples/StringGreaterThanExample'
+      responses:
+        '200':
+          description: A page containing a list of schedule log items and paging token are successfully retrieved.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ScheduleLogItemsPage'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/NotAuthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+components:
+  examples:
+    TimeEqualsExample:
+      value:
+        eq: '12:34:56'
+      summary: Search for a value equal to 12:34:56.
+    StringGreaterThanExample:
+      value:
+        gte: Example
+      summary: Search for a value alphanumerically after or equal to "Example".
+    TimeRangeExample:
+      value:
+        gte: 01:23:45
+        lte: '12:34:56'
+      summary: Search for a value between 01:23:45 and 12:34:56 (inclusive)
+    DateTimeEqualsExample:
+      value:
+        eq: '2020-10-02T12:34:56+01:00'
+      summary: Search for a value equal to 2020-10-02 at 12:34:56 (GMT+1).
+    StringStartsWithExample:
+      value:
+        strtw: Exa
+      summary: Search a value starting with "Exa".
+    TimeLessThanExample:
+      value:
+        lte: '12:34:56'
+      summary: Search for a value less than or equal to 12:34:56
+    DateTimeRangeExample:
+      value:
+        gte: '2020-10-02T12:34:56+01:00'
+        lte: '2020-11-02T12:34:56+01:00'
+      summary: Search for a value between 2020-10-02 at 12:34:56 (GMT+1) and 2020-11-02 at 12:34:56 (GMT+1) (inclusive).
+    StringEqualsExample:
+      value:
+        eq: Example
+      summary: Search for a value equal to "Example".
+    DateTimeGreaterThanExample:
+      value:
+        gte: '2020-10-02T12:34:56+01:00'
+      summary: Search for a value after or equal to 2020-10-02 at 12:34:56 (GMT+1).
+    StringRangeExample:
+      value:
+        gte: Ex
+        lte: F
+      summary: Search for a value alphanumerically between "Ex" and "F".
+  schemas:
+    UrlParameterError:
+      description: An error occurred due to incorrect data supplied to url parameter.
+      type: object
+      properties:
+        message:
+          type: string
+          description: A message about the error.
+        messageDetail:
+          type: string
+          description: A detailed description about the error.
+    ScheduleLogSummary:
+      description: Contains basic details about a schedule log.
+      type: object
+      properties:
+        scheduleLogId:
+          type: integer
+          description: The ID of the schedule log.
+        startTime:
+          type: string
+          format: date-time
+          description: The start time of the schedule.
+        endTime:
+          type: string
+          format: date-time
+          description: The end time of the schedule.
+        duration:
+          type: string
+          format: time-span
+          description: The duration of the schedule.
+        status:
+          type: string
+          description: The current status of the schedule.
+          enum:
+          - pending
+          - running
+          - terminated
+          - completed
+          - partExceptioned
+        serverName:
+          type: string
+          description: The name of the application server this schedule instance ran on.
+        scheduleId:
+          type: integer
+          description: The ID of the schedule.
+        scheduleName:
+          type: string
+          description: The name of the schedule.
+    BasicStringFilter:
+      description: Used to filter strings. Check for strings that start with, equal, are greater than, are less than, or are between the given value(s).
+      type: object
+      anyOf:
+      - $ref: '#/components/schemas/RangeOrEqualFilter'
+      - $ref: '#/components/schemas/StartsWithStringFilter'
+      example:
+        strtw: null
+        gte: null
+        lte: null
+        eq: null
+    RangeOrEqualFilter:
+      description: Used to filter values. Check for values that are equal to, greater than or equal to, less than or equal to, or between the given value(s).
+      type: object
+      oneOf:
+      - $ref: '#/components/schemas/RangeFilter'
+      - $ref: '#/components/schemas/EqualsFilter'
+      example:
+        gte: null
+        lte: null
+        eq: null
+    GreaterThanOrEqualToFilter:
+      description: Used to filter values. Check for values that are greater than or equal to the given value.
+      type: object
+      properties:
+        gte:
+          type:
+          - object
+          - 'null'
+          description: The value that the field should be greater than or equal to.
+      example:
+        gte: null
+    StartsWithStringFilter:
+      description: Used to filter strings. Check for strings that start with the given value.
+      type: object
+      properties:
+        strtw:
+          type:
+          - string
+          - 'null'
+          description: The value that the field should start with.
+      example:
+        strtw: null
+    ValidationError:
+      description: An error occurred during validation. See the response body for details on the invalid field.
+      type: object
+      properties:
+        invalidField:
+          type: string
+          description: The field which is invalid.
+        message:
+          type: string
+          description: A description of the error found with the field.
+    ErrorMessage:
+      description: A message describing the problem encountered.
+      type: string
+    ScheduleLogItemsPage:
+      description: Contains details of a page of schedule logs.
+      type: object
+      properties:
+        pagingToken:
+          type: string
+          description: The token to be used in the next request to return the next collection of items.
+        items:
+          type: array
+          description: A collection of schedule log summary
+          items:
+            $ref: '#/components/schemas/ScheduleLogSummary'
+      example:
+        pagingToken: U3VwZXIgc2VjcmV0IGRhdGEuIFNoaGho
+        items:
+        - scheduleLogId: 1
+          startTime: '2019-08-27T14:15:22Z'
+          endTime: '2019-08-27T14:15:22Z'
+          duration: 00:01:23
+          status: pending
+          serverName: Example server
+          scheduleId: 1
+          scheduleName: Example schedule
+    LessThanOrEqualToFilter:
+      description: Used to filter values. Check for values that are less than or equal to the given value.
+      type: object
+      properties:
+        lte:
+          type:
+          - object
+          - 'null'
+          description: The value that the field should be less than or equal to.
+      example:
+        lte: null
+    EqualsFilter:
+      description: Used to filter values. Check for values that are equal to the given value.
+      type: object
+      properties:
+        eq:
+          type:
+          - object
+          - 'null'
+          description: The value that the field should be equal to.
+      example:
+        eq: null
+    RangeFilter:
+      description: Used to filter values. Check for values that are greater than or equal to, less than or equal to, or between the given value(s).
+      type: object
+      anyOf:
+      - $ref: '#/components/schemas/GreaterThanOrEqualToFilter'
+      - $ref: '#/components/schemas/LessThanOrEqualToFilter'
+      example:
+        gte: null
+        lte: null
+  responses:
+    NotAuthorized:
+      description: The authentication token was either missing or invalid and must be refreshed.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorMessage'
+    Forbidden:
+      description: The authentication token does not give sufficient permissions to perform this action.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorMessage'
+    BadRequest:
+      description: The request is malformed or contains incorrect information. See the response for more details.
+      content:
+        application/json:
+          schema:
+            oneOf:
+            - $ref: '#/components/schemas/UrlParameterError'
+            - $ref: '#/components/schemas/ValidationError'
+    NotFound:
+      description: The requested resource could not be found.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorMessage'
+  securitySchemes:
+    Bearer:
+      type: http
+      scheme: bearer
+      description: JWT token issued from Authentication Server.
+      bearerFormat: JWT
+    OAuth2:
+      type: oauth2
+      flows:
+        clientCredentials:
+          tokenUrl: https://auth-server/connect/token
+          scopes:
+            bp-api: API scope
+            bpserver: Blue Prism Application scope

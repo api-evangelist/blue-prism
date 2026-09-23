@@ -1,0 +1,62 @@
+openapi: 3.2.0
+info:
+  title: Blue Prism User API
+  description: An API to expose core functionality of the Blue Prism product.
+  version: 7.5.1
+security:
+- Bearer:
+  - bp-api
+  - bpserver
+- OAuth2:
+  - bp-api
+  - bpserver
+tags:
+- name: User
+paths:
+  /api/v7/user/permissions:
+    get:
+      summary: Return a list of permissions for the currently authenticated user
+      operationId: getPermissionsForUser
+      tags:
+      - User
+      responses:
+        '200':
+          description: A list of user permissions was successfully retrieved.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: string
+              example:
+              - Permission_1
+              - Permission_2
+              - Permission_3
+        '401':
+          $ref: '#/components/responses/NotAuthorized'
+components:
+  responses:
+    NotAuthorized:
+      description: The authentication token was either missing or invalid and must be refreshed.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorMessage'
+  schemas:
+    ErrorMessage:
+      description: A message describing the problem encountered.
+      type: string
+  securitySchemes:
+    Bearer:
+      type: http
+      scheme: bearer
+      description: JWT token issued from Authentication Server.
+      bearerFormat: JWT
+    OAuth2:
+      type: oauth2
+      flows:
+        clientCredentials:
+          tokenUrl: https://auth-server/connect/token
+          scopes:
+            bp-api: API scope
+            bpserver: Blue Prism Application scope

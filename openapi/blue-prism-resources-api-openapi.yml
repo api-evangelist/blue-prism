@@ -1,0 +1,542 @@
+openapi: 3.2.0
+info:
+  title: Blue Prism Resources API
+  description: An API to expose core functionality of the Blue Prism product.
+  version: 7.5.1
+security:
+- Bearer:
+  - bp-api
+  - bpserver
+- OAuth2:
+  - bp-api
+  - bpserver
+tags:
+- name: Resources
+paths:
+  /api/v7/resources:
+    get:
+      summary: Return a list of resources in the environment
+      operationId: getResources
+      description: '> ### Permissions required
+
+        At least one of: `View Resource` | `View Resource Screen Captures` | `Configure Resource`
+
+        | `Control Resource` | `Manage Resource Access Rights` | `View Resource Details`'
+      tags:
+      - Resources
+      parameters:
+      - name: name
+        description: A filter to search for the name of the resource.
+        in: query
+        style: deepObject
+        schema:
+          $ref: '#/components/schemas/BasicStringFilter'
+        examples:
+          equals:
+            $ref: '#/components/examples/StringEqualsExample'
+          startsWith:
+            $ref: '#/components/examples/StringStartsWithExample'
+          range:
+            $ref: '#/components/examples/StringRangeExample'
+          greater:
+            $ref: '#/components/examples/StringGreaterThanExample'
+      - name: groupName
+        description: A filter to search for the group name of the resource.
+        in: query
+        style: deepObject
+        schema:
+          $ref: '#/components/schemas/BasicStringFilter'
+        examples:
+          equals:
+            $ref: '#/components/examples/StringEqualsExample'
+          startsWith:
+            $ref: '#/components/examples/StringStartsWithExample'
+          range:
+            $ref: '#/components/examples/StringRangeExample'
+          greater:
+            $ref: '#/components/examples/StringGreaterThanExample'
+      - name: poolName
+        description: A filter to search for the pool name of the resource.
+        in: query
+        style: deepObject
+        schema:
+          $ref: '#/components/schemas/BasicStringFilter'
+        examples:
+          equals:
+            $ref: '#/components/examples/StringEqualsExample'
+          startsWith:
+            $ref: '#/components/examples/StringStartsWithExample'
+          range:
+            $ref: '#/components/examples/StringRangeExample'
+          greater:
+            $ref: '#/components/examples/StringGreaterThanExample'
+      - name: activeSessionCount
+        description: A filter to search for resource's active session count.
+        in: query
+        style: deepObject
+        schema:
+          $ref: '#/components/schemas/RangeOrEqualFilter'
+        examples:
+          equals:
+            $ref: '#/components/examples/IntegerEqualsExample'
+          range:
+            $ref: '#/components/examples/IntegerRangeExample'
+          less:
+            $ref: '#/components/examples/IntegerLessThanExample'
+      - name: pendingSessionCount
+        description: A filter to search for resource's pending session count.
+        in: query
+        style: deepObject
+        schema:
+          $ref: '#/components/schemas/RangeOrEqualFilter'
+        examples:
+          equals:
+            $ref: '#/components/examples/IntegerEqualsExample'
+          range:
+            $ref: '#/components/examples/IntegerRangeExample'
+          less:
+            $ref: '#/components/examples/IntegerLessThanExample'
+      - name: displayStatus
+        description: A filter to search for the current status of the resource.
+        in: query
+        style: form
+        explode: false
+        schema:
+          type: array
+          items:
+            type: string
+            enum:
+            - Working
+            - Idle
+            - Warning
+            - Offline
+            - Missing
+            - LoggedOut
+            - Private
+            - Details
+            - BPD
+            - Hybrid
+      - name: retirementFilter
+        description: A filter to search for the retirement status of the resource. The default behavior is to search for non-retired resources.
+        in: query
+        schema:
+          type: string
+          enum:
+          - NonRetired
+          - Retired
+          - All
+      - name: resourceType
+        description: A filter to search for the resource type.
+        in: query
+        schema:
+          type: string
+          enum:
+          - Enterprise
+          - Desktop
+          - RemoteDigitalWorker
+      - name: includeResourcePools
+        description: Includes resource pools in the results.
+        in: query
+        schema:
+          type: boolean
+      - name: sortBy
+        description: The field that results should be sorted by and the direction they should be sorted in.
+        in: query
+        schema:
+          type: string
+          enum:
+          - NameAsc
+          - NameDesc
+          - PoolAsc
+          - PoolDesc
+          - GroupAsc
+          - GroupDesc
+          - PendingAsc
+          - PendingDesc
+          - ActiveAsc
+          - ActiveDesc
+          - DisplayStatusAsc
+          - DisplayStatusDesc
+      - name: itemsPerPage
+        in: query
+        description: The maximum number of items to retrieve per page.
+        schema:
+          type: integer
+          minimum: 1
+      - name: pagingToken
+        in: query
+        description: The token to point to the last item previously returned.
+        schema:
+          type: string
+      responses:
+        '200':
+          description: An array of resource summaries.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResourceItemsPage'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/NotAuthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+  /api/v7/resources/{resourceId}:
+    put:
+      operationId: updateResource
+      summary: Retire or unretire a resource with the given ID
+      description: '> ### Permissions required: `Configure Resource`'
+      tags:
+      - Resources
+      parameters:
+      - name: resourceId
+        in: path
+        description: The ID of the resource or pool.
+        required: true
+        schema:
+          type: string
+          format: uuid
+      requestBody:
+        required: true
+        description: 'To retire an active resource, use "Retire". To unretire a resource, use "None". The "Retire" attribute should not be included if attempting to unretire a resource.
+
+          '
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateResource'
+      responses:
+        '204':
+          description: The resource has been successfully updated.
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/NotAuthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '409':
+          description: The resource could not be updated. See errorMessage for more details.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+components:
+  examples:
+    StringGreaterThanExample:
+      value:
+        gte: Example
+      summary: Search for a value alphanumerically after or equal to "Example".
+    IntegerLessThanExample:
+      value:
+        lte: 123
+      summary: Search for a value less than or equal to 123.
+    IntegerRangeExample:
+      value:
+        gte: 123
+        lte: 321
+      summary: Search for a value between 123 and 321 inclusive.
+    StringStartsWithExample:
+      value:
+        strtw: Exa
+      summary: Search a value starting with "Exa".
+    IntegerEqualsExample:
+      value:
+        eq: 123
+      summary: Search for a value equal to 123.
+    StringEqualsExample:
+      value:
+        eq: Example
+      summary: Search for a value equal to "Example".
+    StringRangeExample:
+      value:
+        gte: Ex
+        lte: F
+      summary: Search for a value alphanumerically between "Ex" and "F".
+  schemas:
+    UrlParameterError:
+      description: An error occurred due to incorrect data supplied to url parameter.
+      type: object
+      properties:
+        message:
+          type: string
+          description: A message about the error.
+        messageDetail:
+          type: string
+          description: A detailed description about the error.
+    BasicStringFilter:
+      description: Used to filter strings. Check for strings that start with, equal, are greater than, are less than, or are between the given value(s).
+      type: object
+      anyOf:
+      - $ref: '#/components/schemas/RangeOrEqualFilter'
+      - $ref: '#/components/schemas/StartsWithStringFilter'
+      example:
+        strtw: null
+        gte: null
+        lte: null
+        eq: null
+    RangeOrEqualFilter:
+      description: Used to filter values. Check for values that are equal to, greater than or equal to, less than or equal to, or between the given value(s).
+      type: object
+      oneOf:
+      - $ref: '#/components/schemas/RangeFilter'
+      - $ref: '#/components/schemas/EqualsFilter'
+      example:
+        gte: null
+        lte: null
+        eq: null
+    GreaterThanOrEqualToFilter:
+      description: Used to filter values. Check for values that are greater than or equal to the given value.
+      type: object
+      properties:
+        gte:
+          type:
+          - object
+          - 'null'
+          description: The value that the field should be greater than or equal to.
+      example:
+        gte: null
+    StartsWithStringFilter:
+      description: Used to filter strings. Check for strings that start with the given value.
+      type: object
+      properties:
+        strtw:
+          type:
+          - string
+          - 'null'
+          description: The value that the field should start with.
+      example:
+        strtw: null
+    ResourceAttribute:
+      description: The attributes of the resource.
+      type: string
+      enum:
+      - None
+      - Retired
+      - Local
+      - LoginAgent
+      - Private
+      - DefaultInstance
+      - Desktop
+      - RemoteDigitalWorker
+      - Pool
+    ValidationError:
+      description: An error occurred during validation. See the response body for details on the invalid field.
+      type: object
+      properties:
+        invalidField:
+          type: string
+          description: The field which is invalid.
+        message:
+          type: string
+          description: A description of the error found with the field.
+    ErrorMessage:
+      description: A message describing the problem encountered.
+      type: string
+    ResourceItemsPage:
+      description: Contains details of a page of runtime resources.
+      type: object
+      properties:
+        pagingToken:
+          type:
+          - string
+          - 'null'
+          description: The token to be used in the next request to return the next collection of items.
+        items:
+          type: array
+          description: A collection of resources.
+          items:
+            $ref: '#/components/schemas/Resource'
+      example:
+        pagingToken: U3VwZXIgc2VjcmV0IGRhdGEuIFNoaGho
+        items:
+        - id: 01234567-89ab-cdef-0123-456789abcdef
+          name: Example
+          poolId: 99e23d41-e8ec-4ffe-89c9-93814d70d551
+          poolName: Pool name
+          groupId: fedcba98-7654-3210-fedc-ba9876543210
+          groupName: Example group
+          attributes:
+          - None
+          activeSessionCount: 5
+          warningSessionCount: 1
+          pendingSessionCount: 2
+          databaseStatus: Ready
+          displayStatus: Working
+          resourceType: Desktop
+    LessThanOrEqualToFilter:
+      description: Used to filter values. Check for values that are less than or equal to the given value.
+      type: object
+      properties:
+        lte:
+          type:
+          - object
+          - 'null'
+          description: The value that the field should be less than or equal to.
+      example:
+        lte: null
+    EqualsFilter:
+      description: Used to filter values. Check for values that are equal to the given value.
+      type: object
+      properties:
+        eq:
+          type:
+          - object
+          - 'null'
+          description: The value that the field should be equal to.
+      example:
+        eq: null
+    Resource:
+      description: Contains details of a runtime resource.
+      type: object
+      properties:
+        id:
+          type: string
+          description: The ID of the resource.
+          format: uuid
+        name:
+          type: string
+          description: The name of the resource.
+        poolId:
+          type: string
+          description: The ID of the pool to which the resource belongs.
+          format: uuid
+        poolName:
+          type: string
+          description: The name of the pool to which the resource belongs.
+        groupId:
+          type: string
+          description: The ID of the group to which the resource or its pool belongs.
+          format: uuid
+        groupName:
+          type: string
+          description: The name of the group to which the resource or its pool belongs.
+        attributes:
+          type: array
+          description: The attributes of the resource.
+          items:
+            $ref: '#/components/schemas/ResourceAttribute'
+        activeSessionCount:
+          type: integer
+          description: The number of active sessions on the resource.
+        warningSessionCount:
+          type: integer
+          description: The number of warning sessions on the resource.
+        pendingSessionCount:
+          type: integer
+          description: The number of pending sessions on the resource.
+        databaseStatus:
+          type: string
+          enum:
+          - Unknown
+          - Ready
+          - Offline
+          - Pending
+          description: The reported status of the resource.
+        displayStatus:
+          type: string
+          enum:
+          - Working
+          - Idle
+          - Warning
+          - Offline
+          - Missing
+          - LoggedOut
+          - Private
+          - Details
+          - BPD
+          - Hybrid
+          description: The calculated state of the resource.
+        resourceType:
+          type: string
+          enum:
+          - Desktop
+          - Enterprise
+          - RemoteDigitalWorker
+          description: The calculated type of the resource
+      example:
+        id: 01234567-89ab-cdef-0123-456789abcdef
+        name: Example
+        poolId: 99e23d41-e8ec-4ffe-89c9-93814d70d551
+        poolName: Pool name
+        groupId: fedcba98-7654-3210-fedc-ba9876543210
+        groupName: Example group
+        attributes:
+        - None
+        activeSessionCount: 5
+        warningSessionCount: 1
+        pendingSessionCount: 2
+        databaseStatus: Ready
+        displayStatus: Working
+        resourceType: Desktop
+    RangeFilter:
+      description: Used to filter values. Check for values that are greater than or equal to, less than or equal to, or between the given value(s).
+      type: object
+      anyOf:
+      - $ref: '#/components/schemas/GreaterThanOrEqualToFilter'
+      - $ref: '#/components/schemas/LessThanOrEqualToFilter'
+      example:
+        gte: null
+        lte: null
+    Error:
+      description: A general error occurred. See errorMessage for details.
+      type: object
+      properties:
+        errorMessage:
+          description: A message describing the problem encountered.
+          type: string
+    UpdateResource:
+      description: Contains details to update a runtime resource's attributes.
+      type: object
+      properties:
+        attributes:
+          description: The attributes to assign to the resource.
+          type: array
+          items:
+            $ref: '#/components/schemas/ResourceAttribute'
+      example:
+        attributes:
+        - Retired
+        - None
+  responses:
+    NotAuthorized:
+      description: The authentication token was either missing or invalid and must be refreshed.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorMessage'
+    Forbidden:
+      description: The authentication token does not give sufficient permissions to perform this action.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorMessage'
+    BadRequest:
+      description: The request is malformed or contains incorrect information. See the response for more details.
+      content:
+        application/json:
+          schema:
+            oneOf:
+            - $ref: '#/components/schemas/UrlParameterError'
+            - $ref: '#/components/schemas/ValidationError'
+    NotFound:
+      description: The requested resource could not be found.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorMessage'
+  securitySchemes:
+    Bearer:
+      type: http
+      scheme: bearer
+      description: JWT token issued from Authentication Server.
+      bearerFormat: JWT
+    OAuth2:
+      type: oauth2
+      flows:
+        clientCredentials:
+          tokenUrl: https://auth-server/connect/token
+          scopes:
+            bp-api: API scope
+            bpserver: Blue Prism Application scope

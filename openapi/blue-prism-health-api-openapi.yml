@@ -1,0 +1,79 @@
+openapi: 3.2.0
+info:
+  title: Blue Prism Health API
+  description: An API to expose core functionality of the Blue Prism product.
+  version: 7.5.1
+security:
+- Bearer:
+  - bp-api
+  - bpserver
+- OAuth2:
+  - bp-api
+  - bpserver
+tags:
+- name: Health
+paths:
+  /api/v7/health:
+    get:
+      summary: Return health of API
+      tags:
+      - Health
+      responses:
+        '200':
+          description: Health of API was retrieved with OK health.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Health'
+        '503':
+          description: Health of API was retrieved with Service Unavailable health.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Health'
+              example:
+                healthy: false
+                dependencies:
+                - name: databse
+                  healthy: false
+      operationId: getApiV7Health
+      x-operation-id-source: derived
+components:
+  schemas:
+    Health:
+      description: Contains details of API health and its dependencies.
+      type: object
+      properties:
+        healthy:
+          type: boolean
+          description: The overall health status of the API.
+        dependencies:
+          type: array
+          description: The health of API dependencies
+          items:
+            $ref: '#/components/schemas/Dependency'
+    Dependency:
+      description: Contains details of API dependency health
+      type: object
+      properties:
+        name:
+          type: string
+          description: The name of the dependency
+          example: database
+        healthy:
+          type: boolean
+          description: The health status of the dependency
+  securitySchemes:
+    Bearer:
+      type: http
+      scheme: bearer
+      description: JWT token issued from Authentication Server.
+      bearerFormat: JWT
+    OAuth2:
+      type: oauth2
+      flows:
+        clientCredentials:
+          tokenUrl: https://auth-server/connect/token
+          scopes:
+            bp-api: API scope
+            bpserver: Blue Prism Application scope

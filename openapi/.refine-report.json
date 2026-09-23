@@ -1,0 +1,72 @@
+{
+  "provider": "blue-prism",
+  "sources": [
+    "_original/blue-prism-enterprise-api-7-5-1-openapi.json"
+  ],
+  "outputs": [
+    "blue-prism-calendars-api-openapi.yml",
+    "blue-prism-dashboards-api-openapi.yml",
+    "blue-prism-encryption-schemes-api-openapi.yml",
+    "blue-prism-environment-variables-api-openapi.yml",
+    "blue-prism-health-api-openapi.yml",
+    "blue-prism-licenses-api-openapi.yml",
+    "blue-prism-pools-api-openapi.yml",
+    "blue-prism-processes-api-openapi.yml",
+    "blue-prism-resources-api-openapi.yml",
+    "blue-prism-schedulelogs-api-openapi.yml",
+    "blue-prism-schedules-api-openapi.yml",
+    "blue-prism-sessions-api-openapi.yml",
+    "blue-prism-subscriptions-api-openapi.yml",
+    "blue-prism-time-zones-api-openapi.yml",
+    "blue-prism-user-api-openapi.yml",
+    "blue-prism-work-queue-groups-api-openapi.yml",
+    "blue-prism-work-queues-api-openapi.yml"
+  ],
+  "archived": [
+    "deleted 1 superseded output(s) from the previous generation"
+  ],
+  "errors": [],
+  "warnings": [],
+  "notes": [
+    "sourced from openapi/_original/ (1 archived document(s)); previously refined output at the top level was skipped rather than re-split",
+    "blue-prism-enterprise-api-7-5-1-openapi.json: upgraded openapi 3.0.3 -> OpenAPI 3.2.0",
+    "blue-prism-enterprise-api-7-5-1-openapi.json: declared missing tag: Calendars",
+    "blue-prism-enterprise-api-7-5-1-openapi.json: declared missing tag: Dashboards",
+    "blue-prism-enterprise-api-7-5-1-openapi.json: declared missing tag: Encryption Schemes",
+    "blue-prism-enterprise-api-7-5-1-openapi.json: declared missing tag: Environment Variables",
+    "blue-prism-enterprise-api-7-5-1-openapi.json: declared missing tag: Health",
+    "blue-prism-enterprise-api-7-5-1-openapi.json: declared missing tag: Licenses",
+    "blue-prism-enterprise-api-7-5-1-openapi.json: declared missing tag: Pools",
+    "blue-prism-enterprise-api-7-5-1-openapi.json: declared missing tag: Processes",
+    "blue-prism-enterprise-api-7-5-1-openapi.json: declared missing tag: Resources",
+    "blue-prism-enterprise-api-7-5-1-openapi.json: declared missing tag: ScheduleLogs",
+    "blue-prism-enterprise-api-7-5-1-openapi.json: declared missing tag: Schedules",
+    "blue-prism-enterprise-api-7-5-1-openapi.json: declared missing tag: Sessions",
+    "blue-prism-enterprise-api-7-5-1-openapi.json: declared missing tag: Subscriptions",
+    "blue-prism-enterprise-api-7-5-1-openapi.json: declared missing tag: Time Zones",
+    "blue-prism-enterprise-api-7-5-1-openapi.json: declared missing tag: User",
+    "blue-prism-enterprise-api-7-5-1-openapi.json: declared missing tag: Work Queue Groups",
+    "blue-prism-enterprise-api-7-5-1-openapi.json: declared missing tag: Work Queues",
+    "superseded outputs removed: blue-prism-timezones-api-openapi.yml",
+    "apis.yml register: written (+1 apis, 18 total)"
+  ],
+  "skipped": [
+    "blue-prism-calendars-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "blue-prism-dashboards-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "blue-prism-encryption-schemes-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "blue-prism-environment-variables-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "blue-prism-health-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "blue-prism-licenses-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "blue-prism-pools-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "blue-prism-processes-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "blue-prism-resources-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "blue-prism-schedulelogs-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "blue-prism-schedules-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "blue-prism-sessions-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "blue-prism-subscriptions-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "blue-prism-timezones-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "blue-prism-user-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "blue-prism-work-queue-groups-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "blue-prism-work-queues-api-openapi.yml: previously refined output, superseded by openapi/_original/"
+  ]
+}

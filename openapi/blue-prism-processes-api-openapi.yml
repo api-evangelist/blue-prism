@@ -1,0 +1,489 @@
+openapi: 3.2.0
+info:
+  title: Blue Prism Processes API
+  description: An API to expose core functionality of the Blue Prism product.
+  version: 7.5.1
+security:
+- Bearer:
+  - bp-api
+  - bpserver
+- OAuth2:
+  - bp-api
+  - bpserver
+tags:
+- name: Processes
+paths:
+  /api/v7/processes:
+    get:
+      summary: Return a list of all the processes in the environment
+      operationId: GetProcesses
+      description: '> ### Permissions required
+
+        At least one of: `Create Process` | `Delete Process` | `Edit Process`
+
+        | `Edit Process Groups` | `Execute Process` | `Execute Process as Web Service`
+
+        | `Export Process` | `Manage Process Access Rights` | `View Process Definition`'
+      tags:
+      - Processes
+      parameters:
+      - name: processName
+        description: A filter to search for the name of the process.
+        in: query
+        style: deepObject
+        schema:
+          $ref: '#/components/schemas/BasicStringFilter'
+        examples:
+          equals:
+            $ref: '#/components/examples/StringEqualsExample'
+          startsWith:
+            $ref: '#/components/examples/StringStartsWithExample'
+          range:
+            $ref: '#/components/examples/StringRangeExample'
+          greater:
+            $ref: '#/components/examples/StringGreaterThanExample'
+      - name: description
+        description: A filter to search for the description of the process.
+        in: query
+        style: deepObject
+        schema:
+          $ref: '#/components/schemas/BasicStringFilter'
+        examples:
+          equals:
+            $ref: '#/components/examples/StringEqualsExample'
+          startsWith:
+            $ref: '#/components/examples/StringStartsWithExample'
+          range:
+            $ref: '#/components/examples/StringRangeExample'
+          greater:
+            $ref: '#/components/examples/StringGreaterThanExample'
+      - name: groupName
+        description: A filter to search for the group name of the process.
+        in: query
+        style: deepObject
+        schema:
+          $ref: '#/components/schemas/BasicStringFilter'
+        examples:
+          equals:
+            $ref: '#/components/examples/StringEqualsExample'
+          startsWith:
+            $ref: '#/components/examples/StringStartsWithExample'
+          range:
+            $ref: '#/components/examples/StringRangeExample'
+          greater:
+            $ref: '#/components/examples/StringGreaterThanExample'
+      - name: attributesInclude
+        in: query
+        description: A filter to search for attributes to be included.
+        style: form
+        explode: false
+        schema:
+          type: array
+          items:
+            $ref: '#/components/schemas/ProcessAttributeFilter'
+      - name: attributesExclude
+        in: query
+        description: A filter to search for attributes to be excluded.
+        style: form
+        explode: false
+        schema:
+          type: array
+          items:
+            $ref: '#/components/schemas/ProcessAttributeFilter'
+      - name: sortBy
+        in: query
+        description: The field that results should be sorted by and the direction they should be sorted in.
+        schema:
+          type: string
+          title: getProcessSortBy
+          enum:
+          - NameAsc
+          - NameDesc
+          - DescriptionAsc
+          - DescriptionDesc
+          - GroupAsc
+          - GroupDesc
+      - name: itemsPerPage
+        in: query
+        description: The maximum number of items to retrieve per page.
+        schema:
+          type: integer
+          minimum: 1
+      - name: pagingToken
+        in: query
+        description: The token to point to the last item previously returned.
+        schema:
+          type: string
+      responses:
+        '200':
+          description: An array of processes summaries.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProcessItemsPage'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/NotAuthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+  /api/v7/processgroups/root/descendants:
+    get:
+      summary: Return a list of all the processes / process groups in the process group tree
+      operationId: getAllProcessGroupItems
+      description: '> ### Permissions required
+
+        At least one of: `Create Process` | `Delete Process` | `Edit Process`
+
+        | `Edit Process Groups` | `Execute Process` | `Execute Process as Web Service`
+
+        | `Export Process` | `Manage Process Access Rights` | `View Process Definition`'
+      tags:
+      - Processes
+      parameters:
+      - name: name
+        in: query
+        description: A filter to search for the name of the process / group.
+        style: deepObject
+        required: false
+        schema:
+          $ref: '#/components/schemas/BasicStringFilter'
+        examples:
+          equals:
+            $ref: '#/components/examples/StringEqualsExample'
+          startsWith:
+            $ref: '#/components/examples/StringStartsWithExample'
+          range:
+            $ref: '#/components/examples/StringRangeExample'
+          greater:
+            $ref: '#/components/examples/StringGreaterThanExample'
+      - name: sortBy
+        in: query
+        description: The field that results should be sorted by and the direction they should be sorted in.
+        required: false
+        schema:
+          title: getAllProcessGroupItemsSortBy
+          type: string
+          enum:
+          - NameAsc
+          - NameDesc
+      - name: itemsPerPage
+        in: query
+        description: The maximum number of items to retrieve per page.
+        required: false
+        schema:
+          type: integer
+          minimum: 1
+      - name: pagingToken
+        in: query
+        description: The token to point to the last item previously returned.
+        required: false
+        schema:
+          type: string
+      - name: attributesInclude
+        in: query
+        description: A filter to search for attributes to be included.
+        style: form
+        explode: false
+        schema:
+          type: array
+          items:
+            $ref: '#/components/schemas/ProcessAttributeFilter'
+      - name: attributesExclude
+        in: query
+        description: A filter to search for attributes to be excluded.
+        style: form
+        explode: false
+        schema:
+          type: array
+          items:
+            $ref: '#/components/schemas/ProcessAttributeFilter'
+      responses:
+        '200':
+          description: An array of process / process group summaries.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProcessGroupItemItemsPage'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/NotAuthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+components:
+  examples:
+    StringGreaterThanExample:
+      value:
+        gte: Example
+      summary: Search for a value alphanumerically after or equal to "Example".
+    StringStartsWithExample:
+      value:
+        strtw: Exa
+      summary: Search a value starting with "Exa".
+    StringEqualsExample:
+      value:
+        eq: Example
+      summary: Search for a value equal to "Example".
+    StringRangeExample:
+      value:
+        gte: Ex
+        lte: F
+      summary: Search for a value alphanumerically between "Ex" and "F".
+  schemas:
+    UrlParameterError:
+      description: An error occurred due to incorrect data supplied to url parameter.
+      type: object
+      properties:
+        message:
+          type: string
+          description: A message about the error.
+        messageDetail:
+          type: string
+          description: A detailed description about the error.
+    Process:
+      description: Contains details of a published process.
+      type: object
+      properties:
+        processId:
+          type: string
+          description: The ID of the process.
+          format: uuid
+        processName:
+          type: string
+          description: The name of the process.
+        processDescription:
+          type: string
+          description: The description of the process.
+        groupId:
+          type: string
+          description: The ID of group related to the process.
+          format: uuid
+        groupName:
+          type: string
+          description: The name of the group related to the process.
+        attributes:
+          type: array
+          description: The attributes of the process.
+          items:
+            $ref: '#/components/schemas/ProcessAttribute'
+      example:
+        processId: 01234567-89ab-cdef-0123-456789abcdef
+        processName: Process_Name
+        processDescription: Process_Description
+        groupId: 99e23d41-e8ec-4ffe-89c9-93814d70d551
+        groupName: Group_name
+        attributes:
+        - Retired
+        - Published
+        - PublishedWebService
+    ProcessItemsPage:
+      description: Contains details of a page of processes.
+      type: object
+      properties:
+        pagingToken:
+          type: string
+          description: The token to be used in the next request to return the next collection of items.
+        items:
+          type: array
+          description: A collection of processes.
+          items:
+            $ref: '#/components/schemas/Process'
+      example:
+        pagingToken: U3VwZXIgc2VjcmV0IGRhdGEuIFNoaGho
+        items:
+        - processId: 01234567-89ab-cdef-0123-456789abcdef
+          processName: Process_Name
+          processDescription: Process_Description
+          groupId: 99e23d41-e8ec-4ffe-89c9-93814d70d551
+          groupName: Group_name
+          attributes:
+          - Retired
+          - PublishedWebService
+    BasicStringFilter:
+      description: Used to filter strings. Check for strings that start with, equal, are greater than, are less than, or are between the given value(s).
+      type: object
+      anyOf:
+      - $ref: '#/components/schemas/RangeOrEqualFilter'
+      - $ref: '#/components/schemas/StartsWithStringFilter'
+      example:
+        strtw: null
+        gte: null
+        lte: null
+        eq: null
+    RangeOrEqualFilter:
+      description: Used to filter values. Check for values that are equal to, greater than or equal to, less than or equal to, or between the given value(s).
+      type: object
+      oneOf:
+      - $ref: '#/components/schemas/RangeFilter'
+      - $ref: '#/components/schemas/EqualsFilter'
+      example:
+        gte: null
+        lte: null
+        eq: null
+    GreaterThanOrEqualToFilter:
+      description: Used to filter values. Check for values that are greater than or equal to the given value.
+      type: object
+      properties:
+        gte:
+          type:
+          - object
+          - 'null'
+          description: The value that the field should be greater than or equal to.
+      example:
+        gte: null
+    ProcessAttributeFilter:
+      description: The attributes of the process to filter by.
+      type: string
+      enum:
+      - Retired
+      - Published
+      - PublishedWebService
+      - PublishedDesktop
+    ProcessGroupItem:
+      description: Contains details of a process group tree node.
+      type: object
+      properties:
+        id:
+          type: string
+          description: The ID of the process or group.
+          format: uuid
+        name:
+          type: string
+          description: The name of the process or group.
+        nodeType:
+          type: string
+          enum:
+          - Item
+          - Group
+          description: The type of this tree node - Item or Group.
+        lastModified:
+          type: string
+          format: date-time
+          description: The last modified date of the process it this is an item node. Default date value is this is a group node.
+          example: '2020-10-02T12:34:56+02:00'
+      example:
+        id: 01234567-89ab-cdef-0123-456789abcdef
+        name: Process_Name
+        nodeType: Item
+        lastModified: '2022-04-01T09:05:10.64+01:00'
+    StartsWithStringFilter:
+      description: Used to filter strings. Check for strings that start with the given value.
+      type: object
+      properties:
+        strtw:
+          type:
+          - string
+          - 'null'
+          description: The value that the field should start with.
+      example:
+        strtw: null
+    ProcessAttribute:
+      description: The attributes of the process.
+      type: string
+      enum:
+      - None
+      - Retired
+      - Published
+      - PublishedWebService
+      - PublishedDesktop
+    ValidationError:
+      description: An error occurred during validation. See the response body for details on the invalid field.
+      type: object
+      properties:
+        invalidField:
+          type: string
+          description: The field which is invalid.
+        message:
+          type: string
+          description: A description of the error found with the field.
+    ProcessGroupItemItemsPage:
+      description: Contains details of a page of nodes in the process group tree.
+      type: object
+      properties:
+        pagingToken:
+          type:
+          - string
+          - 'null'
+          description: The token to be used in the next request to return the next collection of items.
+        items:
+          type: array
+          description: A collection of processes / process groups.
+          items:
+            $ref: '#/components/schemas/ProcessGroupItem'
+      example:
+        pagingToken: U3VwZXIgc2VjcmV0IGRhdGEuIFNoaGho
+        items:
+        - id: 01234567-89ab-cdef-0123-456789abcdef
+          name: Process_Name
+          nodeType: Item
+          lastModified: '2022-04-01T09:05:10.64+01:00'
+    ErrorMessage:
+      description: A message describing the problem encountered.
+      type: string
+    LessThanOrEqualToFilter:
+      description: Used to filter values. Check for values that are less than or equal to the given value.
+      type: object
+      properties:
+        lte:
+          type:
+          - object
+          - 'null'
+          description: The value that the field should be less than or equal to.
+      example:
+        lte: null
+    EqualsFilter:
+      description: Used to filter values. Check for values that are equal to the given value.
+      type: object
+      properties:
+        eq:
+          type:
+          - object
+          - 'null'
+          description: The value that the field should be equal to.
+      example:
+        eq: null
+    RangeFilter:
+      description: Used to filter values. Check for values that are greater than or equal to, less than or equal to, or between the given value(s).
+      type: object
+      anyOf:
+      - $ref: '#/components/schemas/GreaterThanOrEqualToFilter'
+      - $ref: '#/components/schemas/LessThanOrEqualToFilter'
+      example:
+        gte: null
+        lte: null
+  responses:
+    NotAuthorized:
+      description: The authentication token was either missing or invalid and must be refreshed.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorMessage'
+    Forbidden:
+      description: The authentication token does not give sufficient permissions to perform this action.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorMessage'
+    BadRequest:
+      description: The request is malformed or contains incorrect information. See the response for more details.
+      content:
+        application/json:
+          schema:
+            oneOf:
+            - $ref: '#/components/schemas/UrlParameterError'
+            - $ref: '#/components/schemas/ValidationError'
+  securitySchemes:
+    Bearer:
+      type: http
+      scheme: bearer
+      description: JWT token issued from Authentication Server.
+      bearerFormat: JWT
+    OAuth2:
+      type: oauth2
+      flows:
+        clientCredentials:
+          tokenUrl: https://auth-server/connect/token
+          scopes:
+            bp-api: API scope
+            bpserver: Blue Prism Application scope
