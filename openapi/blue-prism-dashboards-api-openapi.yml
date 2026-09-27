@@ -189,6 +189,16 @@ paths:
           $ref: '#/components/responses/Forbidden'
 components:
   schemas:
+    ValidationError:
+      description: An error occurred during validation. See the response body for details on the invalid field.
+      type: object
+      properties:
+        invalidField:
+          type: string
+          description: The field which is invalid.
+        message:
+          type: string
+          description: A description of the error found with the field.
     LicensesEntitlement:
       description: A summary of an aggregated licenses entitlement data.
       type: object
@@ -212,28 +222,6 @@ components:
           type: object
           $ref: '#/components/schemas/BaseEntitlement'
           description: A summary of an aggregated desktop licenses entitlement data.
-    ResourceUtilization:
-      description: A model of resource utilization per hour.
-      type: object
-      properties:
-        resourceId:
-          type: string
-          description: The ID of the resource.
-          format: uuid
-        digitalWorkerName:
-          type: string
-          description: The name of the resource.
-        utilizationDate:
-          type: string
-          description: The date of the resource utilization.
-          format: date-time
-          example: '2020-10-02T12:34:56+02:00'
-        usages:
-          type: array
-          description: An array of 24 items representing each hour of a day. Each item contains the number of minutes of that hour that the resource was working.
-          items:
-            type: integer
-            description: The number of minutes that the resource was working in this hour.
     BaseEntitlement:
       description: An aggregated licenses entitlement data.
       type: object
@@ -250,6 +238,21 @@ components:
         processalertmachineslimit:
           type: integer
           description: Number of machines which Process Alerts can be used.
+    ErrorMessage:
+      description: A message describing the problem encountered.
+      type: string
+    ResourcesSummaryUtilization:
+      description: A model of average resource utilization per day.
+      type: object
+      properties:
+        usagehour:
+          type: string
+          description: The date of the resource utilization.
+          format: date-time
+          example: '2020-10-02T12:34:56+02:00'
+        usage:
+          type: integer
+          description: The average resource utilization per hour in minutes.
     WorkQueueComposition:
       description: A summary of work queue items.
       type: object
@@ -286,19 +289,6 @@ components:
         messageDetail:
           type: string
           description: A detailed description about the error.
-    ValidationError:
-      description: An error occurred during validation. See the response body for details on the invalid field.
-      type: object
-      properties:
-        invalidField:
-          type: string
-          description: The field which is invalid.
-        message:
-          type: string
-          description: A description of the error found with the field.
-    ErrorMessage:
-      description: A message describing the problem encountered.
-      type: string
     LicenseUsageDetailsModel:
       description: A summary of active licenses limits and usages
       type: object
@@ -343,19 +333,35 @@ components:
           type: integer
           description: The number of machines with alerts currently in use.
           example: 17
-    ResourcesSummaryUtilization:
-      description: A model of average resource utilization per day.
+    ResourceUtilization:
+      description: A model of resource utilization per hour.
       type: object
       properties:
-        usagehour:
+        resourceId:
+          type: string
+          description: The ID of the resource.
+          format: uuid
+        digitalWorkerName:
+          type: string
+          description: The name of the resource.
+        utilizationDate:
           type: string
           description: The date of the resource utilization.
           format: date-time
           example: '2020-10-02T12:34:56+02:00'
-        usage:
-          type: integer
-          description: The average resource utilization per hour in minutes.
+        usages:
+          type: array
+          description: An array of 24 items representing each hour of a day. Each item contains the number of minutes of that hour that the resource was working.
+          items:
+            type: integer
+            description: The number of minutes that the resource was working in this hour.
   responses:
+    NotAuthorized:
+      description: The authentication token was either missing or invalid and must be refreshed.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorMessage'
     BadRequest:
       description: The request is malformed or contains incorrect information. See the response for more details.
       content:
@@ -372,12 +378,6 @@ components:
             $ref: '#/components/schemas/ErrorMessage'
     Forbidden:
       description: The authentication token does not give sufficient permissions to perform this action.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/ErrorMessage'
-    NotAuthorized:
-      description: The authentication token was either missing or invalid and must be refreshed.
       content:
         application/json:
           schema:

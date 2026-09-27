@@ -30,6 +30,9 @@ paths:
           $ref: '#/components/responses/NotAuthorized'
 components:
   schemas:
+    ErrorMessage:
+      description: A message describing the problem encountered.
+      type: string
     TimeZone:
       description: Contains details of a time zone.
       type: object
@@ -47,9 +50,6 @@ components:
         standardName:
           type: string
           description: The display name for the time zone's standard time.
-    ErrorMessage:
-      description: A message describing the problem encountered.
-      type: string
     TimeZones:
       description: A collection of time zones.
       type: array

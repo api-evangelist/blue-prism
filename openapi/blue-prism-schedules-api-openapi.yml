@@ -312,7 +312,7 @@ paths:
   /api/v7/schedules/{scheduleId}/runs/active:
     delete:
       summary: Request the schedule to stop
-      operationId: stopSchedule
+      operationId: deleteApiV7SchedulesByScheduleIdRunsActive
       description: '> ### Permissions required: `Edit Schedule`'
       tags:
       - Schedules
@@ -334,6 +334,8 @@ paths:
           $ref: '#/components/responses/Forbidden'
         '404':
           $ref: '#/components/responses/NotFound'
+      x-operation-id-source: normalized
+      x-operation-id-original: stopSchedule
   /api/v7/schedules/{scheduleId}/tasks:
     get:
       summary: Return a list of tasks in a schedule
@@ -1062,106 +1064,11 @@ paths:
           $ref: '#/components/responses/NotFound'
 components:
   schemas:
-    CreateScheduleDefinitionResponseModel:
-      description: Contains the ID of a schedule.
-      type: object
-      properties:
-        id:
-          type: integer
-          description: The ID of the schedule.
-    CreateScheduledTaskResponse:
-      description: Contains ID of created task.
-      type: object
-      properties:
-        taskId:
-          type: integer
-          description: The ID of the created task.
-    UrlParameterError:
-      description: An error occurred due to incorrect data supplied to url parameter.
-      type: object
-      properties:
-        message:
-          type: string
-          description: A message about the error.
-        messageDetail:
-          type: string
-          description: A detailed description about the error.
-    ScheduledTask:
-      description: Contains details of a scheduled task.
-      type: object
-      properties:
-        id:
-          type: integer
-          description: The ID of the scheduled task.
-        name:
-          type: string
-          description: The name of the scheduled task.
-        description:
-          type: string
-          description: The description of the scheduled task.
-        failFastOnError:
-          type: boolean
-          description: Determines if all errors should be regarded as a task failure.
-        delayAfterEnd:
-          type: integer
-          description: The delay after task end.
-        onSuccessTaskId:
-          type: integer
-          description: The ID for the task to commence on the success of this task.
-        onSuccessTaskName:
-          type: string
-          description: The name of the task to commence on the success of this task.
-        onFailureTaskId:
-          type: integer
-          description: The ID for the task to commence on the failure of this task.
-        onFailureTaskName:
-          type: string
-          description: The name of the task to commence on the failure of this task.
-        sessionsCount:
-          type: integer
-          description: The number of scheduled sessions a task has.
-    WeeklyDetails:
-      description: Weekly details that apply to the weekly interval schedule type.
-      type: object
-      properties:
-        period:
-          type: integer
-          description: The schedule frequency.
-        type:
-          type: string
-          description: The type of weekly interval.
-          enum:
-          - WeekDay
-          - WorkingDay
-        weekDay:
-          type:
-          - string
-          - 'null'
-          description: Which working day the schedule will run on.
-          enum:
-          - First
-          - Last
-        calendarId:
-          type:
-          - integer
-          - 'null'
-          description: The ID of the calendar to use.
-    DataRow:
-      description: A dictionary which represents a row of data from a Blue Prism collection.
-      type: object
-      additionalProperties:
-        $ref: '#/components/schemas/DataValue'
-    BasicStringFilter:
-      description: Used to filter strings. Check for strings that start with, equal, are greater than, are less than, or are between the given value(s).
-      type: object
-      anyOf:
-      - $ref: '#/components/schemas/RangeOrEqualFilter'
-      - $ref: '#/components/schemas/StartsWithStringFilter'
-      example:
-        strtw: null
-        gte: null
-        lte: null
-        eq: null
+    ScheduledSessionArguments:
+      description: Contains details of start-up parameters.
+      type: array
+      items:
+        $ref: '#/components/schemas/ScheduledSessionArgumentsModel'
     ScheduleLogDeprecatedItemsPage:
       description: Contains details of a page of schedule logs.
       type: object
@@ -1174,27 +1081,24 @@ components:
           description: A collection of schedule log summary
           items:
             $ref: '#/components/schemas/ScheduleLogDeprecatedSummary'
-    RangeOrEqualFilter:
-      description: Used to filter values. Check for values that are equal to, greater than or equal to, less than or equal to, or between the given value(s).
-      type: object
-      oneOf:
-      - $ref: '#/components/schemas/RangeFilter'
-      - $ref: '#/components/schemas/EqualsFilter'
-      example:
-        gte: null
-        lte: null
-        eq: null
-    GreaterThanOrEqualToFilter:
-      description: Used to filter values. Check for values that are greater than or equal to the given value.
+    CreateScheduledTaskResponse:
+      description: Contains ID of created task.
       type: object
       properties:
-        gte:
-          type:
-          - object
-          - 'null'
-          description: The value that the field should be greater than or equal to.
-      example:
-        gte: null
+        taskId:
+          type: integer
+          description: The ID of the created task.
+    CloneScheduleDetails:
+      description: Contains the details of a schedule.
+      allOf:
+      - type: object
+        properties:
+          name:
+            type: string
+            description: The name of the schedule.
+        required:
+        - name
+      - $ref: '#/components/schemas/ScheduleDetails'
     DataValue:
       description: Represents a single item of data in a Blue Prism format.
       type: object
@@ -1320,94 +1224,17 @@ components:
           - 'null'
           $ref: '#/components/schemas/YearlyDetails'
           description: Yearly details that apply to the yearly interval schedule type.
-    ScheduleSessionStart:
-      description: A request to start a schedule at startTime.
+    EqualsFilter:
+      description: Used to filter values. Check for values that are equal to the given value.
       type: object
       properties:
-        startTime:
-          type: string
-          description: The date and time that the schedule should be run at.
-          format: date-time
-          example: '2020-10-02T12:34:56+02:00'
-    CreateScheduledTask:
-      description: Contains details of a scheduled task.
-      type: object
-      properties:
-        name:
-          type: string
-          description: The name of the scheduled task.
-        description:
-          type: string
-          description: The description of the scheduled task.
-        failFastOnError:
-          type: boolean
-          description: Determines if all errors should be regarded as a task failure.
-        delayAfterEnd:
-          type: integer
-          description: The delay after task end.
-        onSuccessTaskId:
-          type: integer
-          description: The ID for the task to commence on the success of this task.
-        onFailureTaskId:
-          type: integer
-          description: The ID for the task to commence on the failure of this task.
-    StartsWithStringFilter:
-      description: Used to filter strings. Check for strings that start with the given value.
-      type: object
-      properties:
-        strtw:
+        eq:
           type:
-          - string
+          - object
           - 'null'
-          description: The value that the field should start with.
+          description: The value that the field should be equal to.
       example:
-        strtw: null
-    ScheduledSessionParameters:
-      description: Contains parameters of a scheduled session.
-      type: object
-      properties:
-        processId:
-          type: string
-          format: uuid
-          description: The ID of the process.
-        resourceId:
-          type: string
-          format: uuid
-          description: The ID of the resource.
-    DataCollection:
-      description: Represents a Blue Prism collection.
-      type: object
-      properties:
-        rows:
-          description: A collection of rows representing the data contained within the collection.
-          type: array
-          items:
-            $ref: '#/components/schemas/DataRow'
-    ValidationError:
-      description: An error occurred during validation. See the response body for details on the invalid field.
-      type: object
-      properties:
-        invalidField:
-          type: string
-          description: The field which is invalid.
-        message:
-          type: string
-          description: A description of the error found with the field.
-    YearlyDetails:
-      description: Yearly details that apply to the yearly interval schedule type.
-      type: object
-      properties:
-        period:
-          type: integer
-          description: The schedule frequency.
-    ScheduledSessionArguments:
-      description: Contains details of start-up parameters.
-      type: array
-      items:
-        $ref: '#/components/schemas/ScheduledSessionArgumentsModel'
-    ErrorMessage:
-      description: A message describing the problem encountered.
-      type: string
+        eq: null
     CreateScheduledSessionResponse:
       description: Contains ID of created scheduled session.
       type: object
@@ -1430,168 +1257,8 @@ components:
           taskSessionId:
             type: integer
             description: The ID of the session to run associated with the task.
-    CloneScheduleDetails:
-      description: Contains the details of a schedule.
-      allOf:
-      - type: object
-        properties:
-          name:
-            type: string
-            description: The name of the schedule.
-        required:
-        - name
-      - $ref: '#/components/schemas/ScheduleDetails'
-    ScheduleSessionStartResponse:
-      description: A response to a start request containing the date-time when the schedule is expected to run.
-      type: object
-      properties:
-        scheduledTime:
-          type: string
-          description: The date and time that the schedule has been scheduled to run at.
-          format: date-time
-          example: '2020-10-02T12:34:56+02:00'
-    ScheduledSessionArgumentsModel:
-      description: Contains details of start-up parameters.
-      type: object
-      properties:
-        parameters:
-          $ref: '#/components/schemas/DataRow'
-        taskSessionId:
-          type: integer
-          description: The ID of scheduled task session.
-          format: integer
-      example:
-        parameters:
-          parameter1:
-            valueType: Text
-            value: Example value
-            additionalParameters:
-            - UTF-8
-          parameter2:
-            valueType: Number
-            value: 123
-            additionalParameters: null
-          parameter3:
-            valueType: Image
-            value: isAWPOCldncNSNLnacnKNsnaNAlknKLKScnsaklcn...
-            additionalParameters:
-            - C:\Path\To\File.ext
-            - 01/01/2022 01:01:01 AM
-        taskSessionId: 3
-    ScheduleDefinitionResponseModel:
-      description: Contains the details of a Schedule.
-      type: object
-      properties:
-        id:
-          type: integer
-          description: The ID of the schedule.
-        name:
-          type: string
-          description: The name of the schedule.
-        description:
-          type: string
-          description: The description of the schedule.
-        initialTaskId:
-          type: integer
-          description: The ID of the initial task this schedule executes.
-        initialTaskName:
-          type: string
-          description: The Name of the initial task this schedule executes.
-        isRetired:
-          type: boolean
-          description: If the schedule is retired or not.
-        tasksCount:
-          type: integer
-          description: The number of tasks a schedule has.
-        intervalType:
-          type: string
-          description: The type of interval the schedule runs at.
-          enum:
-          - Once
-          - Minute
-          - Hour
-          - Day
-          - Week
-          - Month
-          - Year
-        startDate:
-          type: string
-          description: The earliest date the schedule will run.
-          format: date-time
-        endDate:
-          type:
-          - string
-          - 'null'
-          description: The last date on which the schedule will run. If this value is null or missing, the schedule will run indefinitely.
-          format: date-time
-        timeZoneId:
-          type:
-          - string
-          - 'null'
-          description: The ID of the time zone.
-        adjustForDaylightSaving:
-          type:
-          - boolean
-          - 'null'
-          description: Determines if to use daylight savings time when time one is a valid time zone ID.
-        hourlyDetails:
-          type:
-          - object
-          - 'null'
-          $ref: '#/components/schemas/HourlyMinutelyDetails'
-          description: Hourly details that apply to the hour interval schedule type.
-        minutelyDetails:
-          type:
-          - object
-          - 'null'
-          $ref: '#/components/schemas/HourlyMinutelyDetails'
-          description: Minute details that apply to the minute interval schedule type.
-        dailyDetails:
-          type:
-          - object
-          - 'null'
-          $ref: '#/components/schemas/DailyDetails'
-          description: Daily details that apply to the daily interval schedule type.
-        weeklyDetails:
-          type:
-          - object
-          - 'null'
-          $ref: '#/components/schemas/WeeklyDetails'
-          description: Weekly details that apply to the weekly interval schedule type.
-        monthlyDetails:
-          type:
-          - object
-          - 'null'
-          $ref: '#/components/schemas/MonthlyDetails'
-          description: Monthly details that apply to the monthly interval schedule type.
-        yearlyDetails:
-          type:
-          - object
-          - 'null'
-          $ref: '#/components/schemas/YearlyDetails'
-          description: Yearly details that apply to the yearly interval schedule type.
-    HourlyMinutelyDetails:
-      description: Hourly and minute details that apply to the hourly and minute interval schedule type.
-      type: object
-      properties:
-        period:
-          type: integer
-          description: The schedule frequency (minutes or hours).
-        start:
-          type: string
-          format: time
-          description: The time of day from which the given schedule is active.
-        end:
-          type: string
-          format: time
-          description: The time of day until which the given schedule is active.
-        calendarId:
-          type:
-          - integer
-          - 'null'
-          description: The ID of the calendar to use.
-    MonthlyDetails:
-      description: Monthly details that apply to the monthly interval schedule type.
+    WeeklyDetails:
+      description: Weekly details that apply to the weekly interval schedule type.
       type: object
       properties:
         period:
@@ -1599,50 +1266,15 @@ components:
           description: The schedule frequency.
         type:
           type: string
-          description: The type of monthly interval.
+          description: The type of weekly interval.
           enum:
-          - NthDay
-          - NthWeekDay
-          - NthWorkingDay
-        missingDateAction:
-          type:
-          - string
-          - 'null'
-          description: If startdate month day > 28, selects a substitute month day to execute schedule on (required when NthDay is selected).
-          enum:
-          - Skip
-          - LastSupportedDayInMonth
-          - FirstsupportedDayInNextMonth
-        weekNumber:
-          type:
-          - string
-          - 'null'
-          description: Which week number to repeat the schedule on (required when NthWeekDay is selected).
-          enum:
-          - First
-          - Second
-          - Third
-          - Fourth
-          - Fifth
-          - Last
+          - WeekDay
+          - WorkingDay
         weekDay:
           type:
           - string
           - 'null'
-          description: Which weekday to repeat the schedule on (required when NthWeekDay is selected).
-          enum:
-          - Sunday
-          - Monday
-          - Tuesday
-          - Wednesday
-          - Thursday
-          - Friday
-          - Saturday
-        workingDay:
-          type:
-          - string
-          - 'null'
-          description: Which working day the schedule will run on (required when NthWorkingDay is selected).
+          description: Which working day the schedule will run on.
           enum:
           - First
           - Last
@@ -1650,70 +1282,67 @@ components:
           type:
           - integer
           - 'null'
-          description: The ID of the calendar to use (required when NthWorkingDay is selected).
-    LessThanOrEqualToFilter:
-      description: Used to filter values. Check for values that are less than or equal to the given value.
+          description: The ID of the calendar to use.
+    GreaterThanOrEqualToFilter:
+      description: Used to filter values. Check for values that are greater than or equal to the given value.
       type: object
       properties:
-        lte:
+        gte:
           type:
           - object
           - 'null'
-          description: The value that the field should be less than or equal to.
+          description: The value that the field should be greater than or equal to.
       example:
-        lte: null
-    EqualsFilter:
-      description: Used to filter values. Check for values that are equal to the given value.
+        gte: null
+    CreateScheduledTask:
+      description: Contains details of a scheduled task.
       type: object
       properties:
-        eq:
-          type:
-          - object
-          - 'null'
-          description: The value that the field should be equal to.
-      example:
-        eq: null
-    RadioButtonsArray:
-      description: Used for the RadioButtons data type.
-      type: array
-      items:
-        type: object
-        properties:
-          name:
-            type: string
-          selected:
-            type: boolean
-    ScheduleItemsPage:
-      description: Contains details of a page of schedules.
-      type: object
-      properties:
-        pagingToken:
+        name:
           type: string
-          description: The token to be used in the next request to return the next collection of items.
-        items:
-          type: array
-          description: A collection of schedule summary.
-          items:
-            $ref: '#/components/schemas/ScheduleSummary'
+          description: The name of the scheduled task.
+        description:
+          type: string
+          description: The description of the scheduled task.
+        failFastOnError:
+          type: boolean
+          description: Determines if all errors should be regarded as a task failure.
+        delayAfterEnd:
+          type: integer
+          description: The delay after task end.
+        onSuccessTaskId:
+          type: integer
+          description: The ID for the task to commence on the success of this task.
+        onFailureTaskId:
+          type: integer
+          description: The ID for the task to commence on the failure of this task.
+    BasicStringFilter:
+      description: Used to filter strings. Check for strings that start with, equal, are greater than, are less than, or are between the given value(s).
+      type: object
+      anyOf:
+      - $ref: '#/components/schemas/RangeOrEqualFilter'
+      - $ref: '#/components/schemas/StartsWithStringFilter'
       example:
-        pagingToken: U3VwZXIgc2VjcmV0IGRhdGEuIFNoaGho
-        items:
-        - id: 123
-          name: Example schedule
-          description: A schedule for API example purposes.
-          initialTaskId: 4
-          isRetired: false
-          tasksCount: 3
-          intervalType: Hour
-          timePeriod: 2
-          startPoint: '0001-01-01T09:00:00+01:00'
-          endPoint: '0001-01-01T17:30:00+01:00'
-          dayOfWeek: Tuesday
-          dayOfMonth: First
-          startDate: '2020-10-02T00:00:00Z'
-          endDate: '2020-10-03T02:20:00Z'
-          calendarId: 1
-          calendarName: Example calendar name
+        strtw: null
+        gte: null
+        lte: null
+        eq: null
+    StartsWithStringFilter:
+      description: Used to filter strings. Check for strings that start with the given value.
+      type: object
+      properties:
+        strtw:
+          type:
+          - string
+          - 'null'
+          description: The value that the field should start with.
+      example:
+        strtw: null
+    DataRow:
+      description: A dictionary which represents a row of data from a Blue Prism collection.
+      type: object
+      additionalProperties:
+        $ref: '#/components/schemas/DataValue'
     RangeFilter:
       description: Used to filter values. Check for values that are greater than or equal to, less than or equal to, or between the given value(s).
       type: object
@@ -1723,48 +1352,40 @@ components:
       example:
         gte: null
         lte: null
-    ScheduleLogDeprecatedSummary:
-      description: Contains basic details about a schedule log.
+    ScheduledTask:
+      description: Contains details of a scheduled task.
       type: object
       properties:
-        scheduleLogId:
+        id:
           type: integer
-          description: The ID of the schedule log.
-        startTime:
+          description: The ID of the scheduled task.
+        name:
           type: string
-          format: date-time
-          description: The start time of the schedule.
-        endTime:
+          description: The name of the scheduled task.
+        description:
           type: string
-          format: date-time
-          description: The end time of the schedule.
-        status:
-          type: string
-          description: The current status of the schedule.
-          enum:
-          - pending
-          - running
-          - terminated
-          - completed
-          - partExceptioned
-        serverName:
-          type: string
-          description: The name of the application server this schedule instance ran on.
-        scheduleId:
+          description: The description of the scheduled task.
+        failFastOnError:
+          type: boolean
+          description: Determines if all errors should be regarded as a task failure.
+        delayAfterEnd:
           type: integer
-          description: The ID of the schedule.
-        scheduleName:
+          description: The delay after task end.
+        onSuccessTaskId:
+          type: integer
+          description: The ID for the task to commence on the success of this task.
+        onSuccessTaskName:
           type: string
-          description: The name of the schedule.
-    ScheduleDetailsOptionalName:
-      description: Contains the details of a schedule.
-      allOf:
-      - type: object
-        properties:
-          name:
-            type: string
-            description: The name of the schedule.
-      - $ref: '#/components/schemas/ScheduleDetails'
+          description: The name of the task to commence on the success of this task.
+        onFailureTaskId:
+          type: integer
+          description: The ID for the task to commence on the failure of this task.
+        onFailureTaskName:
+          type: string
+          description: The name of the task to commence on the failure of this task.
+        sessionsCount:
+          type: integer
+          description: The number of scheduled sessions a task has.
     ScheduleSummary:
       description: Contains basic details of a session.
       type: object
@@ -1868,6 +1489,358 @@ components:
         endDate: '2020-10-03T02:20:00Z'
         calendarId: 1
         calendarName: Example calendar name
+    ScheduleSessionStartResponse:
+      description: A response to a start request containing the date-time when the schedule is expected to run.
+      type: object
+      properties:
+        scheduledTime:
+          type: string
+          description: The date and time that the schedule has been scheduled to run at.
+          format: date-time
+          example: '2020-10-02T12:34:56+02:00'
+    CreateScheduleDefinitionResponseModel:
+      description: Contains the ID of a schedule.
+      type: object
+      properties:
+        id:
+          type: integer
+          description: The ID of the schedule.
+    RangeOrEqualFilter:
+      description: Used to filter values. Check for values that are equal to, greater than or equal to, less than or equal to, or between the given value(s).
+      type: object
+      oneOf:
+      - $ref: '#/components/schemas/RangeFilter'
+      - $ref: '#/components/schemas/EqualsFilter'
+      example:
+        gte: null
+        lte: null
+        eq: null
+    ScheduledSessionParameters:
+      description: Contains parameters of a scheduled session.
+      type: object
+      properties:
+        processId:
+          type: string
+          format: uuid
+          description: The ID of the process.
+        resourceId:
+          type: string
+          format: uuid
+          description: The ID of the resource.
+    ScheduleItemsPage:
+      description: Contains details of a page of schedules.
+      type: object
+      properties:
+        pagingToken:
+          type: string
+          description: The token to be used in the next request to return the next collection of items.
+        items:
+          type: array
+          description: A collection of schedule summary.
+          items:
+            $ref: '#/components/schemas/ScheduleSummary'
+      example:
+        pagingToken: U3VwZXIgc2VjcmV0IGRhdGEuIFNoaGho
+        items:
+        - id: 123
+          name: Example schedule
+          description: A schedule for API example purposes.
+          initialTaskId: 4
+          isRetired: false
+          tasksCount: 3
+          intervalType: Hour
+          timePeriod: 2
+          startPoint: '0001-01-01T09:00:00+01:00'
+          endPoint: '0001-01-01T17:30:00+01:00'
+          dayOfWeek: Tuesday
+          dayOfMonth: First
+          startDate: '2020-10-02T00:00:00Z'
+          endDate: '2020-10-03T02:20:00Z'
+          calendarId: 1
+          calendarName: Example calendar name
+    ScheduleDefinitionResponseModel:
+      description: Contains the details of a Schedule.
+      type: object
+      properties:
+        id:
+          type: integer
+          description: The ID of the schedule.
+        name:
+          type: string
+          description: The name of the schedule.
+        description:
+          type: string
+          description: The description of the schedule.
+        initialTaskId:
+          type: integer
+          description: The ID of the initial task this schedule executes.
+        initialTaskName:
+          type: string
+          description: The Name of the initial task this schedule executes.
+        isRetired:
+          type: boolean
+          description: If the schedule is retired or not.
+        tasksCount:
+          type: integer
+          description: The number of tasks a schedule has.
+        intervalType:
+          type: string
+          description: The type of interval the schedule runs at.
+          enum:
+          - Once
+          - Minute
+          - Hour
+          - Day
+          - Week
+          - Month
+          - Year
+        startDate:
+          type: string
+          description: The earliest date the schedule will run.
+          format: date-time
+        endDate:
+          type:
+          - string
+          - 'null'
+          description: The last date on which the schedule will run. If this value is null or missing, the schedule will run indefinitely.
+          format: date-time
+        timeZoneId:
+          type:
+          - string
+          - 'null'
+          description: The ID of the time zone.
+        adjustForDaylightSaving:
+          type:
+          - boolean
+          - 'null'
+          description: Determines if to use daylight savings time when time one is a valid time zone ID.
+        hourlyDetails:
+          type:
+          - object
+          - 'null'
+          $ref: '#/components/schemas/HourlyMinutelyDetails'
+          description: Hourly details that apply to the hour interval schedule type.
+        minutelyDetails:
+          type:
+          - object
+          - 'null'
+          $ref: '#/components/schemas/HourlyMinutelyDetails'
+          description: Minute details that apply to the minute interval schedule type.
+        dailyDetails:
+          type:
+          - object
+          - 'null'
+          $ref: '#/components/schemas/DailyDetails'
+          description: Daily details that apply to the daily interval schedule type.
+        weeklyDetails:
+          type:
+          - object
+          - 'null'
+          $ref: '#/components/schemas/WeeklyDetails'
+          description: Weekly details that apply to the weekly interval schedule type.
+        monthlyDetails:
+          type:
+          - object
+          - 'null'
+          $ref: '#/components/schemas/MonthlyDetails'
+          description: Monthly details that apply to the monthly interval schedule type.
+        yearlyDetails:
+          type:
+          - object
+          - 'null'
+          $ref: '#/components/schemas/YearlyDetails'
+          description: Yearly details that apply to the yearly interval schedule type.
+    UrlParameterError:
+      description: An error occurred due to incorrect data supplied to url parameter.
+      type: object
+      properties:
+        message:
+          type: string
+          description: A message about the error.
+        messageDetail:
+          type: string
+          description: A detailed description about the error.
+    MonthlyDetails:
+      description: Monthly details that apply to the monthly interval schedule type.
+      type: object
+      properties:
+        period:
+          type: integer
+          description: The schedule frequency.
+        type:
+          type: string
+          description: The type of monthly interval.
+          enum:
+          - NthDay
+          - NthWeekDay
+          - NthWorkingDay
+        missingDateAction:
+          type:
+          - string
+          - 'null'
+          description: If startdate month day > 28, selects a substitute month day to execute schedule on (required when NthDay is selected).
+          enum:
+          - Skip
+          - LastSupportedDayInMonth
+          - FirstsupportedDayInNextMonth
+        weekNumber:
+          type:
+          - string
+          - 'null'
+          description: Which week number to repeat the schedule on (required when NthWeekDay is selected).
+          enum:
+          - First
+          - Second
+          - Third
+          - Fourth
+          - Fifth
+          - Last
+        weekDay:
+          type:
+          - string
+          - 'null'
+          description: Which weekday to repeat the schedule on (required when NthWeekDay is selected).
+          enum:
+          - Sunday
+          - Monday
+          - Tuesday
+          - Wednesday
+          - Thursday
+          - Friday
+          - Saturday
+        workingDay:
+          type:
+          - string
+          - 'null'
+          description: Which working day the schedule will run on (required when NthWorkingDay is selected).
+          enum:
+          - First
+          - Last
+        calendarId:
+          type:
+          - integer
+          - 'null'
+          description: The ID of the calendar to use (required when NthWorkingDay is selected).
+    LessThanOrEqualToFilter:
+      description: Used to filter values. Check for values that are less than or equal to the given value.
+      type: object
+      properties:
+        lte:
+          type:
+          - object
+          - 'null'
+          description: The value that the field should be less than or equal to.
+      example:
+        lte: null
+    ScheduleSessionStart:
+      description: A request to start a schedule at startTime.
+      type: object
+      properties:
+        startTime:
+          type: string
+          description: The date and time that the schedule should be run at.
+          format: date-time
+          example: '2020-10-02T12:34:56+02:00'
+    ScheduledSessionArgumentsModel:
+      description: Contains details of start-up parameters.
+      type: object
+      properties:
+        parameters:
+          $ref: '#/components/schemas/DataRow'
+        taskSessionId:
+          type: integer
+          description: The ID of scheduled task session.
+          format: integer
+      example:
+        parameters:
+          parameter1:
+            valueType: Text
+            value: Example value
+            additionalParameters:
+            - UTF-8
+          parameter2:
+            valueType: Number
+            value: 123
+            additionalParameters: null
+          parameter3:
+            valueType: Image
+            value: isAWPOCldncNSNLnacnKNsnaNAlknKLKScnsaklcn...
+            additionalParameters:
+            - C:\Path\To\File.ext
+            - 01/01/2022 01:01:01 AM
+        taskSessionId: 3
+    DataCollection:
+      description: Represents a Blue Prism collection.
+      type: object
+      properties:
+        rows:
+          description: A collection of rows representing the data contained within the collection.
+          type: array
+          items:
+            $ref: '#/components/schemas/DataRow'
+    ValidationError:
+      description: An error occurred during validation. See the response body for details on the invalid field.
+      type: object
+      properties:
+        invalidField:
+          type: string
+          description: The field which is invalid.
+        message:
+          type: string
+          description: A description of the error found with the field.
+    HourlyMinutelyDetails:
+      description: Hourly and minute details that apply to the hourly and minute interval schedule type.
+      type: object
+      properties:
+        period:
+          type: integer
+          description: The schedule frequency (minutes or hours).
+        start:
+          type: string
+          format: time
+          description: The time of day from which the given schedule is active.
+        end:
+          type: string
+          format: time
+          description: The time of day until which the given schedule is active.
+        calendarId:
+          type:
+          - integer
+          - 'null'
+          description: The ID of the calendar to use.
+    ScheduleLogDeprecatedSummary:
+      description: Contains basic details about a schedule log.
+      type: object
+      properties:
+        scheduleLogId:
+          type: integer
+          description: The ID of the schedule log.
+        startTime:
+          type: string
+          format: date-time
+          description: The start time of the schedule.
+        endTime:
+          type: string
+          format: date-time
+          description: The end time of the schedule.
+        status:
+          type: string
+          description: The current status of the schedule.
+          enum:
+          - pending
+          - running
+          - terminated
+          - completed
+          - partExceptioned
+        serverName:
+          type: string
+          description: The name of the application server this schedule instance ran on.
+        scheduleId:
+          type: integer
+          description: The ID of the schedule.
+        scheduleName:
+          type: string
+          description: The name of the schedule.
     DailyDetails:
       description: Daily details that apply to the daily interval schedule type.
       type: object
@@ -1880,58 +1853,69 @@ components:
           - integer
           - 'null'
           description: The ID of the calendar to use.
+    ErrorMessage:
+      description: A message describing the problem encountered.
+      type: string
+    RadioButtonsArray:
+      description: Used for the RadioButtons data type.
+      type: array
+      items:
+        type: object
+        properties:
+          name:
+            type: string
+          selected:
+            type: boolean
+    ScheduleDetailsOptionalName:
+      description: Contains the details of a schedule.
+      allOf:
+      - type: object
+        properties:
+          name:
+            type: string
+            description: The name of the schedule.
+      - $ref: '#/components/schemas/ScheduleDetails'
+    YearlyDetails:
+      description: Yearly details that apply to the yearly interval schedule type.
+      type: object
+      properties:
+        period:
+          type: integer
+          description: The schedule frequency.
   examples:
-    StringGreaterThanExample:
-      value:
-        gte: Example
-      summary: Search for a value alphanumerically after or equal to "Example".
-    DateTimeEqualsExample:
-      value:
-        eq: '2020-10-02T12:34:56+01:00'
-      summary: Search for a value equal to 2020-10-02 at 12:34:56 (GMT+1).
-    StringStartsWithExample:
-      value:
-        strtw: Exa
-      summary: Search a value starting with "Exa".
-    DateTimeRangeExample:
-      value:
-        gte: '2020-10-02T12:34:56+01:00'
-        lte: '2020-11-02T12:34:56+01:00'
-      summary: Search for a value between 2020-10-02 at 12:34:56 (GMT+1) and 2020-11-02 at 12:34:56 (GMT+1) (inclusive).
     StringEqualsExample:
       value:
         eq: Example
       summary: Search for a value equal to "Example".
+    StringStartsWithExample:
+      value:
+        strtw: Exa
+      summary: Search a value starting with "Exa".
     DateTimeGreaterThanExample:
       value:
         gte: '2020-10-02T12:34:56+01:00'
       summary: Search for a value after or equal to 2020-10-02 at 12:34:56 (GMT+1).
+    StringGreaterThanExample:
+      value:
+        gte: Example
+      summary: Search for a value alphanumerically after or equal to "Example".
     StringRangeExample:
       value:
         gte: Ex
         lte: F
       summary: Search for a value alphanumerically between "Ex" and "F".
+    DateTimeRangeExample:
+      value:
+        gte: '2020-10-02T12:34:56+01:00'
+        lte: '2020-11-02T12:34:56+01:00'
+      summary: Search for a value between 2020-10-02 at 12:34:56 (GMT+1) and 2020-11-02 at 12:34:56 (GMT+1) (inclusive).
+    DateTimeEqualsExample:
+      value:
+        eq: '2020-10-02T12:34:56+01:00'
+      summary: Search for a value equal to 2020-10-02 at 12:34:56 (GMT+1).
   responses:
-    Conflict:
-      description: The request conflicts with the current state of the resource.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/ErrorMessage'
-    NotAuthorized:
-      description: The authentication token was either missing or invalid and must be refreshed.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/ErrorMessage'
     BadRequestErrorMessage:
       description: The request is malformed or contains incorrect information. See the response for more details.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/ErrorMessage'
-    Forbidden:
-      description: The authentication token does not give sufficient permissions to perform this action.
       content:
         application/json:
           schema:
@@ -1944,8 +1928,26 @@ components:
             oneOf:
             - $ref: '#/components/schemas/UrlParameterError'
             - $ref: '#/components/schemas/ValidationError'
+    Conflict:
+      description: The request conflicts with the current state of the resource.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorMessage'
+    NotAuthorized:
+      description: The authentication token was either missing or invalid and must be refreshed.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorMessage'
     NotFound:
       description: The requested resource could not be found.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorMessage'
+    Forbidden:
+      description: The authentication token does not give sufficient permissions to perform this action.
       content:
         application/json:
           schema:

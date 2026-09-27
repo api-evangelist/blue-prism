@@ -51,6 +51,24 @@ paths:
           $ref: '#/components/responses/NotFound'
 components:
   schemas:
+    ValidationError:
+      description: An error occurred during validation. See the response body for details on the invalid field.
+      type: object
+      properties:
+        invalidField:
+          type: string
+          description: The field which is invalid.
+        message:
+          type: string
+          description: A description of the error found with the field.
+    PatchRequest:
+      description: A request containing a JSON Patch document. See PatchDocument for details.
+      type: array
+      items:
+        $ref: '#/components/schemas/PatchDocument'
+    ErrorMessage:
+      description: A message describing the problem encountered.
+      type: string
     PatchDocument:
       description: A JSONPatch document as defined by RFC 6902. See http://jsonpatch.com/
       required:
@@ -75,11 +93,6 @@ components:
         from:
           type: string
           description: A string containing a JSON Pointer value.
-    PatchRequest:
-      description: A request containing a JSON Patch document. See PatchDocument for details.
-      type: array
-      items:
-        $ref: '#/components/schemas/PatchDocument'
     UrlParameterError:
       description: An error occurred due to incorrect data supplied to url parameter.
       type: object
@@ -90,20 +103,13 @@ components:
         messageDetail:
           type: string
           description: A detailed description about the error.
-    ValidationError:
-      description: An error occurred during validation. See the response body for details on the invalid field.
-      type: object
-      properties:
-        invalidField:
-          type: string
-          description: The field which is invalid.
-        message:
-          type: string
-          description: A description of the error found with the field.
-    ErrorMessage:
-      description: A message describing the problem encountered.
-      type: string
   responses:
+    NotAuthorized:
+      description: The authentication token was either missing or invalid and must be refreshed.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorMessage'
     BadRequest:
       description: The request is malformed or contains incorrect information. See the response for more details.
       content:
@@ -120,12 +126,6 @@ components:
             $ref: '#/components/schemas/ErrorMessage'
     Forbidden:
       description: The authentication token does not give sufficient permissions to perform this action.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/ErrorMessage'
-    NotAuthorized:
-      description: The authentication token was either missing or invalid and must be refreshed.
       content:
         application/json:
           schema:

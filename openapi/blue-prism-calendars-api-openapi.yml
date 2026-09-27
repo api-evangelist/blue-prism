@@ -524,127 +524,85 @@ paths:
         '404':
           $ref: '#/components/responses/NotFound'
 components:
-  schemas:
-    CloneCalendarModel:
-      description: Contains details for cloning a calendar with a new name.
-      type: object
-      properties:
-        name:
-          type: string
-          description: The name of the calendar to create.
-          minLength: 1
-          maxLength: 128
-    PatchDocument:
-      description: A JSONPatch document as defined by RFC 6902. See http://jsonpatch.com/
-      required:
-      - op
-      - path
-      properties:
-        op:
-          type: string
-          description: The operation to be performed.
-          enum:
-          - add
-          - remove
-          - replace
-          - move
-          - copy
-        path:
-          type: string
-          description: A JSON-Pointer.
+  examples:
+    StringEqualsExample:
+      value:
+        eq: Example
+      summary: Search for a value equal to "Example".
+    IntegerEqualsExample:
+      value:
+        eq: 123
+      summary: Search for a value equal to 123.
+    PatchReplaceExample:
+      summary: Replace the value in a property.
+      value:
+      - op: replace
+        path: /property
+        value: propertyValue
+    PatchCopyExample:
+      summary: Copy a value from one property to another.
+      value:
+      - op: copy
+        from: /sourceProperty
+        path: /destinationProperty
+    StringStartsWithExample:
+      value:
+        strtw: Exa
+      summary: Search a value starting with "Exa".
+    IntegerRangeExample:
+      value:
+        gte: 123
+        lte: 321
+      summary: Search for a value between 123 and 321 inclusive.
+    IntegerLessThanExample:
+      value:
+        lte: 123
+      summary: Search for a value less than or equal to 123.
+    PatchAddToObjectExample:
+      summary: Add new property values to an object.
+      value:
+      - op: add
+        path: /property
+        value: propertyValue
+    StringGreaterThanExample:
+      value:
+        gte: Example
+      summary: Search for a value alphanumerically after or equal to "Example".
+    StringRangeExample:
+      value:
+        gte: Ex
+        lte: F
+      summary: Search for a value alphanumerically between "Ex" and "F".
+    PatchAddToArrayExample:
+      summary: Add values to a collection.
+      value:
+      - op: add
+        path: /someArrayProperty
         value:
-          type: object
-          description: The value to be used within the operations..
-        from:
-          type: string
-          description: A string containing a JSON Pointer value.
-    PatchRequest:
-      description: A request containing a JSON Patch document. See PatchDocument for details.
-      type: array
-      items:
-        $ref: '#/components/schemas/PatchDocument'
-    OtherHolydaysModel:
-      description: Contains details for other holidays.
+        - item1
+        - item2
+    PatchRemoveExample:
+      summary: Remove a property value.
+      value:
+      - op: remove
+        path: /propertyToDeleteValueFrom
+    PatchMoveExample:
+      summary: Move a value from one property to another.
+      value:
+      - op: move
+        from: /sourceProperty
+        path: /destinationProperty
+  schemas:
+    EqualsFilter:
+      description: Used to filter values. Check for values that are equal to the given value.
       type: object
       properties:
-        holidays:
-          type: array
-          description: An array of other holidays.
-          items:
-            type: string
-            format: date
-    UrlParameterError:
-      description: An error occurred due to incorrect data supplied to url parameter.
-      type: object
-      properties:
-        message:
-          type: string
-          description: A message about the error.
-        messageDetail:
-          type: string
-          description: A detailed description about the error.
-    Region:
-      description: A model of region.
-      type: object
-      properties:
-        regionId:
-          type: integer
-          description: The ID of the region.
-        disabledPublicHolidaysIds:
-          type: array
-          description: An array of IDs of the disabled public holidays.
-          items:
-            type: integer
-            description: The ID of disabled public holidays.
+        eq:
+          type:
+          - object
+          - 'null'
+          description: The value that the field should be equal to.
       example:
-        regionId: 1
-        disabledPublicHolidaysIds:
-        - 1
-        - 2
-    HolidayRegion:
-      description: A model of holiday region.
-      type: object
-      properties:
-        id:
-          type: integer
-          description: The ID of the holiday region.
-        name:
-          type: string
-          description: The name of the region.
-      example:
-        id: 1
-        name: England and Wales
-    ReferencesItemsPage:
-      description: Contains references of a specified object.
-      type: object
-      properties:
-        pagingToken:
-          $ref: '#/components/schemas/PagingToken'
-        items:
-          type: array
-          description: A collection of references.
-          items:
-            $ref: '#/components/schemas/Reference'
-    BasicStringFilter:
-      description: Used to filter strings. Check for strings that start with, equal, are greater than, are less than, or are between the given value(s).
-      type: object
-      anyOf:
-      - $ref: '#/components/schemas/RangeOrEqualFilter'
-      - $ref: '#/components/schemas/StartsWithStringFilter'
-      example:
-        strtw: null
-        gte: null
-        lte: null
-        eq: null
-    RangeOrEqualFilter:
-      description: Used to filter values. Check for values that are equal to, greater than or equal to, less than or equal to, or between the given value(s).
-      type: object
-      oneOf:
-      - $ref: '#/components/schemas/RangeFilter'
-      - $ref: '#/components/schemas/EqualsFilter'
-      example:
-        gte: null
-        lte: null
         eq: null
     GreaterThanOrEqualToFilter:
       description: Used to filter values. Check for values that are greater than or equal to the given value.
@@ -657,6 +615,37 @@ components:
           description: The value that the field should be greater than or equal to.
       example:
         gte: null
+    CloneCalendarModel:
+      description: Contains details for cloning a calendar with a new name.
+      type: object
+      properties:
+        name:
+          type: string
+          description: The name of the calendar to create.
+          minLength: 1
+          maxLength: 128
+    BasicStringFilter:
+      description: Used to filter strings. Check for strings that start with, equal, are greater than, are less than, or are between the given value(s).
+      type: object
+      anyOf:
+      - $ref: '#/components/schemas/RangeOrEqualFilter'
+      - $ref: '#/components/schemas/StartsWithStringFilter'
+      example:
+        strtw: null
+        gte: null
+        lte: null
+        eq: null
+    StartsWithStringFilter:
+      description: Used to filter strings. Check for strings that start with the given value.
+      type: object
+      properties:
+        strtw:
+          type:
+          - string
+          - 'null'
+          description: The value that the field should start with.
+      example:
+        strtw: null
     HolidayByRegionId:
       description: A model of holiday by region id.
       type: object
@@ -674,122 +663,17 @@ components:
         publicHolidayId: 33
         name: Coming of Age Day
         nextDate: 10/01/2023
-    StartsWithStringFilter:
-      description: Used to filter strings. Check for strings that start with the given value.
+    ReferencesItemsPage:
+      description: Contains references of a specified object.
       type: object
       properties:
-        strtw:
-          type:
-          - string
-          - 'null'
-          description: The value that the field should start with.
-      example:
-        strtw: null
-    ValidationError:
-      description: An error occurred during validation. See the response body for details on the invalid field.
-      type: object
-      properties:
-        invalidField:
-          type: string
-          description: The field which is invalid.
-        message:
-          type: string
-          description: A description of the error found with the field.
-    ErrorMessage:
-      description: A message describing the problem encountered.
-      type: string
-    PagingToken:
-      type: string
-      description: The token to be used in the next request to return the next collection of items.
-      example: U3VwZXIgc2VjcmV0IGRhdGEuIFNoaGho
-    Calendar:
-      description: A model of calendar.
-      type: object
-      properties:
-        id:
-          type: integer
-          description: The ID of the calendar.
-        name:
-          type: string
-          description: The name of the calendar.
-        workingWeek:
+        pagingToken:
+          $ref: '#/components/schemas/PagingToken'
+        items:
           type: array
-          description: An array of days in the working work.
+          description: A collection of references.
           items:
-            type: string
-        region:
-          $ref: '#/components/schemas/Region'
-      example:
-        id: 1
-        name: Working Week / No Holidays
-        workingWeek:
-        - Monday
-        - Tuesday
-        region:
-          regionId: 1
-          disabledPublicHolidaysIds:
-          - 1
-          - 2
-    Reference:
-      description: Contains details of referenced item.
-      type: object
-      properties:
-        id:
-          type: string
-          format: uuid
-          description: The ID of the process/object.
-        name:
-          type: string
-          description: The name of the process/object.
-          minLength: 1
-        description:
-          type: string
-          description: The description of process/object.
-        type:
-          type: string
-          enum:
-          - Process
-          - Object
-          - Unset
-          description: The type of process/object
-    LessThanOrEqualToFilter:
-      description: Used to filter values. Check for values that are less than or equal to the given value.
-      type: object
-      properties:
-        lte:
-          type:
-          - object
-          - 'null'
-          description: The value that the field should be less than or equal to.
-      example:
-        lte: null
-    EqualsFilter:
-      description: Used to filter values. Check for values that are equal to the given value.
-      type: object
-      properties:
-        eq:
-          type:
-          - object
-          - 'null'
-          description: The value that the field should be equal to.
-      example:
-        eq: null
-    CreateCalendarResponseModel:
-      description: Contains the ID of a calendar.
-      type: object
-      properties:
-        id:
-          type: integer
-          description: The ID of the calendar.
-    RangeFilter:
-      description: Used to filter values. Check for values that are greater than or equal to, less than or equal to, or between the given value(s).
-      type: object
-      anyOf:
-      - $ref: '#/components/schemas/GreaterThanOrEqualToFilter'
-      - $ref: '#/components/schemas/LessThanOrEqualToFilter'
-      example:
-        gte: null
-        lte: null
+            $ref: '#/components/schemas/Reference'
     CreateCalendarModel:
       description: Contains details for creating a new calendar.
       type: object
@@ -826,83 +710,207 @@ components:
               description: An array of disabled public holidays Ids. Each holidays can be added only 1 time.
               items:
                 type: integer
-  examples:
-    StringGreaterThanExample:
-      value:
-        gte: Example
-      summary: Search for a value alphanumerically after or equal to "Example".
-    PatchReplaceExample:
-      summary: Replace the value in a property.
-      value:
-      - op: replace
-        path: /property
-        value: propertyValue
-    IntegerLessThanExample:
-      value:
-        lte: 123
-      summary: Search for a value less than or equal to 123.
-    IntegerRangeExample:
-      value:
-        gte: 123
-        lte: 321
-      summary: Search for a value between 123 and 321 inclusive.
-    StringStartsWithExample:
-      value:
-        strtw: Exa
-      summary: Search a value starting with "Exa".
-    IntegerEqualsExample:
-      value:
-        eq: 123
-      summary: Search for a value equal to 123.
-    StringEqualsExample:
-      value:
-        eq: Example
-      summary: Search for a value equal to "Example".
-    PatchCopyExample:
-      summary: Copy a value from one property to another.
-      value:
-      - op: copy
-        from: /sourceProperty
-        path: /destinationProperty
-    PatchAddToObjectExample:
-      summary: Add new property values to an object.
-      value:
-      - op: add
-        path: /property
-        value: propertyValue
-    PatchRemoveExample:
-      summary: Remove a property value.
-      value:
-      - op: remove
-        path: /propertyToDeleteValueFrom
-    PatchAddToArrayExample:
-      summary: Add values to a collection.
-      value:
-      - op: add
-        path: /someArrayProperty
+    RangeFilter:
+      description: Used to filter values. Check for values that are greater than or equal to, less than or equal to, or between the given value(s).
+      type: object
+      anyOf:
+      - $ref: '#/components/schemas/GreaterThanOrEqualToFilter'
+      - $ref: '#/components/schemas/LessThanOrEqualToFilter'
+      example:
+        gte: null
+        lte: null
+    Region:
+      description: A model of region.
+      type: object
+      properties:
+        regionId:
+          type: integer
+          description: The ID of the region.
+        disabledPublicHolidaysIds:
+          type: array
+          description: An array of IDs of the disabled public holidays.
+          items:
+            type: integer
+            description: The ID of disabled public holidays.
+      example:
+        regionId: 1
+        disabledPublicHolidaysIds:
+        - 1
+        - 2
+    RangeOrEqualFilter:
+      description: Used to filter values. Check for values that are equal to, greater than or equal to, less than or equal to, or between the given value(s).
+      type: object
+      oneOf:
+      - $ref: '#/components/schemas/RangeFilter'
+      - $ref: '#/components/schemas/EqualsFilter'
+      example:
+        gte: null
+        lte: null
+        eq: null
+    UrlParameterError:
+      description: An error occurred due to incorrect data supplied to url parameter.
+      type: object
+      properties:
+        message:
+          type: string
+          description: A message about the error.
+        messageDetail:
+          type: string
+          description: A detailed description about the error.
+    LessThanOrEqualToFilter:
+      description: Used to filter values. Check for values that are less than or equal to the given value.
+      type: object
+      properties:
+        lte:
+          type:
+          - object
+          - 'null'
+          description: The value that the field should be less than or equal to.
+      example:
+        lte: null
+    HolidayRegion:
+      description: A model of holiday region.
+      type: object
+      properties:
+        id:
+          type: integer
+          description: The ID of the holiday region.
+        name:
+          type: string
+          description: The name of the region.
+      example:
+        id: 1
+        name: England and Wales
+    ValidationError:
+      description: An error occurred during validation. See the response body for details on the invalid field.
+      type: object
+      properties:
+        invalidField:
+          type: string
+          description: The field which is invalid.
+        message:
+          type: string
+          description: A description of the error found with the field.
+    PatchRequest:
+      description: A request containing a JSON Patch document. See PatchDocument for details.
+      type: array
+      items:
+        $ref: '#/components/schemas/PatchDocument'
+    ErrorMessage:
+      description: A message describing the problem encountered.
+      type: string
+    PatchDocument:
+      description: A JSONPatch document as defined by RFC 6902. See http://jsonpatch.com/
+      required:
+      - op
+      - path
+      properties:
+        op:
+          type: string
+          description: The operation to be performed.
+          enum:
+          - add
+          - remove
+          - replace
+          - move
+          - copy
+        path:
+          type: string
+          description: A JSON-Pointer.
         value:
-        - item1
-        - item2
-    StringRangeExample:
-      value:
-        gte: Ex
-        lte: F
-      summary: Search for a value alphanumerically between "Ex" and "F".
-    PatchMoveExample:
-      summary: Move a value from one property to another.
-      value:
-      - op: move
-        from: /sourceProperty
-        path: /destinationProperty
+          type: object
+          description: The value to be used within the operations..
+        from:
+          type: string
+          description: A string containing a JSON Pointer value.
+    Reference:
+      description: Contains details of referenced item.
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          description: The ID of the process/object.
+        name:
+          type: string
+          description: The name of the process/object.
+          minLength: 1
+        description:
+          type: string
+          description: The description of process/object.
+        type:
+          type: string
+          enum:
+          - Process
+          - Object
+          - Unset
+          description: The type of process/object
+    Calendar:
+      description: A model of calendar.
+      type: object
+      properties:
+        id:
+          type: integer
+          description: The ID of the calendar.
+        name:
+          type: string
+          description: The name of the calendar.
+        workingWeek:
+          type: array
+          description: An array of days in the working work.
+          items:
+            type: string
+        region:
+          $ref: '#/components/schemas/Region'
+      example:
+        id: 1
+        name: Working Week / No Holidays
+        workingWeek:
+        - Monday
+        - Tuesday
+        region:
+          regionId: 1
+          disabledPublicHolidaysIds:
+          - 1
+          - 2
+    PagingToken:
+      type: string
+      description: The token to be used in the next request to return the next collection of items.
+      example: U3VwZXIgc2VjcmV0IGRhdGEuIFNoaGho
+    OtherHolydaysModel:
+      description: Contains details for other holidays.
+      type: object
+      properties:
+        holidays:
+          type: array
+          description: An array of other holidays.
+          items:
+            type: string
+            format: date
+    CreateCalendarResponseModel:
+      description: Contains the ID of a calendar.
+      type: object
+      properties:
+        id:
+          type: integer
+          description: The ID of the calendar.
   responses:
-    Conflict:
-      description: The request conflicts with the current state of the resource.
+    BadRequest:
+      description: The request is malformed or contains incorrect information. See the response for more details.
+      content:
+        application/json:
+          schema:
+            oneOf:
+            - $ref: '#/components/schemas/UrlParameterError'
+            - $ref: '#/components/schemas/ValidationError'
+    NotAuthorized:
+      description: The authentication token was either missing or invalid and must be refreshed.
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/ErrorMessage'
-    NotAuthorized:
-      description: The authentication token was either missing or invalid and must be refreshed.
+    NotFound:
+      description: The requested resource could not be found.
       content:
         application/json:
           schema:
@@ -913,16 +921,8 @@ components:
         application/json:
           schema:
             $ref: '#/components/schemas/ErrorMessage'
-    BadRequest:
-      description: The request is malformed or contains incorrect information. See the response for more details.
-      content:
-        application/json:
-          schema:
-            oneOf:
-            - $ref: '#/components/schemas/UrlParameterError'
-            - $ref: '#/components/schemas/ValidationError'
-    NotFound:
-      description: The requested resource could not be found.
+    Conflict:
+      description: The request conflicts with the current state of the resource.
       content:
         application/json:
           schema:

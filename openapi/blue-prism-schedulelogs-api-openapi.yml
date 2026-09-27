@@ -288,60 +288,126 @@ paths:
           $ref: '#/components/responses/NotFound'
 components:
   examples:
+    StringEqualsExample:
+      value:
+        eq: Example
+      summary: Search for a value equal to "Example".
     TimeEqualsExample:
       value:
         eq: '12:34:56'
       summary: Search for a value equal to 12:34:56.
-    StringGreaterThanExample:
+    TimeLessThanExample:
       value:
-        gte: Example
-      summary: Search for a value alphanumerically after or equal to "Example".
+        lte: '12:34:56'
+      summary: Search for a value less than or equal to 12:34:56
+    StringStartsWithExample:
+      value:
+        strtw: Exa
+      summary: Search a value starting with "Exa".
     TimeRangeExample:
       value:
         gte: 01:23:45
         lte: '12:34:56'
       summary: Search for a value between 01:23:45 and 12:34:56 (inclusive)
-    DateTimeEqualsExample:
-      value:
-        eq: '2020-10-02T12:34:56+01:00'
-      summary: Search for a value equal to 2020-10-02 at 12:34:56 (GMT+1).
-    StringStartsWithExample:
-      value:
-        strtw: Exa
-      summary: Search a value starting with "Exa".
-    TimeLessThanExample:
-      value:
-        lte: '12:34:56'
-      summary: Search for a value less than or equal to 12:34:56
-    DateTimeRangeExample:
-      value:
-        gte: '2020-10-02T12:34:56+01:00'
-        lte: '2020-11-02T12:34:56+01:00'
-      summary: Search for a value between 2020-10-02 at 12:34:56 (GMT+1) and 2020-11-02 at 12:34:56 (GMT+1) (inclusive).
-    StringEqualsExample:
-      value:
-        eq: Example
-      summary: Search for a value equal to "Example".
     DateTimeGreaterThanExample:
       value:
         gte: '2020-10-02T12:34:56+01:00'
       summary: Search for a value after or equal to 2020-10-02 at 12:34:56 (GMT+1).
+    StringGreaterThanExample:
+      value:
+        gte: Example
+      summary: Search for a value alphanumerically after or equal to "Example".
     StringRangeExample:
       value:
         gte: Ex
         lte: F
       summary: Search for a value alphanumerically between "Ex" and "F".
+    DateTimeRangeExample:
+      value:
+        gte: '2020-10-02T12:34:56+01:00'
+        lte: '2020-11-02T12:34:56+01:00'
+      summary: Search for a value between 2020-10-02 at 12:34:56 (GMT+1) and 2020-11-02 at 12:34:56 (GMT+1) (inclusive).
+    DateTimeEqualsExample:
+      value:
+        eq: '2020-10-02T12:34:56+01:00'
+      summary: Search for a value equal to 2020-10-02 at 12:34:56 (GMT+1).
   schemas:
-    UrlParameterError:
-      description: An error occurred due to incorrect data supplied to url parameter.
+    EqualsFilter:
+      description: Used to filter values. Check for values that are equal to the given value.
       type: object
       properties:
-        message:
+        eq:
+          type:
+          - object
+          - 'null'
+          description: The value that the field should be equal to.
+      example:
+        eq: null
+    GreaterThanOrEqualToFilter:
+      description: Used to filter values. Check for values that are greater than or equal to the given value.
+      type: object
+      properties:
+        gte:
+          type:
+          - object
+          - 'null'
+          description: The value that the field should be greater than or equal to.
+      example:
+        gte: null
+    ScheduleLogItemsPage:
+      description: Contains details of a page of schedule logs.
+      type: object
+      properties:
+        pagingToken:
           type: string
-          description: A message about the error.
-        messageDetail:
-          type: string
-          description: A detailed description about the error.
+          description: The token to be used in the next request to return the next collection of items.
+        items:
+          type: array
+          description: A collection of schedule log summary
+          items:
+            $ref: '#/components/schemas/ScheduleLogSummary'
+      example:
+        pagingToken: U3VwZXIgc2VjcmV0IGRhdGEuIFNoaGho
+        items:
+        - scheduleLogId: 1
+          startTime: '2019-08-27T14:15:22Z'
+          endTime: '2019-08-27T14:15:22Z'
+          duration: 00:01:23
+          status: pending
+          serverName: Example server
+          scheduleId: 1
+          scheduleName: Example schedule
+    BasicStringFilter:
+      description: Used to filter strings. Check for strings that start with, equal, are greater than, are less than, or are between the given value(s).
+      type: object
+      anyOf:
+      - $ref: '#/components/schemas/RangeOrEqualFilter'
+      - $ref: '#/components/schemas/StartsWithStringFilter'
+      example:
+        strtw: null
+        gte: null
+        lte: null
+        eq: null
+    StartsWithStringFilter:
+      description: Used to filter strings. Check for strings that start with the given value.
+      type: object
+      properties:
+        strtw:
+          type:
+          - string
+          - 'null'
+          description: The value that the field should start with.
+      example:
+        strtw: null
+    RangeFilter:
+      description: Used to filter values. Check for values that are greater than or equal to, less than or equal to, or between the given value(s).
+      type: object
+      anyOf:
+      - $ref: '#/components/schemas/GreaterThanOrEqualToFilter'
+      - $ref: '#/components/schemas/LessThanOrEqualToFilter'
+      example:
+        gte: null
+        lte: null
     ScheduleLogSummary:
       description: Contains basic details about a schedule log.
       type: object
@@ -379,17 +445,6 @@ components:
         scheduleName:
           type: string
           description: The name of the schedule.
-    BasicStringFilter:
-      description: Used to filter strings. Check for strings that start with, equal, are greater than, are less than, or are between the given value(s).
-      type: object
-      anyOf:
-      - $ref: '#/components/schemas/RangeOrEqualFilter'
-      - $ref: '#/components/schemas/StartsWithStringFilter'
-      example:
-        strtw: null
-        gte: null
-        lte: null
-        eq: null
     RangeOrEqualFilter:
       description: Used to filter values. Check for values that are equal to, greater than or equal to, less than or equal to, or between the given value(s).
       type: object
@@ -400,28 +455,27 @@ components:
         gte: null
         lte: null
         eq: null
-    GreaterThanOrEqualToFilter:
-      description: Used to filter values. Check for values that are greater than or equal to the given value.
+    UrlParameterError:
+      description: An error occurred due to incorrect data supplied to url parameter.
       type: object
       properties:
-        gte:
+        message:
+          type: string
+          description: A message about the error.
+        messageDetail:
+          type: string
+          description: A detailed description about the error.
+    LessThanOrEqualToFilter:
+      description: Used to filter values. Check for values that are less than or equal to the given value.
+      type: object
+      properties:
+        lte:
           type:
           - object
           - 'null'
-          description: The value that the field should be greater than or equal to.
+          description: The value that the field should be less than or equal to.
       example:
-        gte: null
-    StartsWithStringFilter:
-      description: Used to filter strings. Check for strings that start with the given value.
-      type: object
-      properties:
-        strtw:
-          type:
-          - string
-          - 'null'
-          description: The value that the field should start with.
-      example:
-        strtw: null
+        lte: null
     ValidationError:
       description: An error occurred during validation. See the response body for details on the invalid field.
       type: object
@@ -435,73 +489,7 @@ components:
     ErrorMessage:
       description: A message describing the problem encountered.
       type: string
-    ScheduleLogItemsPage:
-      description: Contains details of a page of schedule logs.
-      type: object
-      properties:
-        pagingToken:
-          type: string
-          description: The token to be used in the next request to return the next collection of items.
-        items:
-          type: array
-          description: A collection of schedule log summary
-          items:
-            $ref: '#/components/schemas/ScheduleLogSummary'
-      example:
-        pagingToken: U3VwZXIgc2VjcmV0IGRhdGEuIFNoaGho
-        items:
-        - scheduleLogId: 1
-          startTime: '2019-08-27T14:15:22Z'
-          endTime: '2019-08-27T14:15:22Z'
-          duration: 00:01:23
-          status: pending
-          serverName: Example server
-          scheduleId: 1
-          scheduleName: Example schedule
-    LessThanOrEqualToFilter:
-      description: Used to filter values. Check for values that are less than or equal to the given value.
-      type: object
-      properties:
-        lte:
-          type:
-          - object
-          - 'null'
-          description: The value that the field should be less than or equal to.
-      example:
-        lte: null
-    EqualsFilter:
-      description: Used to filter values. Check for values that are equal to the given value.
-      type: object
-      properties:
-        eq:
-          type:
-          - object
-          - 'null'
-          description: The value that the field should be equal to.
-      example:
-        eq: null
-    RangeFilter:
-      description: Used to filter values. Check for values that are greater than or equal to, less than or equal to, or between the given value(s).
-      type: object
-      anyOf:
-      - $ref: '#/components/schemas/GreaterThanOrEqualToFilter'
-      - $ref: '#/components/schemas/LessThanOrEqualToFilter'
-      example:
-        gte: null
-        lte: null
   responses:
-    NotAuthorized:
-      description: The authentication token was either missing or invalid and must be refreshed.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/ErrorMessage'
-    Forbidden:
-      description: The authentication token does not give sufficient permissions to perform this action.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/ErrorMessage'
     BadRequest:
       description: The request is malformed or contains incorrect information. See the response for more details.
       content:
@@ -510,8 +498,20 @@ components:
             oneOf:
             - $ref: '#/components/schemas/UrlParameterError'
             - $ref: '#/components/schemas/ValidationError'
+    NotAuthorized:
+      description: The authentication token was either missing or invalid and must be refreshed.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorMessage'
     NotFound:
       description: The requested resource could not be found.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorMessage'
+    Forbidden:
+      description: The authentication token does not give sufficient permissions to perform this action.
       content:
         application/json:
           schema:

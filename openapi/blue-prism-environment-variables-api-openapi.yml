@@ -297,305 +297,7 @@ paths:
         '404':
           $ref: '#/components/responses/NotFound'
 components:
-  examples:
-    StringGreaterThanExample:
-      value:
-        gte: Example
-      summary: Search for a value alphanumerically after or equal to "Example".
-    EnvironmentVariableRadioButtonsExample:
-      summary: RadioButtons
-      value:
-        pagingToken: U3VwZXIgc2VjcmV0IGRhdGEuIFNoaGho
-        items:
-        - name: name of the radiobuttons variable
-          description: description of the radiobuttons variable
-          dataType: radiobuttons
-          value:
-          - name: rb1
-            selected: true
-          - name: rb2
-            selected: false
-    PatchReplaceExample:
-      summary: Replace the value in a property.
-      value:
-      - op: replace
-        path: /property
-        value: propertyValue
-    EnvironmentVariableTextExample:
-      summary: Text
-      value:
-        pagingToken: U3VwZXIgc2VjcmV0IGRhdGEuIFNoaGho
-        items:
-        - name: name of the text variable
-          description: description of the text variable
-          dataType: text
-          value: text value
-    StringStartsWithExample:
-      value:
-        strtw: Exa
-      summary: Search a value starting with "Exa".
-    StringEqualsExample:
-      value:
-        eq: Example
-      summary: Search for a value equal to "Example".
-    PatchCopyExample:
-      summary: Copy a value from one property to another.
-      value:
-      - op: copy
-        from: /sourceProperty
-        path: /destinationProperty
-    PatchAddToObjectExample:
-      summary: Add new property values to an object.
-      value:
-      - op: add
-        path: /property
-        value: propertyValue
-    PatchRemoveExample:
-      summary: Remove a property value.
-      value:
-      - op: remove
-        path: /propertyToDeleteValueFrom
-    PatchAddToArrayExample:
-      summary: Add values to a collection.
-      value:
-      - op: add
-        path: /someArrayProperty
-        value:
-        - item1
-        - item2
-    StringRangeExample:
-      value:
-        gte: Ex
-        lte: F
-      summary: Search for a value alphanumerically between "Ex" and "F".
-    PatchMoveExample:
-      summary: Move a value from one property to another.
-      value:
-      - op: move
-        from: /sourceProperty
-        path: /destinationProperty
   schemas:
-    PatchDocument:
-      description: A JSONPatch document as defined by RFC 6902. See http://jsonpatch.com/
-      required:
-      - op
-      - path
-      properties:
-        op:
-          type: string
-          description: The operation to be performed.
-          enum:
-          - add
-          - remove
-          - replace
-          - move
-          - copy
-        path:
-          type: string
-          description: A JSON-Pointer.
-        value:
-          type: object
-          description: The value to be used within the operations..
-        from:
-          type: string
-          description: A string containing a JSON Pointer value.
-    PatchRequest:
-      description: A request containing a JSON Patch document. See PatchDocument for details.
-      type: array
-      items:
-        $ref: '#/components/schemas/PatchDocument'
-    UrlParameterError:
-      description: An error occurred due to incorrect data supplied to url parameter.
-      type: object
-      properties:
-        message:
-          type: string
-          description: A message about the error.
-        messageDetail:
-          type: string
-          description: A detailed description about the error.
-    RadioButton:
-      type: object
-      description: Contains details for creating a new radio button.
-      properties:
-        name:
-          type: string
-          description: The name of the radio button.
-        selected:
-          type: boolean
-          description: Returns True if the radio button is selected.
-      example:
-        name: button1
-        selected: true
-    EnvironmentVariable:
-      description: Contains details of an environment variable.
-      type: object
-      properties:
-        id:
-          type: string
-          description: The id of the environment variable.
-          format: uuid
-        name:
-          type: string
-          description: The name of the environment variable.
-        description:
-          type: string
-          description: The description of the environment variable.
-        dataType:
-          type: string
-          description: The type of the environment variable.
-        value:
-          type:
-          - object
-          - 'null'
-          description: The value of the environment variable.
-    BasicStringFilter:
-      description: Used to filter strings. Check for strings that start with, equal, are greater than, are less than, or are between the given value(s).
-      type: object
-      anyOf:
-      - $ref: '#/components/schemas/RangeOrEqualFilter'
-      - $ref: '#/components/schemas/StartsWithStringFilter'
-      example:
-        strtw: null
-        gte: null
-        lte: null
-        eq: null
-    RangeOrEqualFilter:
-      description: Used to filter values. Check for values that are equal to, greater than or equal to, less than or equal to, or between the given value(s).
-      type: object
-      oneOf:
-      - $ref: '#/components/schemas/RangeFilter'
-      - $ref: '#/components/schemas/EqualsFilter'
-      example:
-        gte: null
-        lte: null
-        eq: null
-    GreaterThanOrEqualToFilter:
-      description: Used to filter values. Check for values that are greater than or equal to the given value.
-      type: object
-      properties:
-        gte:
-          type:
-          - object
-          - 'null'
-          description: The value that the field should be greater than or equal to.
-      example:
-        gte: null
-    StartsWithStringFilter:
-      description: Used to filter strings. Check for strings that start with the given value.
-      type: object
-      properties:
-        strtw:
-          type:
-          - string
-          - 'null'
-          description: The value that the field should start with.
-      example:
-        strtw: null
-    ValidationError:
-      description: An error occurred during validation. See the response body for details on the invalid field.
-      type: object
-      properties:
-        invalidField:
-          type: string
-          description: The field which is invalid.
-        message:
-          type: string
-          description: A description of the error found with the field.
-    ErrorMessage:
-      description: A message describing the problem encountered.
-      type: string
-    EnvironmentVariableItemsPage:
-      description: Contains details of a page of environment variables.
-      type: object
-      properties:
-        pagingToken:
-          $ref: '#/components/schemas/PagingToken'
-        items:
-          type: array
-          description: A collection of environment variables.
-          items:
-            $ref: '#/components/schemas/EnvironmentVariable'
-    PagingToken:
-      type: string
-      description: The token to be used in the next request to return the next collection of items.
-      example: U3VwZXIgc2VjcmV0IGRhdGEuIFNoaGho
-    Reference:
-      description: Contains details of referenced item.
-      type: object
-      properties:
-        id:
-          type: string
-          format: uuid
-          description: The ID of the process/object.
-        name:
-          type: string
-          description: The name of the process/object.
-          minLength: 1
-        description:
-          type: string
-          description: The description of process/object.
-        type:
-          type: string
-          enum:
-          - Process
-          - Object
-          - Unset
-          description: The type of process/object
-    RadioButtons:
-      description: Contains details for creating a new collection of radio buttons.
-      type: array
-      items:
-        $ref: '#/components/schemas/RadioButton'
-    ProcessType:
-      description: The process type of environment variable reference.
-      type: string
-      enum:
-      - Process
-      - Object
-    LessThanOrEqualToFilter:
-      description: Used to filter values. Check for values that are less than or equal to the given value.
-      type: object
-      properties:
-        lte:
-          type:
-          - object
-          - 'null'
-          description: The value that the field should be less than or equal to.
-      example:
-        lte: null
-    EqualsFilter:
-      description: Used to filter values. Check for values that are equal to the given value.
-      type: object
-      properties:
-        eq:
-          type:
-          - object
-          - 'null'
-          description: The value that the field should be equal to.
-      example:
-        eq: null
-    EnvironmentVariableReferencesItemsPage:
-      description: Contains details of a page of environment variables references.
-      type: object
-      properties:
-        pagingToken:
-          type: string
-          description: The token to be used in the next request to return the next collection of items.
-        items:
-          type: array
-          description: A collection of environment variables references.
-          items:
-            $ref: '#/components/schemas/Reference'
-    RangeFilter:
-      description: Used to filter values. Check for values that are greater than or equal to, less than or equal to, or between the given value(s).
-      type: object
-      anyOf:
-      - $ref: '#/components/schemas/GreaterThanOrEqualToFilter'
-      - $ref: '#/components/schemas/LessThanOrEqualToFilter'
-      example:
-        gte: null
-        lte: null
     CreateEnvironmentVariableModel:
       description: Contains details for creating a new environment variable.
       type: object
@@ -636,19 +338,305 @@ components:
         description: Any text
         value: Any text
         dataType: Text
+    EqualsFilter:
+      description: Used to filter values. Check for values that are equal to the given value.
+      type: object
+      properties:
+        eq:
+          type:
+          - object
+          - 'null'
+          description: The value that the field should be equal to.
+      example:
+        eq: null
+    GreaterThanOrEqualToFilter:
+      description: Used to filter values. Check for values that are greater than or equal to the given value.
+      type: object
+      properties:
+        gte:
+          type:
+          - object
+          - 'null'
+          description: The value that the field should be greater than or equal to.
+      example:
+        gte: null
+    BasicStringFilter:
+      description: Used to filter strings. Check for strings that start with, equal, are greater than, are less than, or are between the given value(s).
+      type: object
+      anyOf:
+      - $ref: '#/components/schemas/RangeOrEqualFilter'
+      - $ref: '#/components/schemas/StartsWithStringFilter'
+      example:
+        strtw: null
+        gte: null
+        lte: null
+        eq: null
+    ProcessType:
+      description: The process type of environment variable reference.
+      type: string
+      enum:
+      - Process
+      - Object
+    StartsWithStringFilter:
+      description: Used to filter strings. Check for strings that start with the given value.
+      type: object
+      properties:
+        strtw:
+          type:
+          - string
+          - 'null'
+          description: The value that the field should start with.
+      example:
+        strtw: null
+    RangeFilter:
+      description: Used to filter values. Check for values that are greater than or equal to, less than or equal to, or between the given value(s).
+      type: object
+      anyOf:
+      - $ref: '#/components/schemas/GreaterThanOrEqualToFilter'
+      - $ref: '#/components/schemas/LessThanOrEqualToFilter'
+      example:
+        gte: null
+        lte: null
+    RadioButton:
+      type: object
+      description: Contains details for creating a new radio button.
+      properties:
+        name:
+          type: string
+          description: The name of the radio button.
+        selected:
+          type: boolean
+          description: Returns True if the radio button is selected.
+      example:
+        name: button1
+        selected: true
+    RangeOrEqualFilter:
+      description: Used to filter values. Check for values that are equal to, greater than or equal to, less than or equal to, or between the given value(s).
+      type: object
+      oneOf:
+      - $ref: '#/components/schemas/RangeFilter'
+      - $ref: '#/components/schemas/EqualsFilter'
+      example:
+        gte: null
+        lte: null
+        eq: null
+    UrlParameterError:
+      description: An error occurred due to incorrect data supplied to url parameter.
+      type: object
+      properties:
+        message:
+          type: string
+          description: A message about the error.
+        messageDetail:
+          type: string
+          description: A detailed description about the error.
+    EnvironmentVariableItemsPage:
+      description: Contains details of a page of environment variables.
+      type: object
+      properties:
+        pagingToken:
+          $ref: '#/components/schemas/PagingToken'
+        items:
+          type: array
+          description: A collection of environment variables.
+          items:
+            $ref: '#/components/schemas/EnvironmentVariable'
+    LessThanOrEqualToFilter:
+      description: Used to filter values. Check for values that are less than or equal to the given value.
+      type: object
+      properties:
+        lte:
+          type:
+          - object
+          - 'null'
+          description: The value that the field should be less than or equal to.
+      example:
+        lte: null
+    RadioButtons:
+      description: Contains details for creating a new collection of radio buttons.
+      type: array
+      items:
+        $ref: '#/components/schemas/RadioButton'
+    EnvironmentVariable:
+      description: Contains details of an environment variable.
+      type: object
+      properties:
+        id:
+          type: string
+          description: The id of the environment variable.
+          format: uuid
+        name:
+          type: string
+          description: The name of the environment variable.
+        description:
+          type: string
+          description: The description of the environment variable.
+        dataType:
+          type: string
+          description: The type of the environment variable.
+        value:
+          type:
+          - object
+          - 'null'
+          description: The value of the environment variable.
+    ValidationError:
+      description: An error occurred during validation. See the response body for details on the invalid field.
+      type: object
+      properties:
+        invalidField:
+          type: string
+          description: The field which is invalid.
+        message:
+          type: string
+          description: A description of the error found with the field.
+    PatchRequest:
+      description: A request containing a JSON Patch document. See PatchDocument for details.
+      type: array
+      items:
+        $ref: '#/components/schemas/PatchDocument'
+    ErrorMessage:
+      description: A message describing the problem encountered.
+      type: string
+    PatchDocument:
+      description: A JSONPatch document as defined by RFC 6902. See http://jsonpatch.com/
+      required:
+      - op
+      - path
+      properties:
+        op:
+          type: string
+          description: The operation to be performed.
+          enum:
+          - add
+          - remove
+          - replace
+          - move
+          - copy
+        path:
+          type: string
+          description: A JSON-Pointer.
+        value:
+          type: object
+          description: The value to be used within the operations..
+        from:
+          type: string
+          description: A string containing a JSON Pointer value.
+    Reference:
+      description: Contains details of referenced item.
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          description: The ID of the process/object.
+        name:
+          type: string
+          description: The name of the process/object.
+          minLength: 1
+        description:
+          type: string
+          description: The description of process/object.
+        type:
+          type: string
+          enum:
+          - Process
+          - Object
+          - Unset
+          description: The type of process/object
+    EnvironmentVariableReferencesItemsPage:
+      description: Contains details of a page of environment variables references.
+      type: object
+      properties:
+        pagingToken:
+          type: string
+          description: The token to be used in the next request to return the next collection of items.
+        items:
+          type: array
+          description: A collection of environment variables references.
+          items:
+            $ref: '#/components/schemas/Reference'
+    PagingToken:
+      type: string
+      description: The token to be used in the next request to return the next collection of items.
+      example: U3VwZXIgc2VjcmV0IGRhdGEuIFNoaGho
+  examples:
+    StringEqualsExample:
+      value:
+        eq: Example
+      summary: Search for a value equal to "Example".
+    EnvironmentVariableTextExample:
+      summary: Text
+      value:
+        pagingToken: U3VwZXIgc2VjcmV0IGRhdGEuIFNoaGho
+        items:
+        - name: name of the text variable
+          description: description of the text variable
+          dataType: text
+          value: text value
+    PatchReplaceExample:
+      summary: Replace the value in a property.
+      value:
+      - op: replace
+        path: /property
+        value: propertyValue
+    StringStartsWithExample:
+      value:
+        strtw: Exa
+      summary: Search a value starting with "Exa".
+    EnvironmentVariableRadioButtonsExample:
+      summary: RadioButtons
+      value:
+        pagingToken: U3VwZXIgc2VjcmV0IGRhdGEuIFNoaGho
+        items:
+        - name: name of the radiobuttons variable
+          description: description of the radiobuttons variable
+          dataType: radiobuttons
+          value:
+          - name: rb1
+            selected: true
+          - name: rb2
+            selected: false
+    PatchCopyExample:
+      summary: Copy a value from one property to another.
+      value:
+      - op: copy
+        from: /sourceProperty
+        path: /destinationProperty
+    PatchAddToObjectExample:
+      summary: Add new property values to an object.
+      value:
+      - op: add
+        path: /property
+        value: propertyValue
+    StringGreaterThanExample:
+      value:
+        gte: Example
+      summary: Search for a value alphanumerically after or equal to "Example".
+    StringRangeExample:
+      value:
+        gte: Ex
+        lte: F
+      summary: Search for a value alphanumerically between "Ex" and "F".
+    PatchAddToArrayExample:
+      summary: Add values to a collection.
+      value:
+      - op: add
+        path: /someArrayProperty
+        value:
+        - item1
+        - item2
+    PatchRemoveExample:
+      summary: Remove a property value.
+      value:
+      - op: remove
+        path: /propertyToDeleteValueFrom
+    PatchMoveExample:
+      summary: Move a value from one property to another.
+      value:
+      - op: move
+        from: /sourceProperty
+        path: /destinationProperty
   responses:
-    NotAuthorized:
-      description: The authentication token was either missing or invalid and must be refreshed.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/ErrorMessage'
-    Forbidden:
-      description: The authentication token does not give sufficient permissions to perform this action.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/ErrorMessage'
     BadRequest:
       description: The request is malformed or contains incorrect information. See the response for more details.
       content:
@@ -657,8 +645,20 @@ components:
             oneOf:
             - $ref: '#/components/schemas/UrlParameterError'
             - $ref: '#/components/schemas/ValidationError'
+    NotAuthorized:
+      description: The authentication token was either missing or invalid and must be refreshed.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorMessage'
     NotFound:
       description: The requested resource could not be found.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorMessage'
+    Forbidden:
+      description: The authentication token does not give sufficient permissions to perform this action.
       content:
         application/json:
           schema:

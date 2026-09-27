@@ -35,6 +35,10 @@ paths:
         '401':
           $ref: '#/components/responses/NotAuthorized'
 components:
+  schemas:
+    ErrorMessage:
+      description: A message describing the problem encountered.
+      type: string
   responses:
     NotAuthorized:
       description: The authentication token was either missing or invalid and must be refreshed.
@@ -42,10 +46,6 @@ components:
         application/json:
           schema:
             $ref: '#/components/schemas/ErrorMessage'
-  schemas:
-    ErrorMessage:
-      description: A message describing the problem encountered.
-      type: string
   securitySchemes:
     Bearer:
       type: http

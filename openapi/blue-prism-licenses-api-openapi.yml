@@ -277,115 +277,7 @@ paths:
         '404':
           $ref: '#/components/responses/NotFound'
 components:
-  examples:
-    StringGreaterThanExample:
-      value:
-        gte: Example
-      summary: Search for a value alphanumerically after or equal to "Example".
-    StringContainsExample:
-      value:
-        ctn: amp
-      summary: Search a value containing "amp"
-    IntegerLessThanExample:
-      value:
-        lte: 123
-      summary: Search for a value less than or equal to 123.
-    DateTimeEqualsExample:
-      value:
-        eq: '2020-10-02T12:34:56+01:00'
-      summary: Search for a value equal to 2020-10-02 at 12:34:56 (GMT+1).
-    IntegerRangeExample:
-      value:
-        gte: 123
-        lte: 321
-      summary: Search for a value between 123 and 321 inclusive.
-    StringStartsWithExample:
-      value:
-        strtw: Exa
-      summary: Search a value starting with "Exa".
-    IntegerEqualsExample:
-      value:
-        eq: 123
-      summary: Search for a value equal to 123.
-    DateTimeRangeExample:
-      value:
-        gte: '2020-10-02T12:34:56+01:00'
-        lte: '2020-11-02T12:34:56+01:00'
-      summary: Search for a value between 2020-10-02 at 12:34:56 (GMT+1) and 2020-11-02 at 12:34:56 (GMT+1) (inclusive).
-    StringEqualsExample:
-      value:
-        eq: Example
-      summary: Search for a value equal to "Example".
-    DateTimeGreaterThanExample:
-      value:
-        gte: '2020-10-02T12:34:56+01:00'
-      summary: Search for a value after or equal to 2020-10-02 at 12:34:56 (GMT+1).
-    StringRangeExample:
-      value:
-        gte: Ex
-        lte: F
-      summary: Search for a value alphanumerically between "Ex" and "F".
   schemas:
-    UrlParameterError:
-      description: An error occurred due to incorrect data supplied to url parameter.
-      type: object
-      properties:
-        message:
-          type: string
-          description: A message about the error.
-        messageDetail:
-          type: string
-          description: A detailed description about the error.
-    StringFilter:
-      description: Used to filter strings. Check for strings that start with, and/or contain the given value(s).
-      type: object
-      anyOf:
-      - $ref: '#/components/schemas/ContainsStringFilter'
-      - $ref: '#/components/schemas/StartsWithStringFilter'
-      example:
-        ctn: null
-        strtw: null
-    RangeOrEqualFilter:
-      description: Used to filter values. Check for values that are equal to, greater than or equal to, less than or equal to, or between the given value(s).
-      type: object
-      oneOf:
-      - $ref: '#/components/schemas/RangeFilter'
-      - $ref: '#/components/schemas/EqualsFilter'
-      example:
-        gte: null
-        lte: null
-        eq: null
-    GreaterThanOrEqualToFilter:
-      description: Used to filter values. Check for values that are greater than or equal to the given value.
-      type: object
-      properties:
-        gte:
-          type:
-          - object
-          - 'null'
-          description: The value that the field should be greater than or equal to.
-      example:
-        gte: null
-    AddLicense:
-      description: Contains details for adding a new license key.
-      type: object
-      properties:
-        encodedLicenseKey:
-          type: string
-          description: The encoded license key.
-      example:
-        encodedLicenseKey: PD94bWwgdmVyc2lvbj0iMS4
-    StartsWithStringFilter:
-      description: Used to filter strings. Check for strings that start with the given value.
-      type: object
-      properties:
-        strtw:
-          type:
-          - string
-          - 'null'
-          description: The value that the field should start with.
-      example:
-        strtw: null
     ContainsStringFilter:
       description: Used to filter strings. Check for strings that contain the given value.
       type: object
@@ -397,16 +289,6 @@ components:
           description: The value that the field should contain.
       example:
         ctn: null
-    ValidationError:
-      description: An error occurred during validation. See the response body for details on the invalid field.
-      type: object
-      properties:
-        invalidField:
-          type: string
-          description: The field which is invalid.
-        message:
-          type: string
-          description: A description of the error found with the field.
     LicensesItemsPage:
       description: Contains basic details of a licenses.
       type: object
@@ -418,65 +300,6 @@ components:
           description: A collection of licenses.
           items:
             $ref: '#/components/schemas/License'
-    ErrorMessage:
-      description: A message describing the problem encountered.
-      type: string
-    PagingToken:
-      type: string
-      description: The token to be used in the next request to return the next collection of items.
-      example: U3VwZXIgc2VjcmV0IGRhdGEuIFNoaGho
-    AddLicenseResponseModel:
-      description: Contains the information of an added license.
-      type: object
-      properties:
-        id:
-          type: integer
-          description: The ID of the license.
-        status:
-          type: string
-          enum:
-          - Future
-          - Expired
-          - ExpiresSoon
-          - GracePeriodEndsSoon
-          - RequiresActivation
-          - Active
-          description: The status of the license.
-        expires:
-          type: string
-          description: The date at which this license expires.
-          format: date-time
-        owner:
-          type: string
-          description: The owner of the license.
-      example:
-        id: 1
-        status: Active
-        expires: '2023-01-31'
-        owner: Test License
-    LessThanOrEqualToFilter:
-      description: Used to filter values. Check for values that are less than or equal to the given value.
-      type: object
-      properties:
-        lte:
-          type:
-          - object
-          - 'null'
-          description: The value that the field should be less than or equal to.
-      example:
-        lte: null
-    FullStringFilter:
-      description: Used to filter strings. Check for strings that start with, contain, equal, are greater than, are less than, or are between the given value(s).
-      type: object
-      anyOf:
-      - $ref: '#/components/schemas/StringFilter'
-      - $ref: '#/components/schemas/RangeOrEqualFilter'
-      example:
-        ctn: null
-        strtw: null
-        gte: null
-        lte: null
-        eq: null
     EqualsFilter:
       description: Used to filter values. Check for values that are equal to the given value.
       type: object
@@ -488,6 +311,46 @@ components:
           description: The value that the field should be equal to.
       example:
         eq: null
+    AddLicense:
+      description: Contains details for adding a new license key.
+      type: object
+      properties:
+        encodedLicenseKey:
+          type: string
+          description: The encoded license key.
+      example:
+        encodedLicenseKey: PD94bWwgdmVyc2lvbj0iMS4
+    GreaterThanOrEqualToFilter:
+      description: Used to filter values. Check for values that are greater than or equal to the given value.
+      type: object
+      properties:
+        gte:
+          type:
+          - object
+          - 'null'
+          description: The value that the field should be greater than or equal to.
+      example:
+        gte: null
+    StartsWithStringFilter:
+      description: Used to filter strings. Check for strings that start with the given value.
+      type: object
+      properties:
+        strtw:
+          type:
+          - string
+          - 'null'
+          description: The value that the field should start with.
+      example:
+        strtw: null
+    RangeFilter:
+      description: Used to filter values. Check for values that are greater than or equal to, less than or equal to, or between the given value(s).
+      type: object
+      anyOf:
+      - $ref: '#/components/schemas/GreaterThanOrEqualToFilter'
+      - $ref: '#/components/schemas/LessThanOrEqualToFilter'
+      example:
+        gte: null
+        lte: null
     License:
       description: Contains details of the license.
       type: object
@@ -565,28 +428,153 @@ components:
         alerts: '50'
         standalone: true
         decipherIDP: false
-    RangeFilter:
-      description: Used to filter values. Check for values that are greater than or equal to, less than or equal to, or between the given value(s).
+    StringFilter:
+      description: Used to filter strings. Check for strings that start with, and/or contain the given value(s).
       type: object
       anyOf:
-      - $ref: '#/components/schemas/GreaterThanOrEqualToFilter'
-      - $ref: '#/components/schemas/LessThanOrEqualToFilter'
+      - $ref: '#/components/schemas/ContainsStringFilter'
+      - $ref: '#/components/schemas/StartsWithStringFilter'
+      example:
+        ctn: null
+        strtw: null
+    RangeOrEqualFilter:
+      description: Used to filter values. Check for values that are equal to, greater than or equal to, less than or equal to, or between the given value(s).
+      type: object
+      oneOf:
+      - $ref: '#/components/schemas/RangeFilter'
+      - $ref: '#/components/schemas/EqualsFilter'
       example:
         gte: null
         lte: null
+        eq: null
+    FullStringFilter:
+      description: Used to filter strings. Check for strings that start with, contain, equal, are greater than, are less than, or are between the given value(s).
+      type: object
+      anyOf:
+      - $ref: '#/components/schemas/StringFilter'
+      - $ref: '#/components/schemas/RangeOrEqualFilter'
+      example:
+        ctn: null
+        strtw: null
+        gte: null
+        lte: null
+        eq: null
+    UrlParameterError:
+      description: An error occurred due to incorrect data supplied to url parameter.
+      type: object
+      properties:
+        message:
+          type: string
+          description: A message about the error.
+        messageDetail:
+          type: string
+          description: A detailed description about the error.
+    LessThanOrEqualToFilter:
+      description: Used to filter values. Check for values that are less than or equal to the given value.
+      type: object
+      properties:
+        lte:
+          type:
+          - object
+          - 'null'
+          description: The value that the field should be less than or equal to.
+      example:
+        lte: null
+    AddLicenseResponseModel:
+      description: Contains the information of an added license.
+      type: object
+      properties:
+        id:
+          type: integer
+          description: The ID of the license.
+        status:
+          type: string
+          enum:
+          - Future
+          - Expired
+          - ExpiresSoon
+          - GracePeriodEndsSoon
+          - RequiresActivation
+          - Active
+          description: The status of the license.
+        expires:
+          type: string
+          description: The date at which this license expires.
+          format: date-time
+        owner:
+          type: string
+          description: The owner of the license.
+      example:
+        id: 1
+        status: Active
+        expires: '2023-01-31'
+        owner: Test License
+    ValidationError:
+      description: An error occurred during validation. See the response body for details on the invalid field.
+      type: object
+      properties:
+        invalidField:
+          type: string
+          description: The field which is invalid.
+        message:
+          type: string
+          description: A description of the error found with the field.
+    ErrorMessage:
+      description: A message describing the problem encountered.
+      type: string
+    PagingToken:
+      type: string
+      description: The token to be used in the next request to return the next collection of items.
+      example: U3VwZXIgc2VjcmV0IGRhdGEuIFNoaGho
+  examples:
+    StringEqualsExample:
+      value:
+        eq: Example
+      summary: Search for a value equal to "Example".
+    IntegerEqualsExample:
+      value:
+        eq: 123
+      summary: Search for a value equal to 123.
+    IntegerRangeExample:
+      value:
+        gte: 123
+        lte: 321
+      summary: Search for a value between 123 and 321 inclusive.
+    StringStartsWithExample:
+      value:
+        strtw: Exa
+      summary: Search a value starting with "Exa".
+    IntegerLessThanExample:
+      value:
+        lte: 123
+      summary: Search for a value less than or equal to 123.
+    DateTimeGreaterThanExample:
+      value:
+        gte: '2020-10-02T12:34:56+01:00'
+      summary: Search for a value after or equal to 2020-10-02 at 12:34:56 (GMT+1).
+    StringGreaterThanExample:
+      value:
+        gte: Example
+      summary: Search for a value alphanumerically after or equal to "Example".
+    StringContainsExample:
+      value:
+        ctn: amp
+      summary: Search a value containing "amp"
+    StringRangeExample:
+      value:
+        gte: Ex
+        lte: F
+      summary: Search for a value alphanumerically between "Ex" and "F".
+    DateTimeEqualsExample:
+      value:
+        eq: '2020-10-02T12:34:56+01:00'
+      summary: Search for a value equal to 2020-10-02 at 12:34:56 (GMT+1).
+    DateTimeRangeExample:
+      value:
+        gte: '2020-10-02T12:34:56+01:00'
+        lte: '2020-11-02T12:34:56+01:00'
+      summary: Search for a value between 2020-10-02 at 12:34:56 (GMT+1) and 2020-11-02 at 12:34:56 (GMT+1) (inclusive).
   responses:
-    NotAuthorized:
-      description: The authentication token was either missing or invalid and must be refreshed.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/ErrorMessage'
-    Forbidden:
-      description: The authentication token does not give sufficient permissions to perform this action.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/ErrorMessage'
     BadRequest:
       description: The request is malformed or contains incorrect information. See the response for more details.
       content:
@@ -595,8 +583,20 @@ components:
             oneOf:
             - $ref: '#/components/schemas/UrlParameterError'
             - $ref: '#/components/schemas/ValidationError'
+    NotAuthorized:
+      description: The authentication token was either missing or invalid and must be refreshed.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorMessage'
     NotFound:
       description: The requested resource could not be found.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorMessage'
+    Forbidden:
+      description: The authentication token does not give sufficient permissions to perform this action.
       content:
         application/json:
           schema:
