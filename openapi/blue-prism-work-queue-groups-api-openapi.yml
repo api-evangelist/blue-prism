@@ -287,31 +287,127 @@ paths:
         '404':
           $ref: '#/components/responses/NotFound'
 components:
-  examples:
-    StringEqualsExample:
-      value:
-        eq: Example
-      summary: Search for a value equal to "Example".
-    PatchReplaceExample:
-      summary: Replace the value in a property.
-      value:
-      - op: replace
-        path: /property
-        value: propertyValue
-    StringStartsWithExample:
-      value:
-        strtw: Exa
-      summary: Search a value starting with "Exa".
-    StringGreaterThanExample:
-      value:
-        gte: Example
-      summary: Search for a value alphanumerically after or equal to "Example".
-    StringRangeExample:
-      value:
-        gte: Ex
-        lte: F
-      summary: Search for a value alphanumerically between "Ex" and "F".
   schemas:
+    RangeOrEqualFilter:
+      description: Used to filter values. Check for values that are equal to, greater than or equal to, less than or equal to, or between the given value(s).
+      type: object
+      oneOf:
+      - $ref: '#/components/schemas/RangeFilter'
+      - $ref: '#/components/schemas/EqualsFilter'
+      example:
+        gte: null
+        lte: null
+        eq: null
+    WorkQueuesFromGroupItemsPage:
+      description: Contains details of a page of work queues from the work queue group.
+      type: object
+      properties:
+        pagingToken:
+          type: string
+          description: The token to be used in the next request to return the next collection of items.
+        items:
+          type: array
+          description: A collection of work queues from the work queue group.
+          items:
+            $ref: '#/components/schemas/WorkQueueInGroup'
+      example:
+        pagingToken: U3VwZXIgc2VjcmV0IGRhdGEuIFNoaGho
+        items:
+        - id: 01234567-89ab-cdef-0123-456789abcdef
+          name: queue 1
+    StartsWithStringFilter:
+      description: Used to filter strings. Check for strings that start with the given value.
+      type: object
+      properties:
+        strtw:
+          type:
+          - string
+          - 'null'
+          description: The value that the field should start with.
+      example:
+        strtw: null
+    LessThanOrEqualToFilter:
+      description: Used to filter values. Check for values that are less than or equal to the given value.
+      type: object
+      properties:
+        lte:
+          type:
+          - object
+          - 'null'
+          description: The value that the field should be less than or equal to.
+      example:
+        lte: null
+    ValidationError:
+      description: An error occurred during validation. See the response body for details on the invalid field.
+      type: object
+      properties:
+        invalidField:
+          type: string
+          description: The field which is invalid.
+        message:
+          type: string
+          description: A description of the error found with the field.
+    WorkQueueInGroup:
+      description: Contains details of the work queue from the work queue group.
+      type: object
+      properties:
+        id:
+          type: string
+          description: The ID of the queue.
+          format: uuid
+        name:
+          type: string
+          description: The name of the queue.
+    GreaterThanOrEqualToFilter:
+      description: Used to filter values. Check for values that are greater than or equal to the given value.
+      type: object
+      properties:
+        gte:
+          type:
+          - object
+          - 'null'
+          description: The value that the field should be greater than or equal to.
+      example:
+        gte: null
+    UrlParameterError:
+      description: An error occurred due to incorrect data supplied to url parameter.
+      type: object
+      properties:
+        message:
+          type: string
+          description: A message about the error.
+        messageDetail:
+          type: string
+          description: A detailed description about the error.
+    PatchRequest:
+      description: A request containing a JSON Patch document. See PatchDocument for details.
+      type: array
+      items:
+        $ref: '#/components/schemas/PatchDocument'
+    WorkQueueChildGroups:
+      description: Contains basic details of a work queue group.
+      type: object
+      properties:
+        pagingToken:
+          $ref: '#/components/schemas/PagingToken'
+        items:
+          type: array
+          description: A collection of work queue groups.
+          items:
+            $ref: '#/components/schemas/WorkQueueGroup'
+    PagingToken:
+      type: string
+      description: The token to be used in the next request to return the next collection of items.
+      example: U3VwZXIgc2VjcmV0IGRhdGEuIFNoaGho
+    RangeFilter:
+      description: Used to filter values. Check for values that are greater than or equal to, less than or equal to, or between the given value(s).
+      type: object
+      anyOf:
+      - $ref: '#/components/schemas/GreaterThanOrEqualToFilter'
+      - $ref: '#/components/schemas/LessThanOrEqualToFilter'
+      example:
+        gte: null
+        lte: null
     EqualsFilter:
       description: Used to filter values. Check for values that are equal to the given value.
       type: object
@@ -323,6 +419,25 @@ components:
           description: The value that the field should be equal to.
       example:
         eq: null
+    BasicStringFilter:
+      description: Used to filter strings. Check for strings that start with, equal, are greater than, are less than, or are between the given value(s).
+      type: object
+      anyOf:
+      - $ref: '#/components/schemas/RangeOrEqualFilter'
+      - $ref: '#/components/schemas/StartsWithStringFilter'
+      example:
+        strtw: null
+        gte: null
+        lte: null
+        eq: null
+    CreateWorkQueueGroupResponseModel:
+      description: Contains the ID of a new work queue group.
+      type: object
+      properties:
+        groupId:
+          type: string
+          format: uuid
+          description: The ID of the created work queue group.
     WorkQueueGroup:
       description: Contains basic details of a work queue group.
       type: object
@@ -350,6 +465,9 @@ components:
         parentGroupId: fedcba98-7654-3210-fedc-ba9876543210
         hasChildGroups: false
         hasChildItems: false
+    ErrorMessage:
+      description: A message describing the problem encountered.
+      type: string
     CreateWorkQueueGroup:
       description: Contains details for creating a new work queue group.
       type: object
@@ -366,144 +484,6 @@ components:
       example:
         name: Test Group
         parentGroupId: a4e0b0ba-3b8f-443d-bdb0-ee519299bd01
-    GreaterThanOrEqualToFilter:
-      description: Used to filter values. Check for values that are greater than or equal to the given value.
-      type: object
-      properties:
-        gte:
-          type:
-          - object
-          - 'null'
-          description: The value that the field should be greater than or equal to.
-      example:
-        gte: null
-    CreateWorkQueueGroupResponseModel:
-      description: Contains the ID of a new work queue group.
-      type: object
-      properties:
-        groupId:
-          type: string
-          format: uuid
-          description: The ID of the created work queue group.
-    BasicStringFilter:
-      description: Used to filter strings. Check for strings that start with, equal, are greater than, are less than, or are between the given value(s).
-      type: object
-      anyOf:
-      - $ref: '#/components/schemas/RangeOrEqualFilter'
-      - $ref: '#/components/schemas/StartsWithStringFilter'
-      example:
-        strtw: null
-        gte: null
-        lte: null
-        eq: null
-    StartsWithStringFilter:
-      description: Used to filter strings. Check for strings that start with the given value.
-      type: object
-      properties:
-        strtw:
-          type:
-          - string
-          - 'null'
-          description: The value that the field should start with.
-      example:
-        strtw: null
-    RangeFilter:
-      description: Used to filter values. Check for values that are greater than or equal to, less than or equal to, or between the given value(s).
-      type: object
-      anyOf:
-      - $ref: '#/components/schemas/GreaterThanOrEqualToFilter'
-      - $ref: '#/components/schemas/LessThanOrEqualToFilter'
-      example:
-        gte: null
-        lte: null
-    WorkQueueInGroup:
-      description: Contains details of the work queue from the work queue group.
-      type: object
-      properties:
-        id:
-          type: string
-          description: The ID of the queue.
-          format: uuid
-        name:
-          type: string
-          description: The name of the queue.
-    RangeOrEqualFilter:
-      description: Used to filter values. Check for values that are equal to, greater than or equal to, less than or equal to, or between the given value(s).
-      type: object
-      oneOf:
-      - $ref: '#/components/schemas/RangeFilter'
-      - $ref: '#/components/schemas/EqualsFilter'
-      example:
-        gte: null
-        lte: null
-        eq: null
-    UrlParameterError:
-      description: An error occurred due to incorrect data supplied to url parameter.
-      type: object
-      properties:
-        message:
-          type: string
-          description: A message about the error.
-        messageDetail:
-          type: string
-          description: A detailed description about the error.
-    WorkQueueChildGroups:
-      description: Contains basic details of a work queue group.
-      type: object
-      properties:
-        pagingToken:
-          $ref: '#/components/schemas/PagingToken'
-        items:
-          type: array
-          description: A collection of work queue groups.
-          items:
-            $ref: '#/components/schemas/WorkQueueGroup'
-    LessThanOrEqualToFilter:
-      description: Used to filter values. Check for values that are less than or equal to the given value.
-      type: object
-      properties:
-        lte:
-          type:
-          - object
-          - 'null'
-          description: The value that the field should be less than or equal to.
-      example:
-        lte: null
-    ValidationError:
-      description: An error occurred during validation. See the response body for details on the invalid field.
-      type: object
-      properties:
-        invalidField:
-          type: string
-          description: The field which is invalid.
-        message:
-          type: string
-          description: A description of the error found with the field.
-    PatchRequest:
-      description: A request containing a JSON Patch document. See PatchDocument for details.
-      type: array
-      items:
-        $ref: '#/components/schemas/PatchDocument'
-    WorkQueuesFromGroupItemsPage:
-      description: Contains details of a page of work queues from the work queue group.
-      type: object
-      properties:
-        pagingToken:
-          type: string
-          description: The token to be used in the next request to return the next collection of items.
-        items:
-          type: array
-          description: A collection of work queues from the work queue group.
-          items:
-            $ref: '#/components/schemas/WorkQueueInGroup'
-      example:
-        pagingToken: U3VwZXIgc2VjcmV0IGRhdGEuIFNoaGho
-        items:
-        - id: 01234567-89ab-cdef-0123-456789abcdef
-          name: queue 1
-    ErrorMessage:
-      description: A message describing the problem encountered.
-      type: string
     PatchDocument:
       description: A JSONPatch document as defined by RFC 6902. See http://jsonpatch.com/
       required:
@@ -528,11 +508,37 @@ components:
         from:
           type: string
           description: A string containing a JSON Pointer value.
-    PagingToken:
-      type: string
-      description: The token to be used in the next request to return the next collection of items.
-      example: U3VwZXIgc2VjcmV0IGRhdGEuIFNoaGho
+  examples:
+    StringEqualsExample:
+      value:
+        eq: Example
+      summary: Search for a value equal to "Example".
+    StringRangeExample:
+      value:
+        gte: Ex
+        lte: F
+      summary: Search for a value alphanumerically between "Ex" and "F".
+    StringStartsWithExample:
+      value:
+        strtw: Exa
+      summary: Search a value starting with "Exa".
+    StringGreaterThanExample:
+      value:
+        gte: Example
+      summary: Search for a value alphanumerically after or equal to "Example".
+    PatchReplaceExample:
+      summary: Replace the value in a property.
+      value:
+      - op: replace
+        path: /property
+        value: propertyValue
   responses:
+    NotFound:
+      description: The requested resource could not be found.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorMessage'
     BadRequest:
       description: The request is malformed or contains incorrect information. See the response for more details.
       content:
@@ -543,12 +549,6 @@ components:
             - $ref: '#/components/schemas/ValidationError'
     NotAuthorized:
       description: The authentication token was either missing or invalid and must be refreshed.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/ErrorMessage'
-    NotFound:
-      description: The requested resource could not be found.
       content:
         application/json:
           schema:

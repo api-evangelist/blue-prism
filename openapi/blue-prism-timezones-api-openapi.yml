@@ -29,10 +29,14 @@ paths:
         '401':
           $ref: '#/components/responses/NotAuthorized'
 components:
+  responses:
+    NotAuthorized:
+      description: The authentication token was either missing or invalid and must be refreshed.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorMessage'
   schemas:
-    ErrorMessage:
-      description: A message describing the problem encountered.
-      type: string
     TimeZone:
       description: Contains details of a time zone.
       type: object
@@ -65,13 +69,9 @@ components:
           displayName: (UTC-11:00) Co-ordinated Universal Time-11
           baseUtcOffset: '-11:00:00'
           standardName: UTC-11
-  responses:
-    NotAuthorized:
-      description: The authentication token was either missing or invalid and must be refreshed.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/ErrorMessage'
+    ErrorMessage:
+      description: A message describing the problem encountered.
+      type: string
   securitySchemes:
     Bearer:
       type: http

@@ -70,14 +70,14 @@ components:
         members: 3
         databaseStatus: Ready
   responses:
-    Forbidden:
-      description: The authentication token does not give sufficient permissions to perform this action.
+    NotAuthorized:
+      description: The authentication token was either missing or invalid and must be refreshed.
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/ErrorMessage'
-    NotAuthorized:
-      description: The authentication token was either missing or invalid and must be refreshed.
+    Forbidden:
+      description: The authentication token does not give sufficient permissions to perform this action.
       content:
         application/json:
           schema:

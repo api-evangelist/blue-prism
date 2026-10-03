@@ -51,24 +51,6 @@ paths:
           $ref: '#/components/responses/NotFound'
 components:
   schemas:
-    ValidationError:
-      description: An error occurred during validation. See the response body for details on the invalid field.
-      type: object
-      properties:
-        invalidField:
-          type: string
-          description: The field which is invalid.
-        message:
-          type: string
-          description: A description of the error found with the field.
-    PatchRequest:
-      description: A request containing a JSON Patch document. See PatchDocument for details.
-      type: array
-      items:
-        $ref: '#/components/schemas/PatchDocument'
-    ErrorMessage:
-      description: A message describing the problem encountered.
-      type: string
     PatchDocument:
       description: A JSONPatch document as defined by RFC 6902. See http://jsonpatch.com/
       required:
@@ -93,6 +75,9 @@ components:
         from:
           type: string
           description: A string containing a JSON Pointer value.
+    ErrorMessage:
+      description: A message describing the problem encountered.
+      type: string
     UrlParameterError:
       description: An error occurred due to incorrect data supplied to url parameter.
       type: object
@@ -103,9 +88,36 @@ components:
         messageDetail:
           type: string
           description: A detailed description about the error.
+    PatchRequest:
+      description: A request containing a JSON Patch document. See PatchDocument for details.
+      type: array
+      items:
+        $ref: '#/components/schemas/PatchDocument'
+    ValidationError:
+      description: An error occurred during validation. See the response body for details on the invalid field.
+      type: object
+      properties:
+        invalidField:
+          type: string
+          description: The field which is invalid.
+        message:
+          type: string
+          description: A description of the error found with the field.
   responses:
+    Forbidden:
+      description: The authentication token does not give sufficient permissions to perform this action.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorMessage'
     NotAuthorized:
       description: The authentication token was either missing or invalid and must be refreshed.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorMessage'
+    NotFound:
+      description: The requested resource could not be found.
       content:
         application/json:
           schema:
@@ -118,18 +130,6 @@ components:
             oneOf:
             - $ref: '#/components/schemas/UrlParameterError'
             - $ref: '#/components/schemas/ValidationError'
-    NotFound:
-      description: The requested resource could not be found.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/ErrorMessage'
-    Forbidden:
-      description: The authentication token does not give sufficient permissions to perform this action.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/ErrorMessage'
   examples:
     PatchReplaceExample:
       summary: Replace the value in a property.
