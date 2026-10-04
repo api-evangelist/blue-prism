@@ -644,6 +644,8 @@ apis:
   humanURL: https://documentation.blueprism.com/process-intelligence/2-1/en-us/api/api-intro.htm
   baseURL: https://{your.instance}/open-api/1.0
   tags:
+  - Timezone
+  tags_raw:
   - Timezones
   properties:
   - type: OpenAPI
