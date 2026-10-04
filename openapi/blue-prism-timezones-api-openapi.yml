@@ -29,31 +29,7 @@ paths:
         '401':
           $ref: '#/components/responses/NotAuthorized'
 components:
-  responses:
-    NotAuthorized:
-      description: The authentication token was either missing or invalid and must be refreshed.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/ErrorMessage'
   schemas:
-    TimeZone:
-      description: Contains details of a time zone.
-      type: object
-      properties:
-        id:
-          type: string
-          description: The time zone identifier.
-        displayName:
-          type: string
-          description: The general display name that represents the time zone.
-        baseUtcOffset:
-          type: string
-          format: time-span
-          description: The time difference between the current time zone's standard time and Coordinated Universal Time (UTC).
-        standardName:
-          type: string
-          description: The display name for the time zone's standard time.
     TimeZones:
       description: A collection of time zones.
       type: array
@@ -72,6 +48,30 @@ components:
     ErrorMessage:
       description: A message describing the problem encountered.
       type: string
+    TimeZone:
+      description: Contains details of a time zone.
+      type: object
+      properties:
+        id:
+          type: string
+          description: The time zone identifier.
+        displayName:
+          type: string
+          description: The general display name that represents the time zone.
+        baseUtcOffset:
+          type: string
+          format: time-span
+          description: The time difference between the current time zone's standard time and Coordinated Universal Time (UTC).
+        standardName:
+          type: string
+          description: The display name for the time zone's standard time.
+  responses:
+    NotAuthorized:
+      description: The authentication token was either missing or invalid and must be refreshed.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorMessage'
   securitySchemes:
     Bearer:
       type: http

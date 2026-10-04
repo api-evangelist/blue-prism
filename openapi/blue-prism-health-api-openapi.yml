@@ -40,17 +40,6 @@ paths:
       x-operation-id-source: derived
 components:
   schemas:
-    Dependency:
-      description: Contains details of API dependency health
-      type: object
-      properties:
-        name:
-          type: string
-          description: The name of the dependency
-          example: database
-        healthy:
-          type: boolean
-          description: The health status of the dependency
     Health:
       description: Contains details of API health and its dependencies.
       type: object
@@ -63,6 +52,17 @@ components:
           description: The health of API dependencies
           items:
             $ref: '#/components/schemas/Dependency'
+    Dependency:
+      description: Contains details of API dependency health
+      type: object
+      properties:
+        name:
+          type: string
+          description: The name of the dependency
+          example: database
+        healthy:
+          type: boolean
+          description: The health status of the dependency
   securitySchemes:
     Bearer:
       type: http

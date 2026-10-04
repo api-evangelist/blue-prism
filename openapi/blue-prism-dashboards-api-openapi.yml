@@ -189,29 +189,35 @@ paths:
           $ref: '#/components/responses/Forbidden'
 components:
   schemas:
-    LicensesEntitlement:
-      description: A summary of an aggregated licenses entitlement data.
+    UrlParameterError:
+      description: An error occurred due to incorrect data supplied to url parameter.
       type: object
       properties:
-        activeLicenseTypes:
-          description: An array of types of an active licenses.
-          type: array
-          items:
-            type: string
-            enum:
-            - Enterprise
-            - NHS
-            - Evaluation
-            - Education
-            - Desktop
-        enterpriseEntitlement:
-          type: object
-          $ref: '#/components/schemas/BaseEntitlement'
-          description: A summary of an aggregated enterprise licenses entitlement data.
-        desktopEntitlement:
-          type: object
-          $ref: '#/components/schemas/BaseEntitlement'
-          description: A summary of an aggregated desktop licenses entitlement data.
+        message:
+          type: string
+          description: A message about the error.
+        messageDetail:
+          type: string
+          description: A detailed description about the error.
+    ErrorMessage:
+      description: A message describing the problem encountered.
+      type: string
+    BaseEntitlement:
+      description: An aggregated licenses entitlement data.
+      type: object
+      properties:
+        publishedprocesseslimit:
+          type: integer
+          description: Number of processes that can be published.
+        concurrentsessionslimit:
+          type: integer
+          description: Number of concurrent sessions which can be ran.
+        runtimeresourceslimit:
+          type: integer
+          description: Number of resources which can be registered at any one time.
+        processalertmachineslimit:
+          type: integer
+          description: Number of machines which Process Alerts can be used.
     ResourceUtilization:
       description: A model of resource utilization per hour.
       type: object
@@ -234,6 +240,28 @@ components:
           items:
             type: integer
             description: The number of minutes that the resource was working in this hour.
+    ResourcesSummaryUtilization:
+      description: A model of average resource utilization per day.
+      type: object
+      properties:
+        usagehour:
+          type: string
+          description: The date of the resource utilization.
+          format: date-time
+          example: '2020-10-02T12:34:56+02:00'
+        usage:
+          type: integer
+          description: The average resource utilization per hour in minutes.
+    ValidationError:
+      description: An error occurred during validation. See the response body for details on the invalid field.
+      type: object
+      properties:
+        invalidField:
+          type: string
+          description: The field which is invalid.
+        message:
+          type: string
+          description: A description of the error found with the field.
     LicenseUsageDetailsModel:
       description: A summary of active licenses limits and usages
       type: object
@@ -278,57 +306,6 @@ components:
           type: integer
           description: The number of machines with alerts currently in use.
           example: 17
-    BaseEntitlement:
-      description: An aggregated licenses entitlement data.
-      type: object
-      properties:
-        publishedprocesseslimit:
-          type: integer
-          description: Number of processes that can be published.
-        concurrentsessionslimit:
-          type: integer
-          description: Number of concurrent sessions which can be ran.
-        runtimeresourceslimit:
-          type: integer
-          description: Number of resources which can be registered at any one time.
-        processalertmachineslimit:
-          type: integer
-          description: Number of machines which Process Alerts can be used.
-    ResourcesSummaryUtilization:
-      description: A model of average resource utilization per day.
-      type: object
-      properties:
-        usagehour:
-          type: string
-          description: The date of the resource utilization.
-          format: date-time
-          example: '2020-10-02T12:34:56+02:00'
-        usage:
-          type: integer
-          description: The average resource utilization per hour in minutes.
-    ErrorMessage:
-      description: A message describing the problem encountered.
-      type: string
-    UrlParameterError:
-      description: An error occurred due to incorrect data supplied to url parameter.
-      type: object
-      properties:
-        message:
-          type: string
-          description: A message about the error.
-        messageDetail:
-          type: string
-          description: A detailed description about the error.
-    ValidationError:
-      description: An error occurred during validation. See the response body for details on the invalid field.
-      type: object
-      properties:
-        invalidField:
-          type: string
-          description: The field which is invalid.
-        message:
-          type: string
-          description: A description of the error found with the field.
     WorkQueueComposition:
       description: A summary of work queue items.
       type: object
@@ -355,6 +332,29 @@ components:
         exceptioned:
           type: integer
           description: A count of exceptioned items in work queue.
+    LicensesEntitlement:
+      description: A summary of an aggregated licenses entitlement data.
+      type: object
+      properties:
+        activeLicenseTypes:
+          description: An array of types of an active licenses.
+          type: array
+          items:
+            type: string
+            enum:
+            - Enterprise
+            - NHS
+            - Evaluation
+            - Education
+            - Desktop
+        enterpriseEntitlement:
+          type: object
+          $ref: '#/components/schemas/BaseEntitlement'
+          description: A summary of an aggregated enterprise licenses entitlement data.
+        desktopEntitlement:
+          type: object
+          $ref: '#/components/schemas/BaseEntitlement'
+          description: A summary of an aggregated desktop licenses entitlement data.
   responses:
     Forbidden:
       description: The authentication token does not give sufficient permissions to perform this action.

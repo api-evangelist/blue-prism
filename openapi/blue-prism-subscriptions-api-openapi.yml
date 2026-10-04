@@ -51,6 +51,16 @@ paths:
           $ref: '#/components/responses/NotFound'
 components:
   schemas:
+    UrlParameterError:
+      description: An error occurred due to incorrect data supplied to url parameter.
+      type: object
+      properties:
+        message:
+          type: string
+          description: A message about the error.
+        messageDetail:
+          type: string
+          description: A detailed description about the error.
     PatchDocument:
       description: A JSONPatch document as defined by RFC 6902. See http://jsonpatch.com/
       required:
@@ -78,21 +88,6 @@ components:
     ErrorMessage:
       description: A message describing the problem encountered.
       type: string
-    UrlParameterError:
-      description: An error occurred due to incorrect data supplied to url parameter.
-      type: object
-      properties:
-        message:
-          type: string
-          description: A message about the error.
-        messageDetail:
-          type: string
-          description: A detailed description about the error.
-    PatchRequest:
-      description: A request containing a JSON Patch document. See PatchDocument for details.
-      type: array
-      items:
-        $ref: '#/components/schemas/PatchDocument'
     ValidationError:
       description: An error occurred during validation. See the response body for details on the invalid field.
       type: object
@@ -103,6 +98,11 @@ components:
         message:
           type: string
           description: A description of the error found with the field.
+    PatchRequest:
+      description: A request containing a JSON Patch document. See PatchDocument for details.
+      type: array
+      items:
+        $ref: '#/components/schemas/PatchDocument'
   responses:
     Forbidden:
       description: The authentication token does not give sufficient permissions to perform this action.

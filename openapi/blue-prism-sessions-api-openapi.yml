@@ -1164,416 +1164,24 @@ paths:
           $ref: '#/components/responses/NotFound'
 components:
   schemas:
-    SessionSource:
-      description: The source of a session
+    ErrorMessage:
+      description: A message describing the problem encountered.
       type: string
-      enum:
-      - Desktop
-      - Enterprise
-    RangeOrEqualFilter:
-      description: Used to filter values. Check for values that are equal to, greater than or equal to, less than or equal to, or between the given value(s).
-      type: object
-      oneOf:
-      - $ref: '#/components/schemas/RangeFilter'
-      - $ref: '#/components/schemas/EqualsFilter'
-      example:
-        gte: null
-        lte: null
-        eq: null
-    DataCollection:
-      description: Represents a Blue Prism collection.
+    UpdateSession:
+      description: Contains details for updating a session.
       type: object
       properties:
-        rows:
-          description: A collection of rows representing the data contained within the collection.
-          type: array
-          items:
-            $ref: '#/components/schemas/DataRow'
-    SessionItemsPage:
-      description: Contains details of a page of sessions.
-      type: object
-      properties:
-        pagingToken:
-          $ref: '#/components/schemas/PagingToken'
-        items:
-          type: array
-          description: A collection of session summary.
-          items:
-            $ref: '#/components/schemas/SessionSummary'
-          example:
-          - sessionId: 01234567-89ab-cdef-0123-456789abcdef
-            sessionNumber: 123
-            processId: 01234567-89ab-cdef-0123-456789abcdef
-            processName: Example process
-            resourceId: 01234567-89ab-cdef-0123-456789abcdef
-            resourceName: Example resource
-            username: Example user
-            status: Running
-            startTime: '2020-10-02T12:34:56+02:00'
-            endTime: '2020-10-03T13:36:21+02:00'
-            latestStage: Example stage
-            stageStarted: '2020-10-02T12:35:30+02:00'
-            exceptionMessage: Exception message
-            terminationReason: InternalError
-            exceptionType: Exception type
-            sessionSource: Enterprise
-            processAttribute: Published
-    StartsWithStringFilter:
-      description: Used to filter strings. Check for strings that start with the given value.
-      type: object
-      properties:
-        strtw:
-          type:
-          - string
-          - 'null'
-          description: The value that the field should start with.
-      example:
-        strtw: null
-    LessThanOrEqualToFilter:
-      description: Used to filter values. Check for values that are less than or equal to the given value.
-      type: object
-      properties:
-        lte:
-          type:
-          - object
-          - 'null'
-          description: The value that the field should be less than or equal to.
-      example:
-        lte: null
-    SessionStartUpParameters:
-      description: Contains start-up parameters of a session.
-      type: object
-      properties:
-        parameters:
-          $ref: '#/components/schemas/DataRow'
-      example:
-        parameters:
-          parameter1:
-            valueType: Text
-            value: Example value
-            additionalParameters:
-            - UTF-8
-          parameter2:
-            valueType: Number
-            value: 123
-            additionalParameters: null
-          parameter3:
-            valueType: Image
-            value: isAWPOCldncNSNLnacnKNsnaNAlknKLKScnsaklcn...
-            additionalParameters:
-            - C:\Path\To\File.ext
-            - 01/01/2022 01:01:01 AM
-    StageType:
-      description: The stage type of a session
-      type: string
-      enum:
-      - Undefined
-      - Action
-      - Decision
-      - Calculation
-      - Data
-      - Collection
-      - Process
-      - SubSheet
-      - ProcessInfo
-      - SubSheetInfo
-      - Start
-      - End
-      - Anchor
-      - Note
-      - LoopStart
-      - LoopEnd
-      - Read
-      - Write
-      - Navigate
-      - Code
-      - ChoiceStart
-      - ChoiceEnd
-      - WaitStart
-      - WaitEnd
-      - Alert
-      - Exception
-      - Recover
-      - Resume
-      - Block
-      - MultipleCalculation
-      - Skill
-      - Input
-      - Output
-      - EnterpriseSession
-    ValidationError:
-      description: An error occurred during validation. See the response body for details on the invalid field.
-      type: object
-      properties:
-        invalidField:
+        status:
           type: string
-          description: The field which is invalid.
-        message:
-          type: string
-          description: A description of the error found with the field.
-    DataValue:
-      description: Represents a single item of data in a Blue Prism format.
-      type: object
-      properties:
-        valueType:
-          description: The type of object contained in the value field.
-          type: string
+          description: The status of the session.
           enum:
-          - Binary
-          - Collection
-          - Date
-          - DateTime
-          - Flag
-          - Image
-          - Number
-          - Password
-          - RadioButtons
-          - Text
-          - Time
-          - TimeSpan
-        value:
-          description: The value of the object.
-          oneOf:
-          - type: string
-            format: base64
-            description: Used for Binary and Image data types. The image format must only be one of these BPM, JPG, JPEG, GIF, PNG, ICO or TIFF.
-          - $ref: '#/components/schemas/DataCollection'
-            description: Used for the Collection data type.
-          - type: string
-            format: date
-            description: Used for Date and Time data types.
-          - type: boolean
-            description: Used for the Flag data type.
-          - type: number
-            description: Used for the Number data type.
-          - type: string
-            description: Used for Password and Text data types.
-          - type: string
-            format: time
-            description: Used for the TimeSpan data type.
-          - $ref: '#/components/schemas/RadioButtonsArray'
-        additionalParameters:
-          description: Custom extra parameters i.e. Binary's file path.
-          type: array
-          items:
-            type: string
-    GreaterThanOrEqualToFilter:
-      description: Used to filter values. Check for values that are greater than or equal to the given value.
-      type: object
-      properties:
-        gte:
-          type:
-          - object
-          - 'null'
-          description: The value that the field should be greater than or equal to.
-      example:
-        gte: null
-    SessionLogSummary:
-      description: Contains basic details of a session log.
-      type: object
-      properties:
-        logId:
-          type: integer
-          description: The ID of the session log.
-        logNumber:
-          type: integer
-          description: The number of the session log.
-        stageId:
-          type: string
-          description: The id of the stage that created this log entry.
-        stageName:
-          type: string
-          description: The name of the stage that created this log entry.
-        stageType:
-          description: The type of the stage that created this log entry.
-          type: string
-          $ref: '#/components/schemas/StageType'
-        processName:
-          type: string
-          description: The name of the processes.
-        pageName:
-          type: string
-          description: The name of the page.
-        objectName:
-          type: string
-          description: The name of the object.
-        actionName:
-          type: string
-          description: The name of the action.
-        result:
-          type: string
-          description: The result of the stage.
-        resultType:
-          type: string
-          description: The result type of the stage.
-          $ref: '#/components/schemas/ResultType'
-        resourceStartTime:
-          type: string
-          format: date-time
-          description: The date and time that the resource started running.
-        resourceEndTime:
-          type: string
-          format: date-time
-          description: The date and time that the resource ended running.
-        bluePrismMemory:
-          type: integer
-          description: The automate memory.
-        targetAppId:
-          type: string
-          description: The id of the target app.
-        targetMemory:
-          type: integer
-          description: The tareget memory.
-        hasParameters:
-          type: boolean
-          description: If the session log has parameters.
-      example:
-        logId: 123
-        logNumber: 123
-        stageId: 00000000-0000-0000-0000-000000000000
-        stageName: Example stage
-        stageType: Calculation
-        processName: Example process
-        pageName: Example page
-        objectName: Example object
-        actionName: Example action
-        result: Some result
-        resultType: Collection
-        resourceStartTime: '2020-10-02T12:34:56+01:00'
-        resourceEndTime: '2020-10-02T13:34:56+01:00'
-        bluePrismMemory: 123
-        targetAppId: Example target
-        targetMemory: 123
-        hasParameters: true
-    ProcessAttribute:
-      description: The attributes of the process.
-      type: string
-      enum:
-      - None
-      - Retired
-      - Published
-      - PublishedWebService
-      - PublishedDesktop
-    UrlParameterError:
-      description: An error occurred due to incorrect data supplied to url parameter.
-      type: object
-      properties:
-        message:
-          type: string
-          description: A message about the error.
-        messageDetail:
-          type: string
-          description: A detailed description about the error.
-    SessionLogsPage:
-      description: Contains details of a page of session logs.
-      type: object
-      properties:
-        pagingToken:
-          type: string
-          description: The token to be used in the next request to return the next collection of items.
-        items:
-          type: array
-          description: A collection of items
-          items:
-            $ref: '#/components/schemas/SessionLogSummary'
-      example:
-        pagingToken: U3VwZXIgc2VjcmV0IGRhdGEuIFNoaGho
-        items:
-        - logId: 123
-          logNumber: 123
-          stageId: 00000000-0000-0000-0000-000000000000
-          stageName: Example stage
-          stageType: Calculation
-          processName: Example process
-          pageName: Example page
-          objectName: Example object
-          actionName: Example action
-          result: Some result
-          resultType: Collection
-          resourceStartTime: '2020-10-02T12:34:56+01:00'
-          resourceEndTime: '2020-10-02T13:34:56+01:00'
-          bluePrismMemory: 123
-          targetAppId: Example target
-          targetMemory: 123
-          hasParameters: true
-    RadioButtonsArray:
-      description: Used for the RadioButtons data type.
-      type: array
-      items:
-        type: object
-        properties:
-          name:
-            type: string
-          selected:
-            type: boolean
-    CreateSessionParameters:
-      description: Contain a parameter used to create a new session
-      type: object
-      properties:
-        resourceId:
-          type: string
-          format: uuid
-          description: The ID of the resource or pool to create session.
-        processId:
-          type: string
-          format: uuid
-          description: The ID of the process to create session.
-    PagingToken:
-      type: string
-      description: The token to be used in the next request to return the next collection of items.
-      example: U3VwZXIgc2VjcmV0IGRhdGEuIFNoaGho
-    Error:
-      description: A general error occurred. See errorMessage for details.
-      type: object
-      properties:
-        errorMessage:
-          description: A message describing the problem encountered.
-          type: string
-    SessionLogParametersResponse:
-      description: Contains input and output parameters of a session log.
-      type: object
-      properties:
-        inputs:
-          $ref: '#/components/schemas/DataRow'
-        outputs:
-          $ref: '#/components/schemas/DataRow'
-      example:
-        inputs:
-          parameter1:
-            valueType: Text
-            value: Example value
-          parameter2:
-            valueType: Number
-            value: 123
-        outputs:
-          parameter1:
-            valueType: Collection
-            value:
-              rows:
-              - valueType: Number
-                value: 321
-              - valueType: Date
-                value: '2020-10-02T12:34:56+01:00'
-    RangeFilter:
-      description: Used to filter values. Check for values that are greater than or equal to, less than or equal to, or between the given value(s).
-      type: object
-      anyOf:
-      - $ref: '#/components/schemas/GreaterThanOrEqualToFilter'
-      - $ref: '#/components/schemas/LessThanOrEqualToFilter'
-      example:
-        gte: null
-        lte: null
-    BasicNumericFilter:
-      description: Used to filter numbers. Check for numbers that start with, equal, are greater than, are less than, or are between the given values(s).
-      type: object
-      oneOf:
-      - $ref: '#/components/schemas/RangeOrEqualFilter'
-      - $ref: '#/components/schemas/StartsWithStringFilter'
-      example:
-        strtw: null
-        eq: null
-        lte: null
-        gte: null
+          - Pending
+          - Running
+          - Stopped
+          - Terminated
+          - Completed
+          - Stopping
+          - Warning
     SessionSummary:
       description: Contains basic details of a session,
       type: object
@@ -1684,64 +1292,93 @@ components:
         - Retired
         - Published
         - PublishedWebService
-    DataRow:
-      description: A dictionary which represents a row of data from a Blue Prism collection.
-      type: object
-      additionalProperties:
-        $ref: '#/components/schemas/DataValue'
-    EqualsFilter:
-      description: Used to filter values. Check for values that are equal to the given value.
+    Error:
+      description: A general error occurred. See errorMessage for details.
       type: object
       properties:
-        eq:
-          type:
-          - object
-          - 'null'
-          description: The value that the field should be equal to.
-      example:
-        eq: null
-    BasicStringFilter:
-      description: Used to filter strings. Check for strings that start with, equal, are greater than, are less than, or are between the given value(s).
-      type: object
-      anyOf:
-      - $ref: '#/components/schemas/RangeOrEqualFilter'
-      - $ref: '#/components/schemas/StartsWithStringFilter'
-      example:
-        strtw: null
-        gte: null
-        lte: null
-        eq: null
-    ResultType:
-      description: The result type of a session
+        errorMessage:
+          description: A message describing the problem encountered.
+          type: string
+    StageType:
+      description: The stage type of a session
       type: string
       enum:
-      - Unknown
-      - Binary
+      - Undefined
+      - Action
+      - Decision
+      - Calculation
+      - Data
       - Collection
-      - Date
-      - DateTime
-      - Flag
-      - Image
-      - Number
-      - Password
-      - Text
-      - Time
-      - TimeSpan
-      - RadioButton
-    SessionStatus:
-      description: The status of a session
-      type: string
-      enum:
-      - Pending
-      - Running
-      - Terminated
-      - Stopped
-      - Completed
-      - Stopping
-      - Warning
-    ErrorMessage:
-      description: A message describing the problem encountered.
-      type: string
+      - Process
+      - SubSheet
+      - ProcessInfo
+      - SubSheetInfo
+      - Start
+      - End
+      - Anchor
+      - Note
+      - LoopStart
+      - LoopEnd
+      - Read
+      - Write
+      - Navigate
+      - Code
+      - ChoiceStart
+      - ChoiceEnd
+      - WaitStart
+      - WaitEnd
+      - Alert
+      - Exception
+      - Recover
+      - Resume
+      - Block
+      - MultipleCalculation
+      - Skill
+      - Input
+      - Output
+      - EnterpriseSession
+    SessionLogsPage:
+      description: Contains details of a page of session logs.
+      type: object
+      properties:
+        pagingToken:
+          type: string
+          description: The token to be used in the next request to return the next collection of items.
+        items:
+          type: array
+          description: A collection of items
+          items:
+            $ref: '#/components/schemas/SessionLogSummary'
+      example:
+        pagingToken: U3VwZXIgc2VjcmV0IGRhdGEuIFNoaGho
+        items:
+        - logId: 123
+          logNumber: 123
+          stageId: 00000000-0000-0000-0000-000000000000
+          stageName: Example stage
+          stageType: Calculation
+          processName: Example process
+          pageName: Example page
+          objectName: Example object
+          actionName: Example action
+          result: Some result
+          resultType: Collection
+          resourceStartTime: '2020-10-02T12:34:56+01:00'
+          resourceEndTime: '2020-10-02T13:34:56+01:00'
+          bluePrismMemory: 123
+          targetAppId: Example target
+          targetMemory: 123
+          hasParameters: true
+    UrlParameterError:
+      description: An error occurred due to incorrect data supplied to url parameter.
+      type: object
+      properties:
+        message:
+          type: string
+          description: A message about the error.
+        messageDetail:
+          type: string
+          description: A detailed description about the error.
     FullStringFilter:
       description: Used to filter strings. Check for strings that start with, contain, equal, are greater than, are less than, or are between the given value(s).
       type: object
@@ -1754,21 +1391,68 @@ components:
         gte: null
         lte: null
         eq: null
-    UpdateSession:
-      description: Contains details for updating a session.
+    RangeOrEqualFilter:
+      description: Used to filter values. Check for values that are equal to, greater than or equal to, less than or equal to, or between the given value(s).
+      type: object
+      oneOf:
+      - $ref: '#/components/schemas/RangeFilter'
+      - $ref: '#/components/schemas/EqualsFilter'
+      example:
+        gte: null
+        lte: null
+        eq: null
+    CreateSessionParameters:
+      description: Contain a parameter used to create a new session
       type: object
       properties:
-        status:
+        resourceId:
           type: string
-          description: The status of the session.
-          enum:
-          - Pending
-          - Running
-          - Stopped
-          - Terminated
-          - Completed
-          - Stopping
-          - Warning
+          format: uuid
+          description: The ID of the resource or pool to create session.
+        processId:
+          type: string
+          format: uuid
+          description: The ID of the process to create session.
+    SessionItemsPage:
+      description: Contains details of a page of sessions.
+      type: object
+      properties:
+        pagingToken:
+          $ref: '#/components/schemas/PagingToken'
+        items:
+          type: array
+          description: A collection of session summary.
+          items:
+            $ref: '#/components/schemas/SessionSummary'
+          example:
+          - sessionId: 01234567-89ab-cdef-0123-456789abcdef
+            sessionNumber: 123
+            processId: 01234567-89ab-cdef-0123-456789abcdef
+            processName: Example process
+            resourceId: 01234567-89ab-cdef-0123-456789abcdef
+            resourceName: Example resource
+            username: Example user
+            status: Running
+            startTime: '2020-10-02T12:34:56+02:00'
+            endTime: '2020-10-03T13:36:21+02:00'
+            latestStage: Example stage
+            stageStarted: '2020-10-02T12:35:30+02:00'
+            exceptionMessage: Exception message
+            terminationReason: InternalError
+            exceptionType: Exception type
+            sessionSource: Enterprise
+            processAttribute: Published
+    BasicNumericFilter:
+      description: Used to filter numbers. Check for numbers that start with, equal, are greater than, are less than, or are between the given values(s).
+      type: object
+      oneOf:
+      - $ref: '#/components/schemas/RangeOrEqualFilter'
+      - $ref: '#/components/schemas/StartsWithStringFilter'
+      example:
+        strtw: null
+        eq: null
+        lte: null
+        gte: null
     ContainsStringFilter:
       description: Used to filter strings. Check for strings that contain the given value.
       type: object
@@ -1789,15 +1473,381 @@ components:
       example:
         ctn: null
         strtw: null
+    SessionLogSummary:
+      description: Contains basic details of a session log.
+      type: object
+      properties:
+        logId:
+          type: integer
+          description: The ID of the session log.
+        logNumber:
+          type: integer
+          description: The number of the session log.
+        stageId:
+          type: string
+          description: The id of the stage that created this log entry.
+        stageName:
+          type: string
+          description: The name of the stage that created this log entry.
+        stageType:
+          description: The type of the stage that created this log entry.
+          type: string
+          $ref: '#/components/schemas/StageType'
+        processName:
+          type: string
+          description: The name of the processes.
+        pageName:
+          type: string
+          description: The name of the page.
+        objectName:
+          type: string
+          description: The name of the object.
+        actionName:
+          type: string
+          description: The name of the action.
+        result:
+          type: string
+          description: The result of the stage.
+        resultType:
+          type: string
+          description: The result type of the stage.
+          $ref: '#/components/schemas/ResultType'
+        resourceStartTime:
+          type: string
+          format: date-time
+          description: The date and time that the resource started running.
+        resourceEndTime:
+          type: string
+          format: date-time
+          description: The date and time that the resource ended running.
+        bluePrismMemory:
+          type: integer
+          description: The automate memory.
+        targetAppId:
+          type: string
+          description: The id of the target app.
+        targetMemory:
+          type: integer
+          description: The tareget memory.
+        hasParameters:
+          type: boolean
+          description: If the session log has parameters.
+      example:
+        logId: 123
+        logNumber: 123
+        stageId: 00000000-0000-0000-0000-000000000000
+        stageName: Example stage
+        stageType: Calculation
+        processName: Example process
+        pageName: Example page
+        objectName: Example object
+        actionName: Example action
+        result: Some result
+        resultType: Collection
+        resourceStartTime: '2020-10-02T12:34:56+01:00'
+        resourceEndTime: '2020-10-02T13:34:56+01:00'
+        bluePrismMemory: 123
+        targetAppId: Example target
+        targetMemory: 123
+        hasParameters: true
+    BasicStringFilter:
+      description: Used to filter strings. Check for strings that start with, equal, are greater than, are less than, or are between the given value(s).
+      type: object
+      anyOf:
+      - $ref: '#/components/schemas/RangeOrEqualFilter'
+      - $ref: '#/components/schemas/StartsWithStringFilter'
+      example:
+        strtw: null
+        gte: null
+        lte: null
+        eq: null
+    ValidationError:
+      description: An error occurred during validation. See the response body for details on the invalid field.
+      type: object
+      properties:
+        invalidField:
+          type: string
+          description: The field which is invalid.
+        message:
+          type: string
+          description: A description of the error found with the field.
+    DataRow:
+      description: A dictionary which represents a row of data from a Blue Prism collection.
+      type: object
+      additionalProperties:
+        $ref: '#/components/schemas/DataValue'
+    LessThanOrEqualToFilter:
+      description: Used to filter values. Check for values that are less than or equal to the given value.
+      type: object
+      properties:
+        lte:
+          type:
+          - object
+          - 'null'
+          description: The value that the field should be less than or equal to.
+      example:
+        lte: null
+    PagingToken:
+      type: string
+      description: The token to be used in the next request to return the next collection of items.
+      example: U3VwZXIgc2VjcmV0IGRhdGEuIFNoaGho
+    DataCollection:
+      description: Represents a Blue Prism collection.
+      type: object
+      properties:
+        rows:
+          description: A collection of rows representing the data contained within the collection.
+          type: array
+          items:
+            $ref: '#/components/schemas/DataRow'
+    StartsWithStringFilter:
+      description: Used to filter strings. Check for strings that start with the given value.
+      type: object
+      properties:
+        strtw:
+          type:
+          - string
+          - 'null'
+          description: The value that the field should start with.
+      example:
+        strtw: null
+    SessionSource:
+      description: The source of a session
+      type: string
+      enum:
+      - Desktop
+      - Enterprise
+    SessionStatus:
+      description: The status of a session
+      type: string
+      enum:
+      - Pending
+      - Running
+      - Terminated
+      - Stopped
+      - Completed
+      - Stopping
+      - Warning
+    ResultType:
+      description: The result type of a session
+      type: string
+      enum:
+      - Unknown
+      - Binary
+      - Collection
+      - Date
+      - DateTime
+      - Flag
+      - Image
+      - Number
+      - Password
+      - Text
+      - Time
+      - TimeSpan
+      - RadioButton
+    EqualsFilter:
+      description: Used to filter values. Check for values that are equal to the given value.
+      type: object
+      properties:
+        eq:
+          type:
+          - object
+          - 'null'
+          description: The value that the field should be equal to.
+      example:
+        eq: null
+    GreaterThanOrEqualToFilter:
+      description: Used to filter values. Check for values that are greater than or equal to the given value.
+      type: object
+      properties:
+        gte:
+          type:
+          - object
+          - 'null'
+          description: The value that the field should be greater than or equal to.
+      example:
+        gte: null
+    RangeFilter:
+      description: Used to filter values. Check for values that are greater than or equal to, less than or equal to, or between the given value(s).
+      type: object
+      anyOf:
+      - $ref: '#/components/schemas/GreaterThanOrEqualToFilter'
+      - $ref: '#/components/schemas/LessThanOrEqualToFilter'
+      example:
+        gte: null
+        lte: null
+    ProcessAttribute:
+      description: The attributes of the process.
+      type: string
+      enum:
+      - None
+      - Retired
+      - Published
+      - PublishedWebService
+      - PublishedDesktop
+    SessionLogParametersResponse:
+      description: Contains input and output parameters of a session log.
+      type: object
+      properties:
+        inputs:
+          $ref: '#/components/schemas/DataRow'
+        outputs:
+          $ref: '#/components/schemas/DataRow'
+      example:
+        inputs:
+          parameter1:
+            valueType: Text
+            value: Example value
+          parameter2:
+            valueType: Number
+            value: 123
+        outputs:
+          parameter1:
+            valueType: Collection
+            value:
+              rows:
+              - valueType: Number
+                value: 321
+              - valueType: Date
+                value: '2020-10-02T12:34:56+01:00'
+    RadioButtonsArray:
+      description: Used for the RadioButtons data type.
+      type: array
+      items:
+        type: object
+        properties:
+          name:
+            type: string
+          selected:
+            type: boolean
+    DataValue:
+      description: Represents a single item of data in a Blue Prism format.
+      type: object
+      properties:
+        valueType:
+          description: The type of object contained in the value field.
+          type: string
+          enum:
+          - Binary
+          - Collection
+          - Date
+          - DateTime
+          - Flag
+          - Image
+          - Number
+          - Password
+          - RadioButtons
+          - Text
+          - Time
+          - TimeSpan
+        value:
+          description: The value of the object.
+          oneOf:
+          - type: string
+            format: base64
+            description: Used for Binary and Image data types. The image format must only be one of these BPM, JPG, JPEG, GIF, PNG, ICO or TIFF.
+          - $ref: '#/components/schemas/DataCollection'
+            description: Used for the Collection data type.
+          - type: string
+            format: date
+            description: Used for Date and Time data types.
+          - type: boolean
+            description: Used for the Flag data type.
+          - type: number
+            description: Used for the Number data type.
+          - type: string
+            description: Used for Password and Text data types.
+          - type: string
+            format: time
+            description: Used for the TimeSpan data type.
+          - $ref: '#/components/schemas/RadioButtonsArray'
+        additionalParameters:
+          description: Custom extra parameters i.e. Binary's file path.
+          type: array
+          items:
+            type: string
+    SessionStartUpParameters:
+      description: Contains start-up parameters of a session.
+      type: object
+      properties:
+        parameters:
+          $ref: '#/components/schemas/DataRow'
+      example:
+        parameters:
+          parameter1:
+            valueType: Text
+            value: Example value
+            additionalParameters:
+            - UTF-8
+          parameter2:
+            valueType: Number
+            value: 123
+            additionalParameters: null
+          parameter3:
+            valueType: Image
+            value: isAWPOCldncNSNLnacnKNsnaNAlknKLKScnsaklcn...
+            additionalParameters:
+            - C:\Path\To\File.ext
+            - 01/01/2022 01:01:01 AM
+  examples:
+    DateTimeEqualsExample:
+      value:
+        eq: '2020-10-02T12:34:56+01:00'
+      summary: Search for a value equal to 2020-10-02 at 12:34:56 (GMT+1).
+    IntegerLessThanExample:
+      value:
+        lte: 123
+      summary: Search for a value less than or equal to 123.
+    DateTimeGreaterThanExample:
+      value:
+        gte: '2020-10-02T12:34:56+01:00'
+      summary: Search for a value after or equal to 2020-10-02 at 12:34:56 (GMT+1).
+    IntegerGreaterThanExample:
+      value:
+        gte: 123
+      summary: Search for a value greater than or equal to 123.
+    StringContainsExample:
+      value:
+        ctn: amp
+      summary: Search a value containing "amp"
+    IntegerStartsWithExample:
+      value:
+        strtw: 123
+      summary: Search for a value starting with 123
+    StringEqualsExample:
+      value:
+        eq: Example
+      summary: Search for a value equal to "Example".
+    IntegerEqualsExample:
+      value:
+        eq: 123
+      summary: Search for a value equal to 123.
+    StringStartsWithExample:
+      value:
+        strtw: Exa
+      summary: Search a value starting with "Exa".
+    StringRangeExample:
+      value:
+        gte: Ex
+        lte: F
+      summary: Search for a value alphanumerically between "Ex" and "F".
+    IntegerRangeExample:
+      value:
+        gte: 123
+        lte: 321
+      summary: Search for a value between 123 and 321 inclusive.
+    DateTimeRangeExample:
+      value:
+        gte: '2020-10-02T12:34:56+01:00'
+        lte: '2020-11-02T12:34:56+01:00'
+      summary: Search for a value between 2020-10-02 at 12:34:56 (GMT+1) and 2020-11-02 at 12:34:56 (GMT+1) (inclusive).
+    StringGreaterThanExample:
+      value:
+        gte: Example
+      summary: Search for a value alphanumerically after or equal to "Example".
   responses:
     Conflict:
       description: The request conflicts with the current state of the resource.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/ErrorMessage'
-    NotFound:
-      description: The requested resource could not be found.
       content:
         application/json:
           schema:
@@ -1808,6 +1858,20 @@ components:
         application/json:
           schema:
             $ref: '#/components/schemas/ErrorMessage'
+    NotFound:
+      description: The requested resource could not be found.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorMessage'
+    BadRequest:
+      description: The request is malformed or contains incorrect information. See the response for more details.
+      content:
+        application/json:
+          schema:
+            oneOf:
+            - $ref: '#/components/schemas/UrlParameterError'
+            - $ref: '#/components/schemas/ValidationError'
     Forbidden:
       description: The authentication token does not give sufficient permissions to perform this action.
       content:
@@ -1826,70 +1890,6 @@ components:
         application/json:
           schema:
             $ref: '#/components/schemas/Error'
-    BadRequest:
-      description: The request is malformed or contains incorrect information. See the response for more details.
-      content:
-        application/json:
-          schema:
-            oneOf:
-            - $ref: '#/components/schemas/UrlParameterError'
-            - $ref: '#/components/schemas/ValidationError'
-  examples:
-    StringEqualsExample:
-      value:
-        eq: Example
-      summary: Search for a value equal to "Example".
-    IntegerRangeExample:
-      value:
-        gte: 123
-        lte: 321
-      summary: Search for a value between 123 and 321 inclusive.
-    StringRangeExample:
-      value:
-        gte: Ex
-        lte: F
-      summary: Search for a value alphanumerically between "Ex" and "F".
-    IntegerEqualsExample:
-      value:
-        eq: 123
-      summary: Search for a value equal to 123.
-    StringStartsWithExample:
-      value:
-        strtw: Exa
-      summary: Search a value starting with "Exa".
-    IntegerGreaterThanExample:
-      value:
-        gte: 123
-      summary: Search for a value greater than or equal to 123.
-    StringGreaterThanExample:
-      value:
-        gte: Example
-      summary: Search for a value alphanumerically after or equal to "Example".
-    IntegerStartsWithExample:
-      value:
-        strtw: 123
-      summary: Search for a value starting with 123
-    DateTimeGreaterThanExample:
-      value:
-        gte: '2020-10-02T12:34:56+01:00'
-      summary: Search for a value after or equal to 2020-10-02 at 12:34:56 (GMT+1).
-    DateTimeRangeExample:
-      value:
-        gte: '2020-10-02T12:34:56+01:00'
-        lte: '2020-11-02T12:34:56+01:00'
-      summary: Search for a value between 2020-10-02 at 12:34:56 (GMT+1) and 2020-11-02 at 12:34:56 (GMT+1) (inclusive).
-    DateTimeEqualsExample:
-      value:
-        eq: '2020-10-02T12:34:56+01:00'
-      summary: Search for a value equal to 2020-10-02 at 12:34:56 (GMT+1).
-    IntegerLessThanExample:
-      value:
-        lte: 123
-      summary: Search for a value less than or equal to 123.
-    StringContainsExample:
-      value:
-        ctn: amp
-      summary: Search a value containing "amp"
   securitySchemes:
     Bearer:
       type: http

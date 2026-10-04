@@ -224,6 +224,26 @@ paths:
                 $ref: '#/components/schemas/Error'
 components:
   schemas:
+    ErrorMessage:
+      description: A message describing the problem encountered.
+      type: string
+    Error:
+      description: A general error occurred. See errorMessage for details.
+      type: object
+      properties:
+        errorMessage:
+          description: A message describing the problem encountered.
+          type: string
+    UrlParameterError:
+      description: An error occurred due to incorrect data supplied to url parameter.
+      type: object
+      properties:
+        message:
+          type: string
+          description: A message about the error.
+        messageDetail:
+          type: string
+          description: A detailed description about the error.
     RangeOrEqualFilter:
       description: Used to filter values. Check for values that are equal to, greater than or equal to, less than or equal to, or between the given value(s).
       type: object
@@ -234,17 +254,27 @@ components:
         gte: null
         lte: null
         eq: null
-    StartsWithStringFilter:
-      description: Used to filter strings. Check for strings that start with the given value.
+    BasicStringFilter:
+      description: Used to filter strings. Check for strings that start with, equal, are greater than, are less than, or are between the given value(s).
       type: object
-      properties:
-        strtw:
-          type:
-          - string
-          - 'null'
-          description: The value that the field should start with.
+      anyOf:
+      - $ref: '#/components/schemas/RangeOrEqualFilter'
+      - $ref: '#/components/schemas/StartsWithStringFilter'
       example:
         strtw: null
+        gte: null
+        lte: null
+        eq: null
+    ValidationError:
+      description: An error occurred during validation. See the response body for details on the invalid field.
+      type: object
+      properties:
+        invalidField:
+          type: string
+          description: The field which is invalid.
+        message:
+          type: string
+          description: A description of the error found with the field.
     LessThanOrEqualToFilter:
       description: Used to filter values. Check for values that are less than or equal to the given value.
       type: object
@@ -256,27 +286,19 @@ components:
           description: The value that the field should be less than or equal to.
       example:
         lte: null
-    ValidationError:
-      description: An error occurred during validation. See the response body for details on the invalid field.
-      type: object
-      properties:
-        invalidField:
-          type: string
-          description: The field which is invalid.
-        message:
-          type: string
-          description: A description of the error found with the field.
-    GreaterThanOrEqualToFilter:
-      description: Used to filter values. Check for values that are greater than or equal to the given value.
-      type: object
-      properties:
-        gte:
-          type:
-          - object
-          - 'null'
-          description: The value that the field should be greater than or equal to.
-      example:
-        gte: null
+    ResourceAttribute:
+      description: The attributes of the resource.
+      type: string
+      enum:
+      - None
+      - Retired
+      - Local
+      - LoginAgent
+      - Private
+      - DefaultInstance
+      - Desktop
+      - RemoteDigitalWorker
+      - Pool
     Resource:
       description: Contains details of a runtime resource.
       type: object
@@ -391,45 +413,6 @@ components:
           databaseStatus: Ready
           displayStatus: Working
           resourceType: Desktop
-    UrlParameterError:
-      description: An error occurred due to incorrect data supplied to url parameter.
-      type: object
-      properties:
-        message:
-          type: string
-          description: A message about the error.
-        messageDetail:
-          type: string
-          description: A detailed description about the error.
-    Error:
-      description: A general error occurred. See errorMessage for details.
-      type: object
-      properties:
-        errorMessage:
-          description: A message describing the problem encountered.
-          type: string
-    RangeFilter:
-      description: Used to filter values. Check for values that are greater than or equal to, less than or equal to, or between the given value(s).
-      type: object
-      anyOf:
-      - $ref: '#/components/schemas/GreaterThanOrEqualToFilter'
-      - $ref: '#/components/schemas/LessThanOrEqualToFilter'
-      example:
-        gte: null
-        lte: null
-    ResourceAttribute:
-      description: The attributes of the resource.
-      type: string
-      enum:
-      - None
-      - Retired
-      - Local
-      - LoginAgent
-      - Private
-      - DefaultInstance
-      - Desktop
-      - RemoteDigitalWorker
-      - Pool
     EqualsFilter:
       description: Used to filter values. Check for values that are equal to the given value.
       type: object
@@ -441,20 +424,26 @@ components:
           description: The value that the field should be equal to.
       example:
         eq: null
-    BasicStringFilter:
-      description: Used to filter strings. Check for strings that start with, equal, are greater than, are less than, or are between the given value(s).
+    GreaterThanOrEqualToFilter:
+      description: Used to filter values. Check for values that are greater than or equal to the given value.
+      type: object
+      properties:
+        gte:
+          type:
+          - object
+          - 'null'
+          description: The value that the field should be greater than or equal to.
+      example:
+        gte: null
+    RangeFilter:
+      description: Used to filter values. Check for values that are greater than or equal to, less than or equal to, or between the given value(s).
       type: object
       anyOf:
-      - $ref: '#/components/schemas/RangeOrEqualFilter'
-      - $ref: '#/components/schemas/StartsWithStringFilter'
+      - $ref: '#/components/schemas/GreaterThanOrEqualToFilter'
+      - $ref: '#/components/schemas/LessThanOrEqualToFilter'
       example:
-        strtw: null
         gte: null
         lte: null
-        eq: null
-    ErrorMessage:
-      description: A message describing the problem encountered.
-      type: string
     UpdateResource:
       description: Contains details to update a runtime resource's attributes.
       type: object
@@ -468,21 +457,26 @@ components:
         attributes:
         - Retired
         - None
+    StartsWithStringFilter:
+      description: Used to filter strings. Check for strings that start with the given value.
+      type: object
+      properties:
+        strtw:
+          type:
+          - string
+          - 'null'
+          description: The value that the field should start with.
+      example:
+        strtw: null
   examples:
+    IntegerLessThanExample:
+      value:
+        lte: 123
+      summary: Search for a value less than or equal to 123.
     StringEqualsExample:
       value:
         eq: Example
       summary: Search for a value equal to "Example".
-    IntegerRangeExample:
-      value:
-        gte: 123
-        lte: 321
-      summary: Search for a value between 123 and 321 inclusive.
-    StringRangeExample:
-      value:
-        gte: Ex
-        lte: F
-      summary: Search for a value alphanumerically between "Ex" and "F".
     IntegerEqualsExample:
       value:
         eq: 123
@@ -491,29 +485,29 @@ components:
       value:
         strtw: Exa
       summary: Search a value starting with "Exa".
+    StringRangeExample:
+      value:
+        gte: Ex
+        lte: F
+      summary: Search for a value alphanumerically between "Ex" and "F".
+    IntegerRangeExample:
+      value:
+        gte: 123
+        lte: 321
+      summary: Search for a value between 123 and 321 inclusive.
     StringGreaterThanExample:
       value:
         gte: Example
       summary: Search for a value alphanumerically after or equal to "Example".
-    IntegerLessThanExample:
-      value:
-        lte: 123
-      summary: Search for a value less than or equal to 123.
   responses:
-    NotFound:
-      description: The requested resource could not be found.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/ErrorMessage'
     NotAuthorized:
       description: The authentication token was either missing or invalid and must be refreshed.
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/ErrorMessage'
-    Forbidden:
-      description: The authentication token does not give sufficient permissions to perform this action.
+    NotFound:
+      description: The requested resource could not be found.
       content:
         application/json:
           schema:
@@ -526,6 +520,12 @@ components:
             oneOf:
             - $ref: '#/components/schemas/UrlParameterError'
             - $ref: '#/components/schemas/ValidationError'
+    Forbidden:
+      description: The authentication token does not give sufficient permissions to perform this action.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorMessage'
   securitySchemes:
     Bearer:
       type: http

@@ -213,82 +213,9 @@ paths:
           $ref: '#/components/responses/Forbidden'
 components:
   schemas:
-    RangeOrEqualFilter:
-      description: Used to filter values. Check for values that are equal to, greater than or equal to, less than or equal to, or between the given value(s).
-      type: object
-      oneOf:
-      - $ref: '#/components/schemas/RangeFilter'
-      - $ref: '#/components/schemas/EqualsFilter'
-      example:
-        gte: null
-        lte: null
-        eq: null
-    ProcessItemsPage:
-      description: Contains details of a page of processes.
-      type: object
-      properties:
-        pagingToken:
-          type: string
-          description: The token to be used in the next request to return the next collection of items.
-        items:
-          type: array
-          description: A collection of processes.
-          items:
-            $ref: '#/components/schemas/Process'
-      example:
-        pagingToken: U3VwZXIgc2VjcmV0IGRhdGEuIFNoaGho
-        items:
-        - processId: 01234567-89ab-cdef-0123-456789abcdef
-          processName: Process_Name
-          processDescription: Process_Description
-          groupId: 99e23d41-e8ec-4ffe-89c9-93814d70d551
-          groupName: Group_name
-          attributes:
-          - Retired
-          - PublishedWebService
-    StartsWithStringFilter:
-      description: Used to filter strings. Check for strings that start with the given value.
-      type: object
-      properties:
-        strtw:
-          type:
-          - string
-          - 'null'
-          description: The value that the field should start with.
-      example:
-        strtw: null
-    LessThanOrEqualToFilter:
-      description: Used to filter values. Check for values that are less than or equal to the given value.
-      type: object
-      properties:
-        lte:
-          type:
-          - object
-          - 'null'
-          description: The value that the field should be less than or equal to.
-      example:
-        lte: null
-    ValidationError:
-      description: An error occurred during validation. See the response body for details on the invalid field.
-      type: object
-      properties:
-        invalidField:
-          type: string
-          description: The field which is invalid.
-        message:
-          type: string
-          description: A description of the error found with the field.
-    GreaterThanOrEqualToFilter:
-      description: Used to filter values. Check for values that are greater than or equal to the given value.
-      type: object
-      properties:
-        gte:
-          type:
-          - object
-          - 'null'
-          description: The value that the field should be greater than or equal to.
-      example:
-        gte: null
+    ErrorMessage:
+      description: A message describing the problem encountered.
+      type: string
     ProcessAttributeFilter:
       description: The attributes of the process to filter by.
       type: string
@@ -297,73 +224,6 @@ components:
       - Published
       - PublishedWebService
       - PublishedDesktop
-    ProcessGroupItemItemsPage:
-      description: Contains details of a page of nodes in the process group tree.
-      type: object
-      properties:
-        pagingToken:
-          type:
-          - string
-          - 'null'
-          description: The token to be used in the next request to return the next collection of items.
-        items:
-          type: array
-          description: A collection of processes / process groups.
-          items:
-            $ref: '#/components/schemas/ProcessGroupItem'
-      example:
-        pagingToken: U3VwZXIgc2VjcmV0IGRhdGEuIFNoaGho
-        items:
-        - id: 01234567-89ab-cdef-0123-456789abcdef
-          name: Process_Name
-          nodeType: Item
-          lastModified: '2022-04-01T09:05:10.64+01:00'
-    ProcessAttribute:
-      description: The attributes of the process.
-      type: string
-      enum:
-      - None
-      - Retired
-      - Published
-      - PublishedWebService
-      - PublishedDesktop
-    UrlParameterError:
-      description: An error occurred due to incorrect data supplied to url parameter.
-      type: object
-      properties:
-        message:
-          type: string
-          description: A message about the error.
-        messageDetail:
-          type: string
-          description: A detailed description about the error.
-    ProcessGroupItem:
-      description: Contains details of a process group tree node.
-      type: object
-      properties:
-        id:
-          type: string
-          description: The ID of the process or group.
-          format: uuid
-        name:
-          type: string
-          description: The name of the process or group.
-        nodeType:
-          type: string
-          enum:
-          - Item
-          - Group
-          description: The type of this tree node - Item or Group.
-        lastModified:
-          type: string
-          format: date-time
-          description: The last modified date of the process it this is an item node. Default date value is this is a group node.
-          example: '2020-10-02T12:34:56+02:00'
-      example:
-        id: 01234567-89ab-cdef-0123-456789abcdef
-        name: Process_Name
-        nodeType: Item
-        lastModified: '2022-04-01T09:05:10.64+01:00'
     Process:
       description: Contains details of a published process.
       type: object
@@ -400,25 +260,25 @@ components:
         - Retired
         - Published
         - PublishedWebService
-    RangeFilter:
-      description: Used to filter values. Check for values that are greater than or equal to, less than or equal to, or between the given value(s).
+    UrlParameterError:
+      description: An error occurred due to incorrect data supplied to url parameter.
       type: object
-      anyOf:
-      - $ref: '#/components/schemas/GreaterThanOrEqualToFilter'
-      - $ref: '#/components/schemas/LessThanOrEqualToFilter'
+      properties:
+        message:
+          type: string
+          description: A message about the error.
+        messageDetail:
+          type: string
+          description: A detailed description about the error.
+    RangeOrEqualFilter:
+      description: Used to filter values. Check for values that are equal to, greater than or equal to, less than or equal to, or between the given value(s).
+      type: object
+      oneOf:
+      - $ref: '#/components/schemas/RangeFilter'
+      - $ref: '#/components/schemas/EqualsFilter'
       example:
         gte: null
         lte: null
-    EqualsFilter:
-      description: Used to filter values. Check for values that are equal to the given value.
-      type: object
-      properties:
-        eq:
-          type:
-          - object
-          - 'null'
-          description: The value that the field should be equal to.
-      example:
         eq: null
     BasicStringFilter:
       description: Used to filter strings. Check for strings that start with, equal, are greater than, are less than, or are between the given value(s).
@@ -431,36 +291,152 @@ components:
         gte: null
         lte: null
         eq: null
-    ErrorMessage:
-      description: A message describing the problem encountered.
+    ValidationError:
+      description: An error occurred during validation. See the response body for details on the invalid field.
+      type: object
+      properties:
+        invalidField:
+          type: string
+          description: The field which is invalid.
+        message:
+          type: string
+          description: A description of the error found with the field.
+    LessThanOrEqualToFilter:
+      description: Used to filter values. Check for values that are less than or equal to the given value.
+      type: object
+      properties:
+        lte:
+          type:
+          - object
+          - 'null'
+          description: The value that the field should be less than or equal to.
+      example:
+        lte: null
+    ProcessItemsPage:
+      description: Contains details of a page of processes.
+      type: object
+      properties:
+        pagingToken:
+          type: string
+          description: The token to be used in the next request to return the next collection of items.
+        items:
+          type: array
+          description: A collection of processes.
+          items:
+            $ref: '#/components/schemas/Process'
+      example:
+        pagingToken: U3VwZXIgc2VjcmV0IGRhdGEuIFNoaGho
+        items:
+        - processId: 01234567-89ab-cdef-0123-456789abcdef
+          processName: Process_Name
+          processDescription: Process_Description
+          groupId: 99e23d41-e8ec-4ffe-89c9-93814d70d551
+          groupName: Group_name
+          attributes:
+          - Retired
+          - PublishedWebService
+    EqualsFilter:
+      description: Used to filter values. Check for values that are equal to the given value.
+      type: object
+      properties:
+        eq:
+          type:
+          - object
+          - 'null'
+          description: The value that the field should be equal to.
+      example:
+        eq: null
+    GreaterThanOrEqualToFilter:
+      description: Used to filter values. Check for values that are greater than or equal to the given value.
+      type: object
+      properties:
+        gte:
+          type:
+          - object
+          - 'null'
+          description: The value that the field should be greater than or equal to.
+      example:
+        gte: null
+    ProcessGroupItem:
+      description: Contains details of a process group tree node.
+      type: object
+      properties:
+        id:
+          type: string
+          description: The ID of the process or group.
+          format: uuid
+        name:
+          type: string
+          description: The name of the process or group.
+        nodeType:
+          type: string
+          enum:
+          - Item
+          - Group
+          description: The type of this tree node - Item or Group.
+        lastModified:
+          type: string
+          format: date-time
+          description: The last modified date of the process it this is an item node. Default date value is this is a group node.
+          example: '2020-10-02T12:34:56+02:00'
+      example:
+        id: 01234567-89ab-cdef-0123-456789abcdef
+        name: Process_Name
+        nodeType: Item
+        lastModified: '2022-04-01T09:05:10.64+01:00'
+    RangeFilter:
+      description: Used to filter values. Check for values that are greater than or equal to, less than or equal to, or between the given value(s).
+      type: object
+      anyOf:
+      - $ref: '#/components/schemas/GreaterThanOrEqualToFilter'
+      - $ref: '#/components/schemas/LessThanOrEqualToFilter'
+      example:
+        gte: null
+        lte: null
+    ProcessAttribute:
+      description: The attributes of the process.
       type: string
-  examples:
-    StringEqualsExample:
-      value:
-        eq: Example
-      summary: Search for a value equal to "Example".
-    StringRangeExample:
-      value:
-        gte: Ex
-        lte: F
-      summary: Search for a value alphanumerically between "Ex" and "F".
-    StringStartsWithExample:
-      value:
-        strtw: Exa
-      summary: Search a value starting with "Exa".
-    StringGreaterThanExample:
-      value:
-        gte: Example
-      summary: Search for a value alphanumerically after or equal to "Example".
+      enum:
+      - None
+      - Retired
+      - Published
+      - PublishedWebService
+      - PublishedDesktop
+    ProcessGroupItemItemsPage:
+      description: Contains details of a page of nodes in the process group tree.
+      type: object
+      properties:
+        pagingToken:
+          type:
+          - string
+          - 'null'
+          description: The token to be used in the next request to return the next collection of items.
+        items:
+          type: array
+          description: A collection of processes / process groups.
+          items:
+            $ref: '#/components/schemas/ProcessGroupItem'
+      example:
+        pagingToken: U3VwZXIgc2VjcmV0IGRhdGEuIFNoaGho
+        items:
+        - id: 01234567-89ab-cdef-0123-456789abcdef
+          name: Process_Name
+          nodeType: Item
+          lastModified: '2022-04-01T09:05:10.64+01:00'
+    StartsWithStringFilter:
+      description: Used to filter strings. Check for strings that start with the given value.
+      type: object
+      properties:
+        strtw:
+          type:
+          - string
+          - 'null'
+          description: The value that the field should start with.
+      example:
+        strtw: null
   responses:
     NotAuthorized:
       description: The authentication token was either missing or invalid and must be refreshed.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/ErrorMessage'
-    Forbidden:
-      description: The authentication token does not give sufficient permissions to perform this action.
       content:
         application/json:
           schema:
@@ -473,6 +449,30 @@ components:
             oneOf:
             - $ref: '#/components/schemas/UrlParameterError'
             - $ref: '#/components/schemas/ValidationError'
+    Forbidden:
+      description: The authentication token does not give sufficient permissions to perform this action.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorMessage'
+  examples:
+    StringEqualsExample:
+      value:
+        eq: Example
+      summary: Search for a value equal to "Example".
+    StringStartsWithExample:
+      value:
+        strtw: Exa
+      summary: Search a value starting with "Exa".
+    StringRangeExample:
+      value:
+        gte: Ex
+        lte: F
+      summary: Search for a value alphanumerically between "Ex" and "F".
+    StringGreaterThanExample:
+      value:
+        gte: Example
+      summary: Search for a value alphanumerically after or equal to "Example".
   securitySchemes:
     Bearer:
       type: http

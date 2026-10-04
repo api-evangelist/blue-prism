@@ -1417,7 +1417,226 @@ paths:
         '404':
           $ref: '#/components/responses/NotFound'
 components:
+  examples:
+    PatchRemoveExample:
+      summary: Remove a property value.
+      value:
+      - op: remove
+        path: /propertyToDeleteValueFrom
+    TimeRangeExample:
+      value:
+        gte: 01:23:45
+        lte: '12:34:56'
+      summary: Search for a value between 01:23:45 and 12:34:56 (inclusive)
+    DateTimeEqualsExample:
+      value:
+        eq: '2020-10-02T12:34:56+01:00'
+      summary: Search for a value equal to 2020-10-02 at 12:34:56 (GMT+1).
+    DateTimeGreaterThanExample:
+      value:
+        gte: '2020-10-02T12:34:56+01:00'
+      summary: Search for a value after or equal to 2020-10-02 at 12:34:56 (GMT+1).
+    IntegerLessThanExample:
+      value:
+        lte: 123
+      summary: Search for a value less than or equal to 123.
+    PatchCopyExample:
+      summary: Copy a value from one property to another.
+      value:
+      - op: copy
+        from: /sourceProperty
+        path: /destinationProperty
+    TimeEqualsExample:
+      value:
+        eq: '12:34:56'
+      summary: Search for a value equal to 12:34:56.
+    StringContainsExample:
+      value:
+        ctn: amp
+      summary: Search a value containing "amp"
+    StringEqualsExample:
+      value:
+        eq: Example
+      summary: Search for a value equal to "Example".
+    IntegerEqualsExample:
+      value:
+        eq: 123
+      summary: Search for a value equal to 123.
+    StringStartsWithExample:
+      value:
+        strtw: Exa
+      summary: Search a value starting with "Exa".
+    PatchMoveExample:
+      summary: Move a value from one property to another.
+      value:
+      - op: move
+        from: /sourceProperty
+        path: /destinationProperty
+    PatchReplaceExample:
+      summary: Replace the value in a property.
+      value:
+      - op: replace
+        path: /property
+        value: propertyValue
+    StringRangeExample:
+      value:
+        gte: Ex
+        lte: F
+      summary: Search for a value alphanumerically between "Ex" and "F".
+    IntegerRangeExample:
+      value:
+        gte: 123
+        lte: 321
+      summary: Search for a value between 123 and 321 inclusive.
+    DateTimeRangeExample:
+      value:
+        gte: '2020-10-02T12:34:56+01:00'
+        lte: '2020-11-02T12:34:56+01:00'
+      summary: Search for a value between 2020-10-02 at 12:34:56 (GMT+1) and 2020-11-02 at 12:34:56 (GMT+1) (inclusive).
+    TimeLessThanExample:
+      value:
+        lte: '12:34:56'
+      summary: Search for a value less than or equal to 12:34:56
+    PatchAddToObjectExample:
+      summary: Add new property values to an object.
+      value:
+      - op: add
+        path: /property
+        value: propertyValue
+    StringGreaterThanExample:
+      value:
+        gte: Example
+      summary: Search for a value alphanumerically after or equal to "Example".
+    PatchAddToArrayExample:
+      summary: Add values to a collection.
+      value:
+      - op: add
+        path: /someArrayProperty
+        value:
+        - item1
+        - item2
   schemas:
+    ErrorMessage:
+      description: A message describing the problem encountered.
+      type: string
+    WorkQueueConfigurationSummary:
+      description: Contains details of a work queue configuration.
+      type: object
+      properties:
+        id:
+          type: string
+          description: The ID of the queue.
+          format: uuid
+        name:
+          type: string
+          description: The name of the queue.
+          minLength: 1
+        activeWorkQueueConfiguration:
+          $ref: '#/components/schemas/ActiveWorkQueueConfiguration'
+        activeQueueStats:
+          $ref: '#/components/schemas/ActiveWorkQueueStatistics'
+      example:
+        id: f83a55c4-1151-41b1-89b0-6ad81ad50d7e
+        name: Example work queue
+        activeWorkQueueConfiguration:
+          assignedProcessId: 5ebaf769-6325-4f8a-b175-aefb150ea64f
+          assignedResourceGroupId: 49df134f-974b-4f81-b4a7-8518c04fa970
+        activeQueueStats:
+          activeSessions: '10'
+          availableResources: '5'
+          timeRemaining: 01:25:10
+          elapsedRemaining: 00:05:10
+          ETA: '2020-10-03T13:36:21+02:00'
+    Error:
+      description: A general error occurred. See errorMessage for details.
+      type: object
+      properties:
+        errorMessage:
+          description: A message describing the problem encountered.
+          type: string
+    QueueStatus:
+      description: The current status of the queue.
+      type: string
+      enum:
+      - Running
+      - Paused
+    WorkQueueItemsPage:
+      description: Contains details of a page of work queue items.
+      type: object
+      properties:
+        pagingToken:
+          type: string
+          description: The token to be used in the next request to return the next collection of items.
+        items:
+          type: array
+          description: A collection of work queue items.
+          items:
+            $ref: '#/components/schemas/WorkQueueItemNoData'
+      example:
+        pagingToken: U3VwZXIgc2VjcmV0IGRhdGEuIFNoaGho
+        items:
+        - id: 01234567-89ab-cdef-0123-456789abcdef
+          priority: 3
+          ident: 5112
+          state: Pending
+          keyValue: Example value
+          status: Example status
+          tags:
+          - Example tag 1
+          - Example tag 2
+          attemptNumber: 1
+          loadedDate: '2020-10-02T12:34:56+01:00'
+          deferredDate: '2020-10-02T12:34:56+01:00'
+          lockedDate: '0001-01-01T00:00:00Z'
+          completedDate: '0001-01-01T00:00:00Z'
+          exceptionedDate: '0001-01-01T00:00:00Z'
+          exceptionReason: Example reason
+          lastUpdated: '2020-10-02T12:34:56+01:00'
+          workTimeInSeconds: 123
+          attemptWorkTimeInSeconds: 56
+          resource: Example resource
+          sessionId: 01234567-89ab-cdef-0123-456789abcdef
+          sla: 7200
+          slaDateTime: '0001-01-01T00:00:00Z'
+          processName: Example process name
+          isSuggested: false
+    UrlParameterError:
+      description: An error occurred due to incorrect data supplied to url parameter.
+      type: object
+      properties:
+        message:
+          type: string
+          description: A message about the error.
+        messageDetail:
+          type: string
+          description: A detailed description about the error.
+    ActiveWorkQueueConfiguration:
+      description: Contains details of an active work queue.
+      type: object
+      properties:
+        assignedProcessId:
+          type: string
+          description: ID of the assigned process.
+          format: uuid
+        assignedResourceGroupId:
+          type: string
+          description: ID of the assigned resource group.
+          format: uuid
+      example:
+        assignedProcessId: axe34dfx-1234-2435-fedc-ba9876500987
+        assignedResourceGroupId: xv3fd45s-6543-6231-exrf-we23e456781
+    FullStringFilter:
+      description: Used to filter strings. Check for strings that start with, contain, equal, are greater than, are less than, or are between the given value(s).
+      type: object
+      anyOf:
+      - $ref: '#/components/schemas/StringFilter'
+      - $ref: '#/components/schemas/RangeOrEqualFilter'
+      example:
+        ctn: null
+        strtw: null
+        gte: null
+        lte: null
+        eq: null
     RangeOrEqualFilter:
       description: Used to filter values. Check for values that are equal to, greater than or equal to, less than or equal to, or between the given value(s).
       type: object
@@ -1428,6 +1647,321 @@ components:
         gte: null
         lte: null
         eq: null
+    ContainsStringFilter:
+      description: Used to filter strings. Check for strings that contain the given value.
+      type: object
+      properties:
+        ctn:
+          type:
+          - string
+          - 'null'
+          description: The value that the field should contain.
+      example:
+        ctn: null
+    CreateWorkQueue:
+      description: Contains details for creating a new work queue.
+      type: object
+      properties:
+        name:
+          type: string
+          description: The name of the queue to create.
+          minLength: 1
+          maxLength: 255
+        keyField:
+          type: string
+          description: The name of the column to be used as the queue's key.
+          minLength: 0
+          maxLength: 255
+        maxAttempts:
+          type: integer
+          description: The maximum number of retry attempts for items in the queue.
+          minimum: 1
+          maximum: 999999
+        status:
+          $ref: '#/components/schemas/QueueStatus'
+        encryptionKeyId:
+          type: integer
+          description: The ID of the encryption key to use for the queue. If no encryption is required,  this field should be 0.
+        sessionExceptionRetry:
+          type: boolean
+          description: Retry items in this queue in the event of an unexpected session termination.
+        activeQueueAssignedProcessId:
+          type: string
+          format: uuid
+          description: The ID of the process to use for an active queue.
+        activeQueueAssignedResourceGroupId:
+          type: string
+          format: uuid
+          description: The ID of the resource group to use for an active queue.
+        groupid:
+          type: object
+          description: The ID of the group to use for the queue. If no group id is required, this field should be empty string like "" or empty Guid - "00000000-0000-0000-0000-000000000000".
+      example:
+        name: Example queue
+        keyField: Example field
+        maxAttempts: 3
+        status: Running
+        encryptionKeyId: 0
+        sessionExceptionRetry: false
+        activeQueueAssignedProcessId: 658de89c-a43d-4b18-a38c-d26d5eb26659
+        activeQueueAssignedResourceGroupId: 5180390c-b21a-4d69-9753-b876e34f100d
+        groupid: a4e0b0ba-3b8f-443d-bdb0-ee519299bd01
+    StringFilter:
+      description: Used to filter strings. Check for strings that start with, and/or contain the given value(s).
+      type: object
+      anyOf:
+      - $ref: '#/components/schemas/ContainsStringFilter'
+      - $ref: '#/components/schemas/StartsWithStringFilter'
+      example:
+        ctn: null
+        strtw: null
+    BasicStringFilter:
+      description: Used to filter strings. Check for strings that start with, equal, are greater than, are less than, or are between the given value(s).
+      type: object
+      anyOf:
+      - $ref: '#/components/schemas/RangeOrEqualFilter'
+      - $ref: '#/components/schemas/StartsWithStringFilter'
+      example:
+        strtw: null
+        gte: null
+        lte: null
+        eq: null
+    WorkQueueSummary:
+      description: Contains basic details of a work queue.
+      type: object
+      properties:
+        id:
+          type: string
+          description: The ID of the queue.
+          format: uuid
+        name:
+          type: string
+          description: The name of the queue.
+          minLength: 1
+        keyField:
+          type: string
+          description: The name of the column used as the queue's key.
+        status:
+          $ref: '#/components/schemas/QueueStatus'
+        isEncrypted:
+          type: boolean
+          description: True if the queue is encrypted; otherwise, false.
+        maxAttempts:
+          type: integer
+          description: The maximum number of retry attempts for items in the queue.
+        pendingItemCount:
+          type: integer
+          description: The number of items in the queue in a pending state.
+        completedItemCount:
+          type: integer
+          description: The number of items in the queue in a completed state.
+        lockedItemCount:
+          type: integer
+          description: The number of items in the queue in a locked state.
+        exceptionedItemCount:
+          type: integer
+          description: The number of items in the queue in an exceptioned state.
+        totalItemCount:
+          type: integer
+          description: The total number of items in the queue.
+        averageWorkTime:
+          type: string
+          format: time-span
+          description: The average amount of time an items spends being worked.
+        totalCaseDuration:
+          type: string
+          format: time-span
+          description: The total amount of time items have been worked.
+        groupName:
+          type: string
+          description: The name of the group in which the queue is located.
+        groupId:
+          type: string
+          description: ID of the group in which the queue is located.
+          format: uuid
+        isRetryItems:
+          type: boolean
+          description: True if Retry items in this queue in the event of an unexpected session termination is enabled; otherwise, false.
+        isSnapshotEnabled:
+          type: boolean
+          description: True if there is information related to Snapshot Configuration; otherwise, false.
+        isActiveQueue:
+          type: boolean
+          description: True if the queue is active; otherwise, false.
+        activeWorkQueueConfiguration:
+          $ref: '#/components/schemas/ActiveWorkQueueConfiguration'
+        activeQueueStats:
+          $ref: '#/components/schemas/ActiveWorkQueueStatistics'
+      example:
+        id: 01234567-89ab-cdef-0123-456789abcdef
+        name: Example work queue
+        keyField: Example field
+        status: Running
+        isEncrypted: false
+        maxAttempts: 5
+        pendingItemCount: 10
+        completedItemCount: 75
+        lockedItemCount: 1
+        exceptionedItemCount: 3
+        totalItemCount: 14
+        averageWorkTime: 00:01:23
+        totalCaseDuration: 06:12:53
+        groupName: Example group
+        groupId: fedcba98-7654-3210-fedc-ba9876543210
+        isRetryItems: true
+        isSnapshotEnabled: true
+        isActiveQueue: true
+        activeWorkQueueConfiguration:
+          assignedProcessId: axe34dfx-1234-2435-fedc-ba9876500987
+          assignedResourceGroupId: xv3fd45s-6543-6231-exrf-we23e456781
+    ValidationError:
+      description: An error occurred during validation. See the response body for details on the invalid field.
+      type: object
+      properties:
+        invalidField:
+          type: string
+          description: The field which is invalid.
+        message:
+          type: string
+          description: A description of the error found with the field.
+    DataRow:
+      description: A dictionary which represents a row of data from a Blue Prism collection.
+      type: object
+      additionalProperties:
+        $ref: '#/components/schemas/DataValue'
+    PatchRequest:
+      description: A request containing a JSON Patch document. See PatchDocument for details.
+      type: array
+      items:
+        $ref: '#/components/schemas/PatchDocument'
+    CreateWebhookWorkQueueItem:
+      description: Contains details for creating a webhook subscriptions for a work queue item in a queue.
+      type: object
+      required:
+      - eventtypes
+      - callbackurl
+      properties:
+        eventtypes:
+          type: array
+          description: List of events that trigger the webhook.
+          items:
+            type: string
+            enum:
+            - exception
+            - completed
+            - prioritychanged
+            - dataupdated
+            - status
+            - deferred
+            - locked
+            - retryexception
+        callbackurl:
+          type: string
+          description: The url to send callbacl request.
+          format: uri
+          example: https://your-api.com/webhook/callback
+        extensions:
+          type: object
+          description: Optional security and metadata configuration.
+          required:
+          - security
+          properties:
+            data:
+              type: object
+              description: Custom JSON object for client-specific metadata. Can be empty
+              additionalProperties: true
+              example:
+                clientId: '1'
+            security:
+              type: object
+              description: The authentication callback detailes.
+              required:
+              - credentialName
+              - type
+              properties:
+                credentialName:
+                  description: The name of the credentials registered in BPE Credential Manager.
+                  type: string
+                  example: Client1
+                type:
+                  type: string
+                  description: The type of the credentials.
+                  example: BasicAuthentication
+    WorkQueuesItemsPage:
+      description: Contains details of a page of work queues.
+      type: object
+      properties:
+        pagingToken:
+          type:
+          - string
+          - 'null'
+          description: The token to be used in the next request to return the next collection of items.
+        items:
+          type: array
+          description: A collection of work queues.
+          items:
+            $ref: '#/components/schemas/WorkQueueSummary'
+      example:
+        pagingToken: U3VwZXIgc2VjcmV0IGRhdGEuIFNoaGho
+        items:
+        - id: 01234567-89ab-cdef-0123-456789abcdef
+          name: Example work queue
+          keyField: Example field
+          status: Running
+          isEncrypted: false
+          maxAttempts: 5
+          pendingItemCount: 10
+          completedItemCount: 75
+          lockedItemCount: 1
+          exceptionedItemCount: 3
+          totalItemCount: 14
+          averageWorkTime: 00:01:23
+          totalCaseDuration: 06:12:53
+          groupName: Example group
+          groupId: fedcba98-7654-3210-fedc-ba9876543210
+          isRetryItems: true
+          isSnapshotEnabled: true
+          isActiveQueue: true
+          activeWorkQueueConfiguration:
+            assignedProcessId: axe34dfx-1234-2435-fedc-ba9876500987
+            assignedResourceGroupId: xv3fd45s-6543-6231-exrf-we23e456781
+          activeQueueStats:
+            activeSessions: '10'
+            availableResources: '5'
+            timeRemaining: 01:25:10
+            elapsedRemaining: 00:05:10
+            ETA: '2020-10-03T13:36:21+02:00'
+    LessThanOrEqualToFilter:
+      description: Used to filter values. Check for values that are less than or equal to the given value.
+      type: object
+      properties:
+        lte:
+          type:
+          - object
+          - 'null'
+          description: The value that the field should be less than or equal to.
+      example:
+        lte: null
+    PagingToken:
+      type: string
+      description: The token to be used in the next request to return the next collection of items.
+      example: U3VwZXIgc2VjcmV0IGRhdGEuIFNoaGho
+    CreateWorkQueueItems:
+      description: Contains details for creating a number of work queue items.
+      type: array
+      items:
+        $ref: '#/components/schemas/CreateWorkQueueItem'
+    Identifiers:
+      description: A collection of GUID resource IDs.
+      type: object
+      properties:
+        ids:
+          description: A collection of resource IDs.
+          type: array
+          items:
+            type: string
+            description: The IDs of the newly created items.
+            format: uuid
     DataCollection:
       description: Represents a Blue Prism collection.
       type: object
@@ -1437,17 +1971,218 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/DataRow'
-    StartsWithStringFilter:
-      description: Used to filter strings. Check for strings that start with the given value.
+    Reference:
+      description: Contains details of referenced item.
       type: object
       properties:
-        strtw:
+        id:
+          type: string
+          format: uuid
+          description: The ID of the process/object.
+        name:
+          type: string
+          description: The name of the process/object.
+          minLength: 1
+        description:
+          type: string
+          description: The description of process/object.
+        type:
+          type: string
+          enum:
+          - Process
+          - Object
+          - Unset
+          description: The type of process/object
+    WorkQueueItemSubscriptionCustomResponse:
+      description: Response containing custom subscription details.
+      type: object
+      required:
+      - subscriptionId
+      - subscriptions
+      properties:
+        subscriptionId:
+          type: string
+          format: uuid
+          description: The ID of the subscription.
+      subscriptions:
+        type: array
+        description: The list of subscriptions according to event types.
+        items:
+          $ref: '#/components/schemas/WorkQueueItemEventSubscriptionResponse'
+    Identifier:
+      description: A GUID resource ID.
+      type: object
+      properties:
+        id:
+          type: string
+          description: The ID of the newly created resource.
+          format: uuid
+    EqualsFilter:
+      description: Used to filter values. Check for values that are equal to the given value.
+      type: object
+      properties:
+        eq:
+          type:
+          - object
+          - 'null'
+          description: The value that the field should be equal to.
+      example:
+        eq: null
+    GreaterThanOrEqualToFilter:
+      description: Used to filter values. Check for values that are greater than or equal to the given value.
+      type: object
+      properties:
+        gte:
+          type:
+          - object
+          - 'null'
+          description: The value that the field should be greater than or equal to.
+      example:
+        gte: null
+    WorkQueueItemEventSubscriptionResponse:
+      type: object
+      description: The subscription created for an event type.
+      properties:
+        subscriptionId:
+          type: string
+          description: The ID of the subscription.
+          format: uuid
+        eventType:
+          type: string
+          description: The event type subscribed to.
+          example: exception
+    WorkQueueConfigurationsPage:
+      description: Contains details of a page of work queues configrations.
+      type: object
+      properties:
+        pagingToken:
           type:
           - string
           - 'null'
-          description: The value that the field should start with.
+          description: The token to be used in the next request to return the next collection of items.
+        items:
+          type: array
+          description: A collection of work queues configurations.
+          items:
+            $ref: '#/components/schemas/WorkQueueConfigurationSummary'
       example:
-        strtw: null
+        pagingToken: A5VwZXIgg2VjcmV2IKLcdGEuLFNoaGhu
+        items:
+        - id: f83a55c4-1151-41b1-89b0-6ad81ad50d7e
+          name: Example work queue
+          activeWorkQueueConfiguration:
+            assignedProcessId: 5ebaf769-6325-4f8a-b175-aefb150ea64f
+            assignedResourceGroupId: 49df134f-974b-4f81-b4a7-8518c04fa970
+          activeQueueStats:
+            activeSessions: '10'
+            availableResources: '5'
+            timeRemaining: 01:25:10
+            elapsedRemaining: 00:05:10
+            ETA: '2020-10-03T13:36:21+02:00'
+    CreateWorkQueueItem:
+      description: Contains details for creating a work queue item in a queue.
+      type: object
+      properties:
+        data:
+          $ref: '#/components/schemas/DataCollection'
+        deferredDate:
+          type:
+          - string
+          - 'null'
+          description: The earliest time and date that this item is deferred until.
+          format: date-time
+        priority:
+          type: integer
+          description: The priority value assigned to the item.
+          format: integer
+        tags:
+          type: array
+          description: A collection of tags assigned to the item.
+          items:
+            type: string
+        status:
+          type: string
+          description: The user-supplied status value.
+        sla:
+          type:
+          - integer
+          - 'null'
+          description: The user-supplied sla value.
+        processName:
+          type: string
+          description: The user-supplied process name value.
+        isSuggested:
+          type: boolean
+          description: The user-supplied isSuggested value - default value should be false.
+      example:
+        data:
+          rows:
+          - valueType: Number
+            value: 321
+          - valueType: Date
+            value: '2020-10-02T12:34:56+01:00'
+        deferredDate: '2020-10-02T12:34:56+01:00'
+        priority: 3
+        tags:
+        - Example tag 1
+        - Example tag 2
+        status: Example status
+        sla: 7200
+        processName: Example process name
+        isSuggested: false
+    PatchDocument:
+      description: A JSONPatch document as defined by RFC 6902. See http://jsonpatch.com/
+      required:
+      - op
+      - path
+      properties:
+        op:
+          type: string
+          description: The operation to be performed.
+          enum:
+          - add
+          - remove
+          - replace
+          - move
+          - copy
+        path:
+          type: string
+          description: A JSON-Pointer.
+        value:
+          type: object
+          description: The value to be used within the operations..
+        from:
+          type: string
+          description: A string containing a JSON Pointer value.
+    RangeFilter:
+      description: Used to filter values. Check for values that are greater than or equal to, less than or equal to, or between the given value(s).
+      type: object
+      anyOf:
+      - $ref: '#/components/schemas/GreaterThanOrEqualToFilter'
+      - $ref: '#/components/schemas/LessThanOrEqualToFilter'
+      example:
+        gte: null
+        lte: null
+    WorkQueueItemWebhookSubscriptionResponse:
+      description: Response containing webhook subscription details.
+      type: object
+      required:
+      - id
+      - secret
+      - subscriptions
+      properties:
+        id:
+          type: string
+          format: uuid
+          description: The ID of the webhook subscription.
+        secret:
+          type: string
+          description: The secret for validating webhook payloads.
+        subscriptions:
+          type: array
+          description: The list of subscriptions according to event types.
+          items:
+            $ref: '#/components/schemas/WorkQueueItemEventSubscriptionResponse'
     WorkQueueItem:
       description: Contains details of a work queue item including the data.
       type: object
@@ -1578,141 +2313,6 @@ components:
         slaDateTime: '0001-01-01T00:00:00Z'
         processName: Example process name
         isSuggested: false
-    LessThanOrEqualToFilter:
-      description: Used to filter values. Check for values that are less than or equal to the given value.
-      type: object
-      properties:
-        lte:
-          type:
-          - object
-          - 'null'
-          description: The value that the field should be less than or equal to.
-      example:
-        lte: null
-    QueueStatus:
-      description: The current status of the queue.
-      type: string
-      enum:
-      - Running
-      - Paused
-    CreateWorkQueueItem:
-      description: Contains details for creating a work queue item in a queue.
-      type: object
-      properties:
-        data:
-          $ref: '#/components/schemas/DataCollection'
-        deferredDate:
-          type:
-          - string
-          - 'null'
-          description: The earliest time and date that this item is deferred until.
-          format: date-time
-        priority:
-          type: integer
-          description: The priority value assigned to the item.
-          format: integer
-        tags:
-          type: array
-          description: A collection of tags assigned to the item.
-          items:
-            type: string
-        status:
-          type: string
-          description: The user-supplied status value.
-        sla:
-          type:
-          - integer
-          - 'null'
-          description: The user-supplied sla value.
-        processName:
-          type: string
-          description: The user-supplied process name value.
-        isSuggested:
-          type: boolean
-          description: The user-supplied isSuggested value - default value should be false.
-      example:
-        data:
-          rows:
-          - valueType: Number
-            value: 321
-          - valueType: Date
-            value: '2020-10-02T12:34:56+01:00'
-        deferredDate: '2020-10-02T12:34:56+01:00'
-        priority: 3
-        tags:
-        - Example tag 1
-        - Example tag 2
-        status: Example status
-        sla: 7200
-        processName: Example process name
-        isSuggested: false
-    ValidationError:
-      description: An error occurred during validation. See the response body for details on the invalid field.
-      type: object
-      properties:
-        invalidField:
-          type: string
-          description: The field which is invalid.
-        message:
-          type: string
-          description: A description of the error found with the field.
-    DataValue:
-      description: Represents a single item of data in a Blue Prism format.
-      type: object
-      properties:
-        valueType:
-          description: The type of object contained in the value field.
-          type: string
-          enum:
-          - Binary
-          - Collection
-          - Date
-          - DateTime
-          - Flag
-          - Image
-          - Number
-          - Password
-          - RadioButtons
-          - Text
-          - Time
-          - TimeSpan
-        value:
-          description: The value of the object.
-          oneOf:
-          - type: string
-            format: base64
-            description: Used for Binary and Image data types. The image format must only be one of these BPM, JPG, JPEG, GIF, PNG, ICO or TIFF.
-          - $ref: '#/components/schemas/DataCollection'
-            description: Used for the Collection data type.
-          - type: string
-            format: date
-            description: Used for Date and Time data types.
-          - type: boolean
-            description: Used for the Flag data type.
-          - type: number
-            description: Used for the Number data type.
-          - type: string
-            description: Used for Password and Text data types.
-          - type: string
-            format: time
-            description: Used for the TimeSpan data type.
-          - $ref: '#/components/schemas/RadioButtonsArray'
-        additionalParameters:
-          description: Custom extra parameters i.e. Binary's file path.
-          type: array
-          items:
-            type: string
-    GreaterThanOrEqualToFilter:
-      description: Used to filter values. Check for values that are greater than or equal to the given value.
-      type: object
-      properties:
-        gte:
-          type:
-          - object
-          - 'null'
-          description: The value that the field should be greater than or equal to.
-      example:
-        gte: null
     CreateWorkQueueItemAttemptResponseModel:
       description: Contains the ID of a new work queue item attempt.
       type: object
@@ -1720,585 +2320,6 @@ components:
         attemptId:
           type: integer
           description: The ID of the work queue item attempt.
-    ActiveWorkQueueStatistics:
-      description: Contains statistics for an active work queue.
-      type:
-      - object
-      - 'null'
-      properties:
-        activeSessions:
-          type: integer
-          description: the current number of active sessions for this queue.
-        availableResources:
-          type: integer
-          description: the current number of available resources assigned to this queue.
-        timeRemaining:
-          type: string
-          description: the amount of time remaining for this queue based on the number of pending cases and the average work time for a case.
-          format: time-span
-        elapsedRemaining:
-          type: string
-          description: the amount of time remaining for all currently assigned sessions to work the remaining pending cases.
-          format: time-span
-        ETA:
-          type: string
-          description: the projected end time for this queue in local time.
-          format: date-time
-      example:
-        activeSessions: '10'
-        availableResources: '5'
-        timeRemaining: 01:25:10
-        elapsedRemaining: 00:05:10
-        ETA: '2020-10-03T13:36:21+02:00'
-    ReferencesItemsPage:
-      description: Contains references of a specified object.
-      type: object
-      properties:
-        pagingToken:
-          $ref: '#/components/schemas/PagingToken'
-        items:
-          type: array
-          description: A collection of references.
-          items:
-            $ref: '#/components/schemas/Reference'
-    WorkQueueConfigurationsPage:
-      description: Contains details of a page of work queues configrations.
-      type: object
-      properties:
-        pagingToken:
-          type:
-          - string
-          - 'null'
-          description: The token to be used in the next request to return the next collection of items.
-        items:
-          type: array
-          description: A collection of work queues configurations.
-          items:
-            $ref: '#/components/schemas/WorkQueueConfigurationSummary'
-      example:
-        pagingToken: A5VwZXIgg2VjcmV2IKLcdGEuLFNoaGhu
-        items:
-        - id: f83a55c4-1151-41b1-89b0-6ad81ad50d7e
-          name: Example work queue
-          activeWorkQueueConfiguration:
-            assignedProcessId: 5ebaf769-6325-4f8a-b175-aefb150ea64f
-            assignedResourceGroupId: 49df134f-974b-4f81-b4a7-8518c04fa970
-          activeQueueStats:
-            activeSessions: '10'
-            availableResources: '5'
-            timeRemaining: 01:25:10
-            elapsedRemaining: 00:05:10
-            ETA: '2020-10-03T13:36:21+02:00'
-    UrlParameterError:
-      description: An error occurred due to incorrect data supplied to url parameter.
-      type: object
-      properties:
-        message:
-          type: string
-          description: A message about the error.
-        messageDetail:
-          type: string
-          description: A detailed description about the error.
-    WorkQueueItemSubscriptionCustomResponse:
-      description: Response containing custom subscription details.
-      type: object
-      required:
-      - subscriptionId
-      - subscriptions
-      properties:
-        subscriptionId:
-          type: string
-          format: uuid
-          description: The ID of the subscription.
-      subscriptions:
-        type: array
-        description: The list of subscriptions according to event types.
-        items:
-          $ref: '#/components/schemas/WorkQueueItemEventSubscriptionResponse'
-    RadioButtonsArray:
-      description: Used for the RadioButtons data type.
-      type: array
-      items:
-        type: object
-        properties:
-          name:
-            type: string
-          selected:
-            type: boolean
-    PatchRequest:
-      description: A request containing a JSON Patch document. See PatchDocument for details.
-      type: array
-      items:
-        $ref: '#/components/schemas/PatchDocument'
-    WorkQueueItemEventSubscriptionResponse:
-      type: object
-      description: The subscription created for an event type.
-      properties:
-        subscriptionId:
-          type: string
-          description: The ID of the subscription.
-          format: uuid
-        eventType:
-          type: string
-          description: The event type subscribed to.
-          example: exception
-    WorkQueueConfigurationSummary:
-      description: Contains details of a work queue configuration.
-      type: object
-      properties:
-        id:
-          type: string
-          description: The ID of the queue.
-          format: uuid
-        name:
-          type: string
-          description: The name of the queue.
-          minLength: 1
-        activeWorkQueueConfiguration:
-          $ref: '#/components/schemas/ActiveWorkQueueConfiguration'
-        activeQueueStats:
-          $ref: '#/components/schemas/ActiveWorkQueueStatistics'
-      example:
-        id: f83a55c4-1151-41b1-89b0-6ad81ad50d7e
-        name: Example work queue
-        activeWorkQueueConfiguration:
-          assignedProcessId: 5ebaf769-6325-4f8a-b175-aefb150ea64f
-          assignedResourceGroupId: 49df134f-974b-4f81-b4a7-8518c04fa970
-        activeQueueStats:
-          activeSessions: '10'
-          availableResources: '5'
-          timeRemaining: 01:25:10
-          elapsedRemaining: 00:05:10
-          ETA: '2020-10-03T13:36:21+02:00'
-    Identifiers:
-      description: A collection of GUID resource IDs.
-      type: object
-      properties:
-        ids:
-          description: A collection of resource IDs.
-          type: array
-          items:
-            type: string
-            description: The IDs of the newly created items.
-            format: uuid
-    CreateWorkQueueItems:
-      description: Contains details for creating a number of work queue items.
-      type: array
-      items:
-        $ref: '#/components/schemas/CreateWorkQueueItem'
-    CreateWebhookWorkQueueItem:
-      description: Contains details for creating a webhook subscriptions for a work queue item in a queue.
-      type: object
-      required:
-      - eventtypes
-      - callbackurl
-      properties:
-        eventtypes:
-          type: array
-          description: List of events that trigger the webhook.
-          items:
-            type: string
-            enum:
-            - exception
-            - completed
-            - prioritychanged
-            - dataupdated
-            - status
-            - deferred
-            - locked
-            - retryexception
-        callbackurl:
-          type: string
-          description: The url to send callbacl request.
-          format: uri
-          example: https://your-api.com/webhook/callback
-        extensions:
-          type: object
-          description: Optional security and metadata configuration.
-          required:
-          - security
-          properties:
-            data:
-              type: object
-              description: Custom JSON object for client-specific metadata. Can be empty
-              additionalProperties: true
-              example:
-                clientId: '1'
-            security:
-              type: object
-              description: The authentication callback detailes.
-              required:
-              - credentialName
-              - type
-              properties:
-                credentialName:
-                  description: The name of the credentials registered in BPE Credential Manager.
-                  type: string
-                  example: Client1
-                type:
-                  type: string
-                  description: The type of the credentials.
-                  example: BasicAuthentication
-    PatchDocument:
-      description: A JSONPatch document as defined by RFC 6902. See http://jsonpatch.com/
-      required:
-      - op
-      - path
-      properties:
-        op:
-          type: string
-          description: The operation to be performed.
-          enum:
-          - add
-          - remove
-          - replace
-          - move
-          - copy
-        path:
-          type: string
-          description: A JSON-Pointer.
-        value:
-          type: object
-          description: The value to be used within the operations..
-        from:
-          type: string
-          description: A string containing a JSON Pointer value.
-    PagingToken:
-      type: string
-      description: The token to be used in the next request to return the next collection of items.
-      example: U3VwZXIgc2VjcmV0IGRhdGEuIFNoaGho
-    Error:
-      description: A general error occurred. See errorMessage for details.
-      type: object
-      properties:
-        errorMessage:
-          description: A message describing the problem encountered.
-          type: string
-    WorkQueueItemsPage:
-      description: Contains details of a page of work queue items.
-      type: object
-      properties:
-        pagingToken:
-          type: string
-          description: The token to be used in the next request to return the next collection of items.
-        items:
-          type: array
-          description: A collection of work queue items.
-          items:
-            $ref: '#/components/schemas/WorkQueueItemNoData'
-      example:
-        pagingToken: U3VwZXIgc2VjcmV0IGRhdGEuIFNoaGho
-        items:
-        - id: 01234567-89ab-cdef-0123-456789abcdef
-          priority: 3
-          ident: 5112
-          state: Pending
-          keyValue: Example value
-          status: Example status
-          tags:
-          - Example tag 1
-          - Example tag 2
-          attemptNumber: 1
-          loadedDate: '2020-10-02T12:34:56+01:00'
-          deferredDate: '2020-10-02T12:34:56+01:00'
-          lockedDate: '0001-01-01T00:00:00Z'
-          completedDate: '0001-01-01T00:00:00Z'
-          exceptionedDate: '0001-01-01T00:00:00Z'
-          exceptionReason: Example reason
-          lastUpdated: '2020-10-02T12:34:56+01:00'
-          workTimeInSeconds: 123
-          attemptWorkTimeInSeconds: 56
-          resource: Example resource
-          sessionId: 01234567-89ab-cdef-0123-456789abcdef
-          sla: 7200
-          slaDateTime: '0001-01-01T00:00:00Z'
-          processName: Example process name
-          isSuggested: false
-    ActiveWorkQueueConfiguration:
-      description: Contains details of an active work queue.
-      type: object
-      properties:
-        assignedProcessId:
-          type: string
-          description: ID of the assigned process.
-          format: uuid
-        assignedResourceGroupId:
-          type: string
-          description: ID of the assigned resource group.
-          format: uuid
-      example:
-        assignedProcessId: axe34dfx-1234-2435-fedc-ba9876500987
-        assignedResourceGroupId: xv3fd45s-6543-6231-exrf-we23e456781
-    RangeFilter:
-      description: Used to filter values. Check for values that are greater than or equal to, less than or equal to, or between the given value(s).
-      type: object
-      anyOf:
-      - $ref: '#/components/schemas/GreaterThanOrEqualToFilter'
-      - $ref: '#/components/schemas/LessThanOrEqualToFilter'
-      example:
-        gte: null
-        lte: null
-    WorkQueueSummary:
-      description: Contains basic details of a work queue.
-      type: object
-      properties:
-        id:
-          type: string
-          description: The ID of the queue.
-          format: uuid
-        name:
-          type: string
-          description: The name of the queue.
-          minLength: 1
-        keyField:
-          type: string
-          description: The name of the column used as the queue's key.
-        status:
-          $ref: '#/components/schemas/QueueStatus'
-        isEncrypted:
-          type: boolean
-          description: True if the queue is encrypted; otherwise, false.
-        maxAttempts:
-          type: integer
-          description: The maximum number of retry attempts for items in the queue.
-        pendingItemCount:
-          type: integer
-          description: The number of items in the queue in a pending state.
-        completedItemCount:
-          type: integer
-          description: The number of items in the queue in a completed state.
-        lockedItemCount:
-          type: integer
-          description: The number of items in the queue in a locked state.
-        exceptionedItemCount:
-          type: integer
-          description: The number of items in the queue in an exceptioned state.
-        totalItemCount:
-          type: integer
-          description: The total number of items in the queue.
-        averageWorkTime:
-          type: string
-          format: time-span
-          description: The average amount of time an items spends being worked.
-        totalCaseDuration:
-          type: string
-          format: time-span
-          description: The total amount of time items have been worked.
-        groupName:
-          type: string
-          description: The name of the group in which the queue is located.
-        groupId:
-          type: string
-          description: ID of the group in which the queue is located.
-          format: uuid
-        isRetryItems:
-          type: boolean
-          description: True if Retry items in this queue in the event of an unexpected session termination is enabled; otherwise, false.
-        isSnapshotEnabled:
-          type: boolean
-          description: True if there is information related to Snapshot Configuration; otherwise, false.
-        isActiveQueue:
-          type: boolean
-          description: True if the queue is active; otherwise, false.
-        activeWorkQueueConfiguration:
-          $ref: '#/components/schemas/ActiveWorkQueueConfiguration'
-        activeQueueStats:
-          $ref: '#/components/schemas/ActiveWorkQueueStatistics'
-      example:
-        id: 01234567-89ab-cdef-0123-456789abcdef
-        name: Example work queue
-        keyField: Example field
-        status: Running
-        isEncrypted: false
-        maxAttempts: 5
-        pendingItemCount: 10
-        completedItemCount: 75
-        lockedItemCount: 1
-        exceptionedItemCount: 3
-        totalItemCount: 14
-        averageWorkTime: 00:01:23
-        totalCaseDuration: 06:12:53
-        groupName: Example group
-        groupId: fedcba98-7654-3210-fedc-ba9876543210
-        isRetryItems: true
-        isSnapshotEnabled: true
-        isActiveQueue: true
-        activeWorkQueueConfiguration:
-          assignedProcessId: axe34dfx-1234-2435-fedc-ba9876500987
-          assignedResourceGroupId: xv3fd45s-6543-6231-exrf-we23e456781
-    DataRow:
-      description: A dictionary which represents a row of data from a Blue Prism collection.
-      type: object
-      additionalProperties:
-        $ref: '#/components/schemas/DataValue'
-    EqualsFilter:
-      description: Used to filter values. Check for values that are equal to the given value.
-      type: object
-      properties:
-        eq:
-          type:
-          - object
-          - 'null'
-          description: The value that the field should be equal to.
-      example:
-        eq: null
-    BasicStringFilter:
-      description: Used to filter strings. Check for strings that start with, equal, are greater than, are less than, or are between the given value(s).
-      type: object
-      anyOf:
-      - $ref: '#/components/schemas/RangeOrEqualFilter'
-      - $ref: '#/components/schemas/StartsWithStringFilter'
-      example:
-        strtw: null
-        gte: null
-        lte: null
-        eq: null
-    WorkQueuesItemsPage:
-      description: Contains details of a page of work queues.
-      type: object
-      properties:
-        pagingToken:
-          type:
-          - string
-          - 'null'
-          description: The token to be used in the next request to return the next collection of items.
-        items:
-          type: array
-          description: A collection of work queues.
-          items:
-            $ref: '#/components/schemas/WorkQueueSummary'
-      example:
-        pagingToken: U3VwZXIgc2VjcmV0IGRhdGEuIFNoaGho
-        items:
-        - id: 01234567-89ab-cdef-0123-456789abcdef
-          name: Example work queue
-          keyField: Example field
-          status: Running
-          isEncrypted: false
-          maxAttempts: 5
-          pendingItemCount: 10
-          completedItemCount: 75
-          lockedItemCount: 1
-          exceptionedItemCount: 3
-          totalItemCount: 14
-          averageWorkTime: 00:01:23
-          totalCaseDuration: 06:12:53
-          groupName: Example group
-          groupId: fedcba98-7654-3210-fedc-ba9876543210
-          isRetryItems: true
-          isSnapshotEnabled: true
-          isActiveQueue: true
-          activeWorkQueueConfiguration:
-            assignedProcessId: axe34dfx-1234-2435-fedc-ba9876500987
-            assignedResourceGroupId: xv3fd45s-6543-6231-exrf-we23e456781
-          activeQueueStats:
-            activeSessions: '10'
-            availableResources: '5'
-            timeRemaining: 01:25:10
-            elapsedRemaining: 00:05:10
-            ETA: '2020-10-03T13:36:21+02:00'
-    CreateWorkQueue:
-      description: Contains details for creating a new work queue.
-      type: object
-      properties:
-        name:
-          type: string
-          description: The name of the queue to create.
-          minLength: 1
-          maxLength: 255
-        keyField:
-          type: string
-          description: The name of the column to be used as the queue's key.
-          minLength: 0
-          maxLength: 255
-        maxAttempts:
-          type: integer
-          description: The maximum number of retry attempts for items in the queue.
-          minimum: 1
-          maximum: 999999
-        status:
-          $ref: '#/components/schemas/QueueStatus'
-        encryptionKeyId:
-          type: integer
-          description: The ID of the encryption key to use for the queue. If no encryption is required,  this field should be 0.
-        sessionExceptionRetry:
-          type: boolean
-          description: Retry items in this queue in the event of an unexpected session termination.
-        activeQueueAssignedProcessId:
-          type: string
-          format: uuid
-          description: The ID of the process to use for an active queue.
-        activeQueueAssignedResourceGroupId:
-          type: string
-          format: uuid
-          description: The ID of the resource group to use for an active queue.
-        groupid:
-          type: object
-          description: The ID of the group to use for the queue. If no group id is required, this field should be empty string like "" or empty Guid - "00000000-0000-0000-0000-000000000000".
-      example:
-        name: Example queue
-        keyField: Example field
-        maxAttempts: 3
-        status: Running
-        encryptionKeyId: 0
-        sessionExceptionRetry: false
-        activeQueueAssignedProcessId: 658de89c-a43d-4b18-a38c-d26d5eb26659
-        activeQueueAssignedResourceGroupId: 5180390c-b21a-4d69-9753-b876e34f100d
-        groupid: a4e0b0ba-3b8f-443d-bdb0-ee519299bd01
-    Identifier:
-      description: A GUID resource ID.
-      type: object
-      properties:
-        id:
-          type: string
-          description: The ID of the newly created resource.
-          format: uuid
-    WorkQueueItemWebhookSubscriptionResponse:
-      description: Response containing webhook subscription details.
-      type: object
-      required:
-      - id
-      - secret
-      - subscriptions
-      properties:
-        id:
-          type: string
-          format: uuid
-          description: The ID of the webhook subscription.
-        secret:
-          type: string
-          description: The secret for validating webhook payloads.
-        subscriptions:
-          type: array
-          description: The list of subscriptions according to event types.
-          items:
-            $ref: '#/components/schemas/WorkQueueItemEventSubscriptionResponse'
-    FullStringFilter:
-      description: Used to filter strings. Check for strings that start with, contain, equal, are greater than, are less than, or are between the given value(s).
-      type: object
-      anyOf:
-      - $ref: '#/components/schemas/StringFilter'
-      - $ref: '#/components/schemas/RangeOrEqualFilter'
-      example:
-        ctn: null
-        strtw: null
-        gte: null
-        lte: null
-        eq: null
-    ErrorMessage:
-      description: A message describing the problem encountered.
-      type: string
-    ContainsStringFilter:
-      description: Used to filter strings. Check for strings that contain the given value.
-      type: object
-      properties:
-        ctn:
-          type:
-          - string
-          - 'null'
-          description: The value that the field should contain.
-      example:
-        ctn: null
     WorkQueueItemNoData:
       description: Contains details of a work queue item but does not return the data contained in it.
       type: object
@@ -2420,150 +2441,123 @@ components:
         slaDateTime: '0001-01-01T00:00:00Z'
         processName: Example process name
         isSuggested: false
-    StringFilter:
-      description: Used to filter strings. Check for strings that start with, and/or contain the given value(s).
-      type: object
-      anyOf:
-      - $ref: '#/components/schemas/ContainsStringFilter'
-      - $ref: '#/components/schemas/StartsWithStringFilter'
-      example:
-        ctn: null
-        strtw: null
-    Reference:
-      description: Contains details of referenced item.
+    RadioButtonsArray:
+      description: Used for the RadioButtons data type.
+      type: array
+      items:
+        type: object
+        properties:
+          name:
+            type: string
+          selected:
+            type: boolean
+    DataValue:
+      description: Represents a single item of data in a Blue Prism format.
       type: object
       properties:
-        id:
-          type: string
-          format: uuid
-          description: The ID of the process/object.
-        name:
-          type: string
-          description: The name of the process/object.
-          minLength: 1
-        description:
-          type: string
-          description: The description of process/object.
-        type:
+        valueType:
+          description: The type of object contained in the value field.
           type: string
           enum:
-          - Process
-          - Object
-          - Unset
-          description: The type of process/object
-  examples:
-    StringEqualsExample:
-      value:
-        eq: Example
-      summary: Search for a value equal to "Example".
-    TimeLessThanExample:
-      value:
-        lte: '12:34:56'
-      summary: Search for a value less than or equal to 12:34:56
-    IntegerRangeExample:
-      value:
-        gte: 123
-        lte: 321
-      summary: Search for a value between 123 and 321 inclusive.
-    StringRangeExample:
-      value:
-        gte: Ex
-        lte: F
-      summary: Search for a value alphanumerically between "Ex" and "F".
-    PatchMoveExample:
-      summary: Move a value from one property to another.
-      value:
-      - op: move
-        from: /sourceProperty
-        path: /destinationProperty
-    PatchCopyExample:
-      summary: Copy a value from one property to another.
-      value:
-      - op: copy
-        from: /sourceProperty
-        path: /destinationProperty
-    StringStartsWithExample:
-      value:
-        strtw: Exa
-      summary: Search a value starting with "Exa".
-    IntegerEqualsExample:
-      value:
-        eq: 123
-      summary: Search for a value equal to 123.
-    StringGreaterThanExample:
-      value:
-        gte: Example
-      summary: Search for a value alphanumerically after or equal to "Example".
-    TimeEqualsExample:
-      value:
-        eq: '12:34:56'
-      summary: Search for a value equal to 12:34:56.
-    TimeRangeExample:
-      value:
-        gte: 01:23:45
-        lte: '12:34:56'
-      summary: Search for a value between 01:23:45 and 12:34:56 (inclusive)
-    DateTimeGreaterThanExample:
-      value:
-        gte: '2020-10-02T12:34:56+01:00'
-      summary: Search for a value after or equal to 2020-10-02 at 12:34:56 (GMT+1).
-    PatchRemoveExample:
-      summary: Remove a property value.
-      value:
-      - op: remove
-        path: /propertyToDeleteValueFrom
-    DateTimeRangeExample:
-      value:
-        gte: '2020-10-02T12:34:56+01:00'
-        lte: '2020-11-02T12:34:56+01:00'
-      summary: Search for a value between 2020-10-02 at 12:34:56 (GMT+1) and 2020-11-02 at 12:34:56 (GMT+1) (inclusive).
-    DateTimeEqualsExample:
-      value:
-        eq: '2020-10-02T12:34:56+01:00'
-      summary: Search for a value equal to 2020-10-02 at 12:34:56 (GMT+1).
-    PatchAddToArrayExample:
-      summary: Add values to a collection.
-      value:
-      - op: add
-        path: /someArrayProperty
+          - Binary
+          - Collection
+          - Date
+          - DateTime
+          - Flag
+          - Image
+          - Number
+          - Password
+          - RadioButtons
+          - Text
+          - Time
+          - TimeSpan
         value:
-        - item1
-        - item2
-    IntegerLessThanExample:
-      value:
-        lte: 123
-      summary: Search for a value less than or equal to 123.
-    StringContainsExample:
-      value:
-        ctn: amp
-      summary: Search a value containing "amp"
-    PatchAddToObjectExample:
-      summary: Add new property values to an object.
-      value:
-      - op: add
-        path: /property
-        value: propertyValue
-    PatchReplaceExample:
-      summary: Replace the value in a property.
-      value:
-      - op: replace
-        path: /property
-        value: propertyValue
+          description: The value of the object.
+          oneOf:
+          - type: string
+            format: base64
+            description: Used for Binary and Image data types. The image format must only be one of these BPM, JPG, JPEG, GIF, PNG, ICO or TIFF.
+          - $ref: '#/components/schemas/DataCollection'
+            description: Used for the Collection data type.
+          - type: string
+            format: date
+            description: Used for Date and Time data types.
+          - type: boolean
+            description: Used for the Flag data type.
+          - type: number
+            description: Used for the Number data type.
+          - type: string
+            description: Used for Password and Text data types.
+          - type: string
+            format: time
+            description: Used for the TimeSpan data type.
+          - $ref: '#/components/schemas/RadioButtonsArray'
+        additionalParameters:
+          description: Custom extra parameters i.e. Binary's file path.
+          type: array
+          items:
+            type: string
+    ActiveWorkQueueStatistics:
+      description: Contains statistics for an active work queue.
+      type:
+      - object
+      - 'null'
+      properties:
+        activeSessions:
+          type: integer
+          description: the current number of active sessions for this queue.
+        availableResources:
+          type: integer
+          description: the current number of available resources assigned to this queue.
+        timeRemaining:
+          type: string
+          description: the amount of time remaining for this queue based on the number of pending cases and the average work time for a case.
+          format: time-span
+        elapsedRemaining:
+          type: string
+          description: the amount of time remaining for all currently assigned sessions to work the remaining pending cases.
+          format: time-span
+        ETA:
+          type: string
+          description: the projected end time for this queue in local time.
+          format: date-time
+      example:
+        activeSessions: '10'
+        availableResources: '5'
+        timeRemaining: 01:25:10
+        elapsedRemaining: 00:05:10
+        ETA: '2020-10-03T13:36:21+02:00'
+    ReferencesItemsPage:
+      description: Contains references of a specified object.
+      type: object
+      properties:
+        pagingToken:
+          $ref: '#/components/schemas/PagingToken'
+        items:
+          type: array
+          description: A collection of references.
+          items:
+            $ref: '#/components/schemas/Reference'
+    StartsWithStringFilter:
+      description: Used to filter strings. Check for strings that start with the given value.
+      type: object
+      properties:
+        strtw:
+          type:
+          - string
+          - 'null'
+          description: The value that the field should start with.
+      example:
+        strtw: null
   responses:
-    NotFound:
-      description: The requested resource could not be found.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/ErrorMessage'
     NotAuthorized:
       description: The authentication token was either missing or invalid and must be refreshed.
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/ErrorMessage'
-    Forbidden:
-      description: The authentication token does not give sufficient permissions to perform this action.
+    NotFound:
+      description: The requested resource could not be found.
       content:
         application/json:
           schema:
@@ -2576,6 +2570,12 @@ components:
             oneOf:
             - $ref: '#/components/schemas/UrlParameterError'
             - $ref: '#/components/schemas/ValidationError'
+    Forbidden:
+      description: The authentication token does not give sufficient permissions to perform this action.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorMessage'
   securitySchemes:
     Bearer:
       type: http
