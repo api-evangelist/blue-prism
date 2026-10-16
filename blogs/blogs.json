@@ -2,8 +2,11 @@
   "repo": "blue-prism",
   "feeds": [
     {
-      "source": "https://community.blueprism.com/",
-      "error": "HTTPError"
+      "source": "https://www.blueprism.com/resources/blog/",
+      "feed_url": "https://www.blueprism.com/resources/blog/feed.rss/",
+      "title": "",
+      "saved": 0,
+      "method": "discovered"
     },
     {
       "source": "https://community.blueprism.com/hfgie69872/rss/Community?interaction.style=forum",
@@ -13,8 +16,8 @@
       "method": "feed"
     }
   ],
-  "post_count": 52,
-  "fetched": "2026-10-03T12:30:02Z",
+  "post_count": 58,
+  "fetched": "2026-10-10T13:15:00Z",
   "feed_nature": "support-community",
   "feed_nature_basis": "khoros_thread",
   "feed_nature_note": "Whether these posts are the vendor publishing or its support community, decided on the URL path grammar of the saved posts -- not the hostname, which carries both on Khoros, and not author diversity, which flags large vendor blogs as forums. 'undetermined' means undetermined.",
