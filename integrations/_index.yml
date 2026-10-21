@@ -28,3 +28,105 @@
   relationship: platform-app
   status: not-a-workflow
   arazzo: null
+- slug: blue-prism-abbyy
+  label: ABBYY
+  partner: abbyy
+  partner_name: ABBYY
+  category: RPA marketplace listing
+  type: marketplace
+  marketplace: blue-prism-digital-exchange
+  channel: partner-built
+  evidence: https://digitalexchange.blueprism.com/dx/entry/200048
+  source: edge
+  relationship: platform-app
+  contract_reference:
+    register: SS&C Blue Prism Digital Exchange
+    spec_file: null
+    role: digital-exchange-provider-supported
+    registered_name: ABBYY Professional Services
+    matched_domain: abbyy.com
+    matched_by: domain
+    detected_by: sweep-rpa-document-ai.py
+    detected: '2026-10-20'
+    signal_note: one edge per (provider, platform); listing alone = participation. Listing, download and connector
+      counts are context, never counted
+    apps:
+    - ABBYY FlexiCapture Connector
+    - ABBYY FlexiCapture and FlexiCapture for Invoices
+    - ABBYY Professional Services
+    - ABBYY Vantage Core Cognitive Services Platform
+    - ABBYY Vantage Intelligent Document Processing
+    - ABBYY Vantage Invoice Skill
+    submitter_company: Danielle Mellado
+    built_for:
+    - Blue Prism Enterprise
+    price:
+    - Paid to SS&C
+    - Paid to Third Party
+    builder: provider (Digital Exchange support = Provider Supported)
+  status: not-a-workflow
+  arazzo: null
+- slug: blue-prism-applica
+  label: Applica
+  partner: applica
+  partner_name: Applica
+  category: RPA marketplace listing
+  type: marketplace
+  marketplace: blue-prism-digital-exchange
+  channel: partner-built
+  evidence: https://digitalexchange.blueprism.com/dx/entry/59175
+  source: edge
+  relationship: platform-app
+  contract_reference:
+    register: SS&C Blue Prism Digital Exchange
+    spec_file: null
+    role: digital-exchange-provider-supported
+    registered_name: Applica
+    matched_domain: applica.ai
+    matched_by: domain
+    detected_by: sweep-rpa-document-ai.py
+    detected: '2026-10-20'
+    signal_note: one edge per (provider, platform); listing alone = participation. Listing, download and connector
+      counts are context, never counted
+    apps:
+    - Applica RTA
+    submitter_company: Applica
+    built_for:
+    - Blue Prism Enterprise
+    price:
+    - Free
+    builder: provider (Digital Exchange support = Provider Supported)
+  status: not-a-workflow
+  arazzo: null
+- slug: blue-prism-indico-data
+  label: Indico Data
+  partner: indico-data
+  partner_name: Indico Data
+  category: RPA marketplace listing
+  type: marketplace
+  marketplace: blue-prism-digital-exchange
+  channel: partner-built
+  evidence: https://digitalexchange.blueprism.com/dx/entry/116029
+  source: edge
+  relationship: platform-app
+  contract_reference:
+    register: SS&C Blue Prism Digital Exchange
+    spec_file: null
+    role: digital-exchange-provider-supported
+    registered_name: Indico
+    matched_domain: indicodata.ai
+    matched_by: domain
+    detected_by: sweep-rpa-document-ai.py
+    detected: '2026-10-20'
+    signal_note: one edge per (provider, platform); listing alone = participation. Listing, download and connector
+      counts are context, never counted
+    apps:
+    - Indico Custom Actions for Blue Prism
+    submitter_company: Indico
+    built_for:
+    - Blue Prism Enterprise
+    price:
+    - Paid to Third Party
+    builder: provider (Digital Exchange support = Provider Supported)
+  status: not-a-workflow
+  arazzo: null

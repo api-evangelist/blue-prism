@@ -3,7 +3,16 @@ method: searched
 checked:
 - guidewire/integrations/guidewire-integration-edges.yml
 - https://aws.amazon.com/marketplace/
-marketplace_apps: []
+- https://digitalexchange-api.blueprism.com/assets
+marketplace_apps:
+- marketplace: blue-prism-digital-exchange
+  channel: partner-built
+  app: blue-prism
+  url: https://digitalexchange.blueprism.com/dx
+  app_count: 1377
+  adapter: sweep-rpa-document-ai.py:bp
+  listed: 3
+  note: 'SS&C Blue Prism Digital Exchange: only domain-linked, in-market vendors are written'
 edges:
 - partner_name: AWS Marketplace
   partner: amazon-web-services
@@ -44,5 +53,111 @@ edges:
   badges:
   - Ready for Guidewire
   - 'Partner tier: Growth'
+- partner_name: ABBYY
+  partner: abbyy
+  partner_match: domain
+  partner_url: https://abbyy.com
+  type: marketplace
+  marketplace: blue-prism-digital-exchange
+  channel: partner-built
+  relationship: platform-app
+  direction: partner-built
+  evidence: https://digitalexchange.blueprism.com/dx/entry/200048
+  app: ABBYY Professional Services
+  category: RPA marketplace listing
+  contract_reference:
+    register: SS&C Blue Prism Digital Exchange
+    spec_file: null
+    role: digital-exchange-provider-supported
+    registered_name: ABBYY Professional Services
+    matched_domain: abbyy.com
+    matched_by: domain
+    detected_by: sweep-rpa-document-ai.py
+    detected: '2026-10-20'
+    signal_note: one edge per (provider, platform); listing alone = participation. Listing, download and connector
+      counts are context, never counted
+    apps: &id001
+    - ABBYY FlexiCapture Connector
+    - ABBYY FlexiCapture and FlexiCapture for Invoices
+    - ABBYY Professional Services
+    - ABBYY Vantage Core Cognitive Services Platform
+    - ABBYY Vantage Intelligent Document Processing
+    - ABBYY Vantage Invoice Skill
+    submitter_company: Danielle Mellado
+    built_for:
+    - Blue Prism Enterprise
+    price:
+    - Paid to SS&C
+    - Paid to Third Party
+    builder: provider (Digital Exchange support = Provider Supported)
+  detected_by: sweep-rpa-document-ai.py
+  first_seen: '2026-10-20'
+  apps: *id001
+- partner_name: Applica
+  partner: applica
+  partner_match: domain
+  partner_url: https://applica.ai
+  type: marketplace
+  marketplace: blue-prism-digital-exchange
+  channel: partner-built
+  relationship: platform-app
+  direction: partner-built
+  evidence: https://digitalexchange.blueprism.com/dx/entry/59175
+  app: Applica RTA
+  category: RPA marketplace listing
+  contract_reference:
+    register: SS&C Blue Prism Digital Exchange
+    spec_file: null
+    role: digital-exchange-provider-supported
+    registered_name: Applica
+    matched_domain: applica.ai
+    matched_by: domain
+    detected_by: sweep-rpa-document-ai.py
+    detected: '2026-10-20'
+    signal_note: one edge per (provider, platform); listing alone = participation. Listing, download and connector
+      counts are context, never counted
+    apps:
+    - Applica RTA
+    submitter_company: Applica
+    built_for:
+    - Blue Prism Enterprise
+    price:
+    - Free
+    builder: provider (Digital Exchange support = Provider Supported)
+  detected_by: sweep-rpa-document-ai.py
+  first_seen: '2026-10-20'
+- partner_name: Indico Data
+  partner: indico-data
+  partner_match: domain
+  partner_url: https://indicodata.ai
+  type: marketplace
+  marketplace: blue-prism-digital-exchange
+  channel: partner-built
+  relationship: platform-app
+  direction: partner-built
+  evidence: https://digitalexchange.blueprism.com/dx/entry/116029
+  app: Indico Custom Actions for Blue Prism
+  category: RPA marketplace listing
+  contract_reference:
+    register: SS&C Blue Prism Digital Exchange
+    spec_file: null
+    role: digital-exchange-provider-supported
+    registered_name: Indico
+    matched_domain: indicodata.ai
+    matched_by: domain
+    detected_by: sweep-rpa-document-ai.py
+    detected: '2026-10-20'
+    signal_note: one edge per (provider, platform); listing alone = participation. Listing, download and connector
+      counts are context, never counted
+    apps:
+    - Indico Custom Actions for Blue Prism
+    submitter_company: Indico
+    built_for:
+    - Blue Prism Enterprise
+    price:
+    - Paid to Third Party
+    builder: provider (Digital Exchange support = Provider Supported)
+  detected_by: sweep-rpa-document-ai.py
+  first_seen: '2026-10-20'
 source:
 - guidewire/integrations/guidewire-integration-edges.yml
