@@ -15,19 +15,6 @@
   relationship: distribution-channel
   status: not-a-workflow
   arazzo: null
-- slug: blue-prism-guidewire-own
-  label: Guidewire (own)
-  partner: guidewire
-  partner_name: Guidewire (own)
-  category: Accelerator; Claims Automation; BillingCenter;ClaimCenter;PolicyCenter
-  type: marketplace
-  marketplace: own
-  channel: partner-built
-  evidence: https://marketplace.guidewire.com/product/01t3n00000TGYylAAH/01t3n00000TGYylAAH
-  source: edge
-  relationship: platform-app
-  status: not-a-workflow
-  arazzo: null
 - slug: blue-prism-abbyy
   label: ABBYY
   partner: abbyy
@@ -128,5 +115,69 @@
     price:
     - Paid to Third Party
     builder: provider (Digital Exchange support = Provider Supported)
+  status: not-a-workflow
+  arazzo: null
+- slug: blue-prism-salesforce-appexchange-security-review
+  label: Salesforce AppExchange Security Review
+  partner: salesforce
+  partner_name: Salesforce AppExchange Security Review
+  category: AppExchange security-reviewed publisher
+  type: register
+  channel: standard-directory
+  evidence: https://developer.salesforce.com/docs/atlas.en-us.packagingGuide.meta/packagingGuide/security_review_overview.htm
+  source: edge
+  relationship: standard-participant
+  contract_reference:
+    register: Salesforce AppExchange public listings (listing JSON) under the AgentExchange Security Review requirement
+    standard: Salesforce AppExchange Security Review
+    spec_file: null
+    role: security-reviewed-publisher
+    registered_name: Blue Prism Software Inc.
+    register_country: null
+    matched_domain: blueprism.com
+    matched_by: domain
+    identity_source: the listing's own publisher.website (no lookup)
+    certified_products:
+    - product: Salesforce Platform API solution (security-reviewed)
+      product_type: salesforce-platform/api
+      certifier: Salesforce (AgentExchange / AppExchange Security Review)
+      listings: 1
+      example_listing: https://appexchange.salesforce.com/appxListingDetail?listingId=a0N3A00000G0rNBUAZ
+      latest_approval: '2019-11-05'
+      lapsed: false
+      lapsed_note: the listing JSON prints solution.securityReview.approvalDate on a LIVE public listing; Salesforce
+        publishes no expiry, so no entry is marked lapsed (latest_approval is context)
+    signal_note: certified_products = ONE entry per product type (listing technology) with a printed securityReview.approvalDate,
+      never per listing or version; a listing with no approval date reads nothing; listing counts / versions are
+      context
+    requirement: https://developer.salesforce.com/docs/atlas.en-us.packagingGuide.meta/packagingGuide/security_review_overview.htm
+    detected_by: sweep-salesforce-appexchange.py
+    detected: '2026-10-21'
+  status: not-a-workflow
+  arazzo: null
+- slug: blue-prism-guidewire-own
+  label: Guidewire (own)
+  partner: guidewire
+  partner_name: Guidewire (own)
+  category: Accelerator; Claims Automation; BillingCenter;ClaimCenter;PolicyCenter
+  type: marketplace
+  marketplace: own
+  channel: partner-built
+  evidence: https://marketplace.guidewire.com/product/01t3n00000TGYylAAH/01t3n00000TGYylAAH
+  source: edge
+  relationship: platform-app
+  status: not-a-workflow
+  arazzo: null
+- slug: blue-prism-salesforce-own
+  label: Salesforce (own)
+  partner: salesforce
+  partner_name: Salesforce (own)
+  category: productivity
+  type: marketplace
+  marketplace: own
+  channel: partner-built
+  evidence: https://appexchange.salesforce.com/appxListingDetail?listingId=a0N3A00000G0rNBUAZ
+  source: edge
+  relationship: platform-app
   status: not-a-workflow
   arazzo: null
