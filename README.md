@@ -1,4 +1,4 @@
-# Blue Prism (blue-prism)
+# Blue Prism
 
 <!-- API-EVANGELIST-PROVENANCE:BEGIN -->
 > ### About this repository
@@ -64,49 +64,157 @@
 > Full detail: **[Where this data comes from](https://apievangelist.com/about/where-our-data-comes-from)**
 <!-- API-EVANGELIST-PROVENANCE:END -->
 
-Blue Prism is an intelligent automation platform providing RPA with AI and machine learning capabilities.
+SS&C Blue Prism is an enterprise intelligent-automation vendor whose platform combines robotic process automation, business process management and agentic AI. Its products — Blue Prism Enterprise, Blue Prism Cloud, WorkHQ, Chorus, AI Gateway, Decipher IDP and Process Intelligence — coordinate people, AI agents, digital workers and APIs across regulated, mission-critical workflows. Blue Prism Enterprise publishes a REST contract, the Blue Prism API, covering work queues, sessions, schedules, calendars, processes, runtime resources, licensing and webhook subscriptions. The company was acquired by SS&C Technologies in 2022.
 
-**APIs.json:** [https://raw.githubusercontent.com/api-evangelist/blue-prism/refs/heads/main/apis.yml](https://raw.githubusercontent.com/api-evangelist/blue-prism/refs/heads/main/apis.yml)
+**Areas:** AI Automation · RPA · Intelligent Automation · Business Process Management · Process Orchestration · AI Agents · Workflow Automation · Enterprise Software
 
-## Scope
+## Blue Prism on APIs.io
 
-- **Type:** Index
+Everything profiled for Blue Prism is published on APIs.io rather than in this repository. Start at the provider page — **[apis.io/providers/blue-prism/](https://apis.io/providers/blue-prism/)** — or go straight to one of the APIs or properties below.
 
-## Tags
+### APIs (18)
 
-- AI Automation
-- RPA
+- [Process Intelligence API](https://apis.io/apis/blue-prism/process-intelligence/) — Also called the Timeline API. Lets third-party clients upload data to Process Intelligence projects, drive program modules without the UI, and retrieve…
+- [Blue Prism Calendars API](https://apis.io/apis/blue-prism/blue-prism-calendars-api/) — The Calendars API from Blue Prism — 8 operation(s) for calendars.
+- [Blue Prism Dashboards API](https://apis.io/apis/blue-prism/blue-prism-dashboards-api/) — The Dashboards API from Blue Prism — 5 operation(s) for dashboards.
+- [Blue Prism Encryption Schemes API](https://apis.io/apis/blue-prism/blue-prism-encryption-schemes-api/) — The Encryption Schemes API from Blue Prism — 1 operation(s) for encryption schemes.
+- [Blue Prism Environment Variables API](https://apis.io/apis/blue-prism/blue-prism-environment-variables-api/) — The Environment Variables API from Blue Prism — 3 operation(s) for environment variables.
+- [Blue Prism Health API](https://apis.io/apis/blue-prism/blue-prism-health-api/) — The Health API from Blue Prism — 1 operation(s) for health.
+- [Blue Prism Licenses API](https://apis.io/apis/blue-prism/blue-prism-licenses-api/) — The Licenses API from Blue Prism — 2 operation(s) for licenses.
+- [Blue Prism Pools API](https://apis.io/apis/blue-prism/blue-prism-pools-api/) — The Pools API from Blue Prism — 1 operation(s) for pools.
+- [Blue Prism Processes API](https://apis.io/apis/blue-prism/blue-prism-processes-api/) — The Processes API from Blue Prism — 2 operation(s) for processes.
+- [Blue Prism Resources API](https://apis.io/apis/blue-prism/blue-prism-resources-api/) — The Resources API from Blue Prism — 2 operation(s) for resources.
+- [Blue Prism Schedule Logs API](https://apis.io/apis/blue-prism/blue-prism-schedulelogs-api/) — The ScheduleLogs API from Blue Prism — 2 operation(s) for schedulelogs.
+- [Blue Prism Schedules API](https://apis.io/apis/blue-prism/blue-prism-schedules-api/) — The Schedules API from Blue Prism — 14 operation(s) for schedules.
+- [Blue Prism Sessions API](https://apis.io/apis/blue-prism/blue-prism-sessions-api/) — The Sessions API from Blue Prism — 6 operation(s) for sessions.
+- [Blue Prism Subscriptions API](https://apis.io/apis/blue-prism/blue-prism-subscriptions-api/) — The Subscriptions API from Blue Prism — 1 operation(s) for subscriptions.
+- [Blue Prism User API](https://apis.io/apis/blue-prism/blue-prism-user-api/) — The User API from Blue Prism — 1 operation(s) for user.
+- [Blue Prism Work Queue Groups API](https://apis.io/apis/blue-prism/blue-prism-work-queue-groups-api/) — The Work Queue Groups API from Blue Prism — 5 operation(s) for work queue groups.
+- [Blue Prism Work Queues API](https://apis.io/apis/blue-prism/blue-prism-work-queues-api/) — The Work Queues API from Blue Prism — 12 operation(s) for work queues.
+- [Blue Prism Timezones API](https://apis.io/apis/blue-prism/blue-prism-timezones-api/) — The Timezones API from Blue Prism — 1 operation(s) for timezones.
 
-## Timestamps
+### Published properties
 
-- **Created:** 2026-03-27
-- **Modified:** 2026-03-27
+Each property below is a page on APIs.io carrying the machine-readable artifact and what it says.
 
-## APIs
+#### AsyncAPI (1)
 
-### Blue Prism
+Event-driven and webhook contracts.
 
-Blue Prism is an intelligent automation platform providing RPA with AI and machine learning capabilities.
+- [Blue Prism Webhooks](https://apis.io/asyncapis/blue-prism/blue-prism-webhooks/)
 
-- **Human URL:** [https://www.blueprism.com](https://www.blueprism.com)
+#### MCP servers (1)
 
-#### Tags
+Model Context Protocol servers that expose the API to agents.
 
-- AI Automation
+- [blue-prism-mcp.yml](https://apis.io/servers/blue-prism/blue-prism-mcp-yml/)
 
-#### Properties
+#### Overlays (1)
 
-- [Documentation](https://bpdocs.blueprism.com)
+OpenAPI overlays, including conversational phrasing for each operation.
 
-## Common Properties
+- [Blue Prism Enterprise Api Overlay](https://apis.io/overlays/blue-prism/blue-prism-enterprise-api-overlay/)
 
-- [GitHub Organization](https://github.com/blue-prism)
-- [LinkedIn](https://www.linkedin.com/company/blue-prism-limited)
+#### Security (4)
+
+Authentication, trust centre, and vulnerability disclosure.
+
+- [Blue Prism Authentication](https://apis.io/security/blue-prism/blue-prism-authentication/)
+- [Blue Prism Domain Security](https://apis.io/security/blue-prism/blue-prism-domain-security/)
+- [Blue Prism Trust Center](https://apis.io/security/blue-prism/blue-prism-trust-center/)
+- [Blue Prism Vulnerability Disclosure](https://apis.io/security/blue-prism/blue-prism-vulnerability-disclosure/)
+
+#### OAuth scopes (1)
+
+The permissions the API asks for.
+
+- [Blue Prism Scopes](https://apis.io/scopes/blue-prism/blue-prism-scopes/)
+
+#### Plans and pricing (1)
+
+Published plans, tiers and prices.
+
+- [Blue Prism Plans Pricing](https://apis.io/plans/blue-prism/blue-prism-plans-pricing/)
+
+#### Rate limits (1)
+
+Published request limits.
+
+- [Blue Prism Rate Limits](https://apis.io/rate-limits/blue-prism/blue-prism-rate-limits/)
+
+#### FinOps (1)
+
+What the API costs to run, by operation.
+
+- [Blue Prism Finops](https://apis.io/finops/blue-prism/blue-prism-finops/)
+
+## Where to find this API
+
+Links to the company's own pages. This repository publishes no copy of their specifications — the canonical document is theirs and lives at the URLs below.
+
 - [Website](https://www.blueprism.com)
-- [Documentation](https://bpdocs.blueprism.com)
-- [Integrations](https://www.blueprism.com/partners/find-a-partner/)
+- [Documentation](https://documentation.blueprism.com/en-us/home.htm)
+- [Getting started](https://documentation.blueprism.com/bp-7-5/en-us/Guides/bp-api/api-introduction.htm)
+- [API reference](https://documentation.blueprism.com/bp-7-5/en-us/bp-api/api-spec-home.htm)
+- [Support](https://www.blueprism.com/contact/)
+- [Changelog](https://documentation.blueprism.com/bp-7-5/en-us/release-notes/rn-home.htm)
+- [Blog](https://www.blueprism.com/resources/blog/)
+- [Terms of service](https://www.blueprism.com/terms-of-service/)
+- [Privacy policy](https://www.blueprism.com/privacy-policy/)
+- [GitHub](https://github.com/blue-prism)
+- [Status](https://status.blueprism.com/)
 
-## Maintainers
+## API Evangelist rating
 
-**FN:** Kin Lane
-**Email:** kin@apievangelist.com
+**Kin Score 50.7** — developing · rubric 0.25.0 · scored 2026-10-23
+
+| Facet | Score |
+|---|---|
+| Discoverability | 73.2 |
+| Contract quality | 55.0 |
+| Contract governance | 0.0 |
+| Operational transparency | 44.7 |
+| Developer ergonomics | 56.5 |
+| Access clarity | 43.4 |
+
+**Agent readiness 30.8** — agent-ready
+
+| Agent-readiness dimension | Result |
+|---|---|
+| Spec Presence | yes |
+| Agentic Access | — |
+| Reversibility Documented | — |
+| MCP Server | — |
+| Auth Clarity | bearer (partial credit) |
+| Idempotency | — |
+| Error Semantics | verified |
+| OpenAPI Examples | partial |
+| Rate Limit Signal | documented (partial credit) |
+| Event Surface Described | yes |
+| Agent Skills | derived (partial credit) |
+| Well Known Catalog | — |
+| Consent Identity | — |
+| Agent Card | — |
+| Dry Run Mode | — |
+| Delegated Identity | — |
+| Protected Resource Metadata | — |
+| Dynamic Client Registration | — |
+| Agentic Commerce | — |
+| Pagination Ratio | — |
+| Operation Distinctiveness | mostly |
+
+**Regulatory alignment 45.1** — Horizontal (data, software, accessibility, platform)
+
+The rubric is published at [github.com/api-evangelist/kin-score](https://github.com/api-evangelist/kin-score). The per-check breakdown behind these numbers — which checks were earned, partial or missed — along with score history and how this provider compares to its peers, is available at [apis.io/providers/blue-prism/](https://apis.io/providers/blue-prism/).
+
+## How this profile is made
+
+API Evangelist profiles a company's public API surface the way a developer would find it: the website, developer portal and documentation, the specifications it publishes, its public repositories, and its pricing, status and changelog pages. From that it derives the properties above — contracts split per API, workflows, schemas, collections, governance rules, plans and rate limits — and scores them against the published [Kin Score rubric](https://github.com/api-evangelist/kin-score).
+
+The artifacts are published on [APIs.io](https://apis.io), not in this repository. This repository is the public record for Blue Prism: the place to say something is wrong, missing or out of date, and to ask for a re-score or a removal.
+
+## Open an issue
+
+- **Something about this listing** — a wrong description, a missing API, a stale artifact or a question about the rating: [open an issue on this repository](https://github.com/api-evangelist/blue-prism/issues/new).
+- **A new API, or one that is not in the catalog yet** — [submit it on APIs.io](https://apis.io/add/).
+- **Anything else** — [the APIs.io inbox](https://github.com/api-search/inbox/issues/new) or [info@apievangelist.com](mailto:info@apievangelist.com).
